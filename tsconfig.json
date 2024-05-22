@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "noEmit": true,
+    "incremental": true,
+    "module": "esnext",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve"
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/ProfileTemplate.js", "src/components/ChangeAddressTemplate.js", "src/components/ChangePasswordTemplate.js", "src/components/Account/Affiliate/AffiliateHome.js", "src/components/ApplyAffiliateTemplate.js", "src/components/BonusCodesTemplate.js", "src/components/CreateAffiliateCodeTemplate.js", "src/components/TransactionsTemplate.js", "src/components/WithdrawalRequestTemplate.js", "src/components/WithdrawTemplate.js"],
+  "exclude": ["node_modules"]
+}

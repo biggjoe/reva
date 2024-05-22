@@ -1,0 +1,138 @@
+@charset "UTF-8";
+/*@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+*/
+@import url("https: //fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,400&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+html,
+body {
+
+    /*     font-family: "Quicksand", sans-serif; */
+    font-family: "Inter";
+    font-size: 0.92rem;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+.container {
+    margin: 0 auto;
+    min-width: 80%;
+    max-width: 80%;
+    display: block;
+}
+
+
+@media screen and (max-width: 960px) {
+    .container {
+        max-width: calc(100%);
+        padding: 0 10px;
+    }
+
+
+}
+
+.blue-gray-area {
+    background-color: #f7faff;
+}
+
+
+.contact-area {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px 30px;
+}
+
+.parp {
+    margin-bottom: 20px;
+}
+
+ul.cont-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+ul.cont-list li {
+    display: inline-block;
+    margin-right: 15px;
+}
+
+ul.cont-list li a {
+    display: inline-block;
+    font-size: 30px;
+}
+
+.top-band {
+    display: flex;
+    flex-direction: row;
+    background-color: #2871FE;
+    color: #fff;
+    padding: 8px 20px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    border: 3px dashed yellow;
+    padding: 5px 20px;
+}
+
+.logo {
+    display: inline-block;
+    height: 40px;
+}
+
+
+.main-bg-grad {
+    background-color: #fafafa;
+}
+
+.home-cover {
+    min-height: 100vh;
+    position: relative;
+}
+
+
+.home-overlay {
+    background: url(/images/home-globe-bg.svg);
+    background-image: url(/images/home-globe-bg.svg), linear-gradient(to bottom right, #fff, #fff);
+    background: url(/images/home-globe-bg.svg), linear-gradient(to bottom right, #fff, #fff);
+    background-blend-mode: difference;
+    background-position: 100% 10%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-size: contain;
+    height: 100%;
+    opacity: .1;
+    position: absolute;
+    width: 100%;
+    z-index: 0 !important;
+}
+
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield !important;
+}
+
+.dixer {
+    font-weight: 700;
+}
+
+.txt-xxsm {
+    font-size: 72%;
+    line-height: 1.5;
+}
+
+.color-black {
+    color: #000;
+}
