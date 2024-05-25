@@ -3,6 +3,7 @@ import axios from "axios";
 import HttpService from "../services/HttpService";
 import { Button } from "@mui/material";
 import CustomModal from "./CustomModal";
+import LoadingModal from "./LoadingModal";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -29,7 +30,12 @@ const ChangeAddressTemplate = (props) => {
     onopen: false,
     onclose: modalClose,
   });
-
+  
+  const closeLoader = () => setLoadData({ ...load_data, open: false });
+  const [load_data, setLoadData] = React.useState({
+    open: false,
+    onclose: closeLoader,
+  });
   React.useEffect(() => {
     //setData(user);
     if (!currency_fetched) {
@@ -42,6 +48,17 @@ const ChangeAddressTemplate = (props) => {
     axios.post("https://api.oxapay.com/api/currencies", {}).then((response) => {
       console.log("NETWORKS:::", response);
       fix_keys(response.data.data);
+    },(error)=>{
+      console.log(error)
+      let Err = ()=>{return <span className="color-red spacer">{error.message}</span>;}
+      setLoadData({
+        ...load_data,
+        open: true,
+        message: <Err/>,
+        severity: 0,
+        mode: "component",
+        onclose: closeLoader,
+      });
     });
   };
 
@@ -278,7 +295,12 @@ const ChangeAddressTemplate = (props) => {
           )}
         </div>
       )}
-      <CustomModal data={modal_data} />
+            {loading && (
+              <div className="pxy20 text-center txt-lg">Loading currencies...</div>
+            )}
+            
+ {load_data?.open &&  <LoadingModal data={load_data} />}
+      <CustomModal data={load_data} />
     </React.Fragment>
   );
 };

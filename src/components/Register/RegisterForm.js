@@ -17,7 +17,7 @@ const RegisterForm = ({ submit_handler, loading, intro_message }) => {
   const Lnk = () => {
     return (
       <div>
-        Agree to our <a href="/terms"> Terms & conditions</a>
+        Agree to our <Link href="/terms"> Terms & conditions</Link>
       </div>
     );
   };

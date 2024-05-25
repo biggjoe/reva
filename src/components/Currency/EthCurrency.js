@@ -2,7 +2,6 @@ import React, { useEffect, useState, useCallback } from "react";
 import BigNumber from "bignumber.js";
 import toast, { Toaster } from "react-hot-toast";
 import Link from "next/link";
-import ConnectWalletButton from "../../components/ConnectWalletButton";
 import axios from "axios";
 import {
   useAccount,
@@ -262,6 +261,7 @@ let error_message = <div className="text-center py-2">Error! Something Went Wron
             paid_amount: ethAmount,
             received_amount_in_token: result,
             affiliate_data: token_data,
+            referral_data: ref_data,
           };
 
           const jsonData = JSON.stringify(additionalData);
@@ -286,10 +286,14 @@ let error_message = <div className="text-center py-2">Error! Something Went Wron
         }
       } catch (error) {
         console.error("Error:", error);
+     
+        let Err = ()=>{return <span className="color-red spacer">{error.message}</span>;}
         setLoadData({
           ...load_data,
-          open: false,
-          message: error.message,
+          open: true,
+          message: <Err/>,
+          severity: 0,
+          mode: "component",
           onclose: closeLoader,
         });
       }
@@ -297,12 +301,7 @@ let error_message = <div className="text-center py-2">Error! Something Went Wron
     handlePostRequest();
   }, [
     purchaseIsSuccess,
-    purchaseData?.hash,
-    address,
-    ethAmount,
-    result,
-    user_data?.id,
-    token_data,
+    purchaseData?.hash
   ]);
 
   const [loaded, setLoaded] = React.useState(false);
@@ -337,6 +336,7 @@ let error_message = <div className="text-center py-2">Error! Something Went Wron
     setInvoice({ ...invoice_data, currency:"eth", amount:ethAmount, onopen: true, onclose: closeInvoice });
     console.log(invoice_data);
   };
+
   return (
     <React.Fragment>
       <AmountForm
@@ -442,7 +442,7 @@ let error_message = <div className="text-center py-2">Error! Something Went Wron
       )}
               {invoice_data?.onopen && <PayInvoice data={invoice_data} />}
               {bux_data?.onopen &&  <BuyModal data={bux_data} />}
-              {bux_data?.open &&  <LoadingModal data={load_data} />}
+              {load_data?.open &&  <LoadingModal data={load_data} />}
     </React.Fragment>
   );
 }

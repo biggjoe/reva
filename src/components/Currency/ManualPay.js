@@ -19,7 +19,6 @@ import { parseUnits, parseEther, formatEther, formatUnits,
 import presaleAbi from "../../abi/presale.json";
 import { tokenAdd, contractAddr, chainId } from "../../config";
 import FontAwesome from "react-fontawesome";
-import { UserContext } from "../../services/UserContext";
 import PromptLogin from "../PromptLogin";
 import useAuthService from "../../services/useAuthService";
 import BuyModal from "../BuyModal";
@@ -70,7 +69,6 @@ export default function ManualPay(props) {
 
   const launchInvoice = () => {
     setInvoice({ ...invoice_data, onopen: true, onclose: closeInvoice });
-    console.log(invoice_data);
   };
   const { address } = useAccount();
 

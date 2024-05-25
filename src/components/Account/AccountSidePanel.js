@@ -29,6 +29,7 @@ import {
   SupportAgentOutlined,
 } from "@mui/icons-material";
 import Link from "next/link";
+import FontAwesome from "react-fontawesome";
 
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
@@ -84,6 +85,13 @@ const AccountSidePanel = (props) => {
       path: "affiliate",
       title: "Affiliate",
       icon: <GroupWorkSharp />,
+      navItem: true,
+      data: { mustAuth: true, isAdmin: false, showSideNav: false },
+    },
+    {
+      path: "referral",
+      title: "Referral",
+      icon: <FontAwesome name="users" style={{lineHeight:"1",margin:"0",padding:"0", fontSize:"17px"}} />,
       navItem: true,
       data: { mustAuth: true, isAdmin: false, showSideNav: false },
     },

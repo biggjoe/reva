@@ -3,32 +3,40 @@ import useAuthHeader from "./useAuthHeaders";
 
 const SERVER_API_URL = process.env.NEXT_PUBLIC_SERVER_DOMAIN_API;
 const API_SECRET = process.env.NEXT_PUBLIC_API_SECRET;
-const AuthToken =()=>{
- const { AuthToken } = useAuthHeader();
-  return AuthToken;
+/* const Token =()=>{
+ const { this.AuthToken } = useAuthHeader();
+  return this.AuthToken;
 }
-
+let this.AuthToken=  useAuthHeader(); */
 class HttpServiceFunc {
-  auh = useAuthHeader();
-  AuthToken = AuthToken();
+  auh =useAuthHeader();
+  AuthToken =useAuthHeader();
   fetchPay() {
     const url = SERVER_API_URL + "fetchpay?secret=" + API_SECRET;
-    console.log("fetching pay::: ", url, { headers: AuthToken});
-    return axios.get(url, { headers: AuthToken }).then((response) => {
+    console.log("fetching pay::: ", url, { headers: this.AuthToken});
+    return axios.get(url, { headers: this.AuthToken }).then((response) => {
       console.log(response);
       return response.data;
     });
   }
   logPayment(data) {
-    
     const url = SERVER_API_URL +"log_payment?secret=" + API_SECRET;
-    return axios.post(url, data, { headers: AuthToken }).then((response) => {
+    console.log("log_payment::: ", url, { headers: this.AuthToken });
+    return axios.post(url, data, { headers: this.AuthToken }).then((response) => {
       return response.data;
     });
   }
   fetchAffiliate() {
     const url = SERVER_API_URL + "affiliate_home?secret=" + API_SECRET;
-    console.log("fetching affiliate_home::: ", url, { headers: this.auh });
+    console.log("fetching affiliate_home::: ", url, { headers: this.AuthToken });
+    return axios.get(url, { headers: this.auh }).then((response) => {
+      console.log(response);
+      return response.data;
+    });
+  }
+  fetchReferral() {
+    const url = SERVER_API_URL + "referral_home?secret=" + API_SECRET;
+    console.log("fetching referral_home::: ", url, { headers: this.AuthToken });
     return axios.get(url, { headers: this.auh }).then((response) => {
       console.log(response);
       return response.data;
@@ -246,6 +254,23 @@ class HttpServiceFunc {
     });
   }
 
+  getSettings(id) {
+    const url = SERVER_API_URL + "get_settings?secret=" + API_SECRET;
+    console.log("geting settings::: ", url, { headers: this.auh });
+    return axios.post(url,{id:id}, { headers: this.auh }).then((response) => {
+      console.log(response);
+      return response.data;
+    });
+  }
+  editSetting(data) {
+    const url = SERVER_API_URL + "edit_settings?secret=" + API_SECRET;
+    console.log("editing settings::: ", url, { headers: this.auh });
+    return axios.post(url,data, { headers: this.auh }).then((response) => {
+      console.log(response);
+      return response.data;
+    });
+  }
+
   //Whitepaper
 
   listWhitepaper() {
@@ -417,7 +442,7 @@ class HttpServiceFunc {
 
     
     return axios
-      .post(`${url}`, { code: code }, { headers: AuthToken })
+      .post(`${url}`, { code: code }, { headers: this.AuthToken })
       .then((response) => {
         console.log(response);
         return response.data;
@@ -431,7 +456,7 @@ class HttpServiceFunc {
 
     
     return axios
-      .post(`${url}`, { id: id }, { headers: AuthToken })
+      .post(`${url}`, { id: id }, { headers: this.AuthToken })
       .then((response) => {
         console.log(response);
         return response.data;
@@ -500,9 +525,7 @@ class HttpServiceFunc {
   }
   checkSession() {
     const url = SERVER_API_URL + "check-session?secret=" + API_SECRET;
-    
-    console.log("fetching::: ", url, "session: ", AuthToken);
-    return axios.get(url, { headers: AuthToken }).then((response) => {
+    return axios.get(url, { headers: this.AuthToken }).then((response) => {
       let resp = response.data;
       return resp;
     });
@@ -523,7 +546,7 @@ class HttpServiceFunc {
   postHeader(endpoint, data) {
     
     const url = SERVER_API_URL + endpoint + "?secret=" + API_SECRET;
-    return axios.post(url, data, { headers: AuthToken }).then((response) => {
+    return axios.post(url, data, { headers: this.AuthToken }).then((response) => {
       return response.data;
     });
   }
@@ -537,7 +560,7 @@ class HttpServiceFunc {
   postFormHeader(endpoint, data) {
     
     const objh = { "content-type": "multipart/form-data" };
-    const hrs = { ...AuthToken, ...objh };
+    const hrs = { ...this.AuthToken, ...objh };
     const url = SERVER_API_URL + endpoint + "?secret=" + API_SECRET;
     return axios.post(url, data, { headers: hrs }).then((response) => {
       return response.data;
@@ -546,7 +569,7 @@ class HttpServiceFunc {
   getHeader(endpoint) {
     
     const url = SERVER_API_URL + endpoint + "?secret=" + API_SECRET;
-    return axios.get(url, { headers: AuthToken }).then((response) => {
+    return axios.get(url, { headers: this.AuthToken }).then((response) => {
       let resp = response.data;
       return resp;
     });

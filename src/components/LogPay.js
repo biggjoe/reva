@@ -6,8 +6,9 @@ import {
   Divider,
 } from "@mui/material";
 import FontAwesome from "react-fontawesome";
-import HttpService from "../../../services/HttpService";
+import HttpService from "../services/HttpService";
 import Link from "next/link";
+import CopyText from "../services/CopyText";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -20,8 +21,9 @@ const LogPay = (props) => {
 const [fill_form,setFill]=React.useState(false);
 const toggleFill = ()=> setFill(!fill_form);
 
+
 const [sent,setSent]=React.useState({status:0,message:"",ran:0});
-const [pay,setPay]=React.useState({});
+const [pay,setPay]=React.useState({currency:modal.currency});
 const handleInput = 
   (e) => {
     const name = e.target.name;
@@ -80,18 +82,20 @@ setLoaded(true)
                     />
                   </button>
           </div>
-          
-           
-           
-                <Divider/>
-
-                <div className="px20 pt20 break-word">
-          <p>Please initiate a payment from our <Link href="/purchase">purchase</Link> and make a deposit into  our presale address: <strong>{contract_address}</strong> 
-            and then fill the form below to log your payment</p>
-        </div>
 <Divider/>
-<div className="px20 pt10 pb20">
+<div className="pxy20">
 
+<div className="pt10 break-word">
+          <p>Please ensure to make a deposit of the right currency and 
+             amount you selected on the purchase panel into
+              our presale address shown below  before filling the form below</p>
+        </div>
+        <div className="flex flex-col spacer">
+                <span className="grayed txt-sm mb5">PAYMENT ADDRESS</span>
+                <CopyText text={contract_address}/>
+                </div>
+
+                <div className="mb10"> <Divider/></div>
       {sent.ran===1 &&(
      <div className={`input-form-control flex flex-col ${sent.status===1 ? "success-input-border":"error-input-border"}`}>
         <span className={`text-center ${sent.status===1 ? "color-success":"color-error"}`}> {sent.message}</span>
@@ -105,12 +109,19 @@ setLoaded(true)
     )}   
     
 
-    
        <div className="pt10">{sent.ran ===0 &&(<>
           <div className="input togger">
             <label>Payment address</label>
             <input name="address" disabled={loading ||  (sent.status===1)} onChange={handleInput} placeholder="Enter payment address" className="input-form-control buy-input" />
           </div>
+          <div className="input">
+            <label>Currency</label>
+            <select name="currency" disabled={modal.currency} defaultValue={modal.currency} 
+            onChange={handleInput} className="input-form-control buy-input">
+            <option value="bnb">BNB</option>
+              <option value="usdt">USDT</option>
+              <option value="usdc">USDC</option>
+         </select></div>
           <div className="input togger">
             <label>Exact Amount Paid</label>
             <input name="amount" disabled={loading || (sent.status===1)} onChange={handleInput} placeholder="Enter exact amount paid" className="input-form-control buy-input" />
@@ -120,13 +131,14 @@ setLoaded(true)
           disabled={loading || (sent.status===1)} 
           className="buy_token_button">{loading ? "Logging...":"Submit Payment"}</button>
             </div>
-            
+       
+       
           </>)}
           </div>
           </div>
-          </div>
-
-        </DialogContent>
+                  
+</div>
+</DialogContent>
       </Dialog>
     </React.Fragment>
   );

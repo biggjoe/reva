@@ -6,6 +6,18 @@ import * as processHtml from "../../services/processHtml";
 import CountdownTimers from "../../components/CountdownTimers";
 import PlaceHolder from "../../components/PlaceHolder";
 import Link from "next/link";
+import BigNumber from "bignumber.js";
+import { useContractRead, useAccount, useBalance } from "wagmi";
+import presaleAbi from "../../abi/presale.json";
+import erc20Abi from "../../abi/erc20.json";
+import CountdownTimer from "../../components/CountdownTimers";
+import BnbCurrency from "../../components/Currency/BnbCurrency";
+import UsdtCurrency from "../../components/Currency/UsdtCurrency";
+import EthCurrency from "../../components/Currency/EthCurrency";
+import { tokenAdd, contractAddr, chainId } from "../../config";
+import FontAwesome from "react-fontawesome";
+import ManualPay from "../../components/Currency/ManualPay";
+import numberWithCommas from "../../pipes/Number";
 import Layout from "../../components/Account/Layout";
 
 const Dashboard = () => {
@@ -17,48 +29,82 @@ const Dashboard = () => {
   const [loaded, setLoaded] = React.useState(false);
   const [isParam, setParam] = React.useState(false);
   const [seconds, setSeconds] = React.useState(null);
-  const [dashboard_fetched, setDashboardFetched] = React.useState(false);
+const { address } = useAccount();
+  const getEndTime = useContractRead({
+    address: contractAddr,
+    abi: presaleAbi,
+    functionName: "endTimeSale",
+    watch: true,
+    chainId: chainId,
+  });
 
-  React.useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  const getStartTime = useContractRead({
+    address: contractAddr,
+    abi: presaleAbi,
+    functionName: "startTimeSale",
+    watch: true,
+    chainId: chainId,
+  });
 
-  React.useEffect(() => {
-    fetchDashboard();
-  }, []);
-  const fetchDashboard = () => {
-    setLoading(true);
-    setLoaded(false);
-    HttpService.fetchDashboard()
-      .then(
-        (result) => {
-          console.log("dashboard :: |", result);
-          setDashboardFetched(true);
-          if (result) {
-            setDashboard(result);
-            const secs =
-              new Date(result.progress_data?.ends).getTime() -
-              new Date().getTime();
-            /*   const seconds =
-              result.progress_data.sales_end_in -
-              result.progress_data.sales_start_in; */
-            setSeconds(Math.ceil(secs));
-          }
-        },
-        (error) => {}
-      )
-      .finally(() => {
-        setLoading(false);
-        setLoaded(true);
-      }); //fetch
-  }; //doAjax
-  let progressBar = (done, total) => {
-    console.log(done, total);
-    const one_perc = total / 100;
-    const done_perc = done / one_perc;
-    console.log(done_perc);
-    return { done: done_perc };
+  const getUsdRaised = useContractRead({
+    address: contractAddr,
+    abi: presaleAbi,
+    functionName: "getUsdRaised",
+    watch: true,
+    chainId: chainId,
+  });
+
+  const getTokenPrice = useContractRead({
+    address: contractAddr,
+    abi: presaleAbi,
+    functionName: "getPriceInUSD",
+    watch: true,
+    chainId: chainId,
+  });
+
+  const getTokenBalance = useContractRead({
+    address: tokenAdd,
+    abi: erc20Abi,
+    functionName: "balanceOf",
+    args: [address],
+    enabled: !!address,
+    chainId: chainId,
+  });
+
+  const curprz = new BigNumber(getTokenPrice.data).dividedBy(new BigNumber(10).pow(18)).toFixed(6);
+  const currentPrice  = isNaN(curprz) ? 0.00 : numberWithCommas(curprz); 
+  const tokenBalance = new BigNumber(getTokenBalance.data)
+    .dividedBy(new BigNumber(10).pow(18))
+    .toFixed(3);
+  const saleEndTime = new BigNumber(getEndTime.data);
+  const saleStartTime = new BigNumber(getStartTime.data);
+
+  const rzd = new BigNumber(getUsdRaised.data)
+    .dividedBy(new BigNumber(10).pow(18))
+    .toFixed(3)
+  const raisedUsd = isNaN(rzd) ? 0.00: numberWithCommas(rzd);
+
+const tgt = new BigNumber(3150000);
+    const targetUsd = isNaN(tgt) ? 0.00: numberWithCommas(tgt);
+
+  const progressPercentage = new BigNumber(raisedUsd)
+    .dividedBy(targetUsd)
+    .multipliedBy(100);
+
+
+  const handleCurrencyChange = (currency) => {
+    setSelectedCurrency(currency);
   };
+
+  const [percVal, setPerc] = React.useState(0);
+  React.useEffect(() => {
+    if ((progressPercentage && targetUsd && raisedUsd, currentPrice)) {
+      setLoaded(true);
+      const prc = isNaN(progressPercentage) ? 0 : progressPercentage.toFixed(2);
+      setPerc(`${prc}%`);
+    }
+  }, [progressPercentage, targetUsd, raisedUsd, currentPrice]);
+
   return (
     <React.Fragment>
       <Layout>

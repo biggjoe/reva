@@ -67,6 +67,24 @@ export default function BnbCurrency(props) {
     setBux({ ...bux_data, onopen: true, onclose: closeBux });
   };
 
+  
+  const closeLoader = () => setLoadData({ ...load_data, open: false });
+  const [load_data, setLoadData] = React.useState({
+    open: false,
+    onclose: closeLoader,
+  });
+
+  let doLoader = (state,message,mode=false) => {
+    setLoadData({ ...load_data, open: state,
+      onclose: closeLoader,message:message,mode:mode });
+  };
+
+  const closeInvoice = () => setInvoice({ ...invoice_data, onopen: false });
+  const [invoice_data, setInvoice] = React.useState({
+    onopen: false,
+    onclose: closeInvoice,
+  });
+
 
   const { address } = useAccount();
 
@@ -126,19 +144,10 @@ Success! XRV Purchase Complete
 
   useEffect(() => {
     if (isSuccess) {
-      setLoadData({
-        ...load_data,
-        open: true,
-        message: success_message,
-        onclose: closeLoader,
-      });
+      doLoader(true,success_message,"component")
       toast.success(success_message);
       const timeout = setTimeout(() => {
-        setLoadData({
-          ...load_data,
-          open: false,
-          onclose: closeLoader,
-        });
+        doLoader(false,"")
         toast.dismiss();
       }, 5000);
       return () => clearTimeout(timeout);
@@ -150,19 +159,10 @@ Success! XRV Purchase Complete
 ;
   useEffect(() => {
     if (isError) {
-      setLoadData({
-        ...load_data,
-        open: true,
-        message: error_message,
-        onclose: closeLoader,
-      });
+      doLoader(true,error_message)
       toast.error(error_message );
       const timeout = setTimeout(() => {
-        setLoadData({
-          ...load_data,
-          open: false,
-          onclose: closeLoader,
-        });
+        doLoader(false,"")
         toast.dismiss();
       }, 5000);
       return () => clearTimeout(timeout);
@@ -173,7 +173,6 @@ Success! XRV Purchase Complete
     () => (event) => {
       const inputValue = event.target.value;
       const parsedAmount = Number(inputValue);
-
       if (isNaN(parsedAmount) || parsedAmount <= 0) {
         setBnbErrorMessage("Amount must be greater than zero");
       } else if (balanceBnb.data?.formatted < parsedAmount) {
@@ -190,12 +189,7 @@ Success! XRV Purchase Complete
     const handlePostRequest = async () => {
       try {
         if (isSuccess) {
-          setLoadData({
-            ...load_data,
-            open: true,
-            message: "Payment received. Processing...",
-            onclose: closeLoader,
-          });
+          doLoader(true,"Payment received. Processing dashboard balance...")
           setTokenData({ ...token_data, total_tokens: result });
           const additionalData = {
             id: user_data?.id,
@@ -208,8 +202,8 @@ Success! XRV Purchase Complete
             paid_amount: bnbAmount,
             received_amount_in_token: result,
             affiliate_data: token_data,
+            referral_data: ref_data,
           };
-
           const jsonData = JSON.stringify(additionalData);
 
           const response = await axios.post(
@@ -223,32 +217,22 @@ Success! XRV Purchase Complete
           );
 
           console.log("Server response:", response.data);
-          setLoadData({
-            ...load_data,
-            open: false,
-            message: response.data.message,
-            onclose: closeLoader,
-          });
+          doLoader(true,response.data.message)
+          if(response.data.status===1){
+          const jwt = response.data.new_jwt;
+          localStorage.setItem("access_token", jwt);
+        }
         }
       } catch (error) {
         console.error("Error:", error);
-        setLoadData({
-          ...load_data,
-          open: false,
-          message: error.message,
-          onclose: closeLoader,
-        });
+        let Err = ()=>{return <span className="color-red spacer">{error.message}</span>;}
+        doLoader(true,<Err/>,"component")
       }
     };
     handlePostRequest();
   }, [
     isSuccess,
-    data?.hash,
-    address,
-    bnbAmount,
-    result,
-    user_data?.id,
-    token_data,
+    data?.hash
   ]);
 
   const [is_bonused, setBonused] = React.useState(false);
@@ -260,23 +244,6 @@ Success! XRV Purchase Complete
   const togOnce = () => setShowInit(!show_init);
 
   
-  
-  const closeLoader = () => setLoadData({ ...load_data, open: false });
-  const [load_data, setLoadData] = React.useState({
-    open: false,
-    onclose: closeLoader,
-  });
-
-  const openLoader = () => {
-    setLoadData({ ...load_data, open: true });
-  };  
-  
-  const closeInvoice = () => setInvoice({ ...invoice_data, onopen: false });
-  const [invoice_data, setInvoice] = React.useState({
-    onopen: false,
-    onclose: closeInvoice,
-  });
-
   const launchInvoice = () => {
     setInvoice({ ...invoice_data, currency:"bnb", amount:bnbAmount, onopen: true, onclose: closeInvoice });
     console.log(invoice_data);
@@ -326,14 +293,8 @@ Success! XRV Purchase Complete
                 </button>
                 </div>
               ) : (<>
-                {/* <div className="cover-div">
-                  <div
-                    className="btn-div"
-                    style={{ opacity: bnbAmount > 0 ? "1" : "0.3" }}
-                  >
-                    <ConnectWalletButton />
-                  </div>
-                </div> */}<div className="text-center">
+              
+              <div className="text-center">
 <div className="cover-div">
   <div
     className="btn-div"
@@ -373,7 +334,7 @@ Success! XRV Purchase Complete
         )}
         {invoice_data?.onopen && <PayInvoice data={invoice_data} />}
               {bux_data?.onopen &&  <BuyModal data={bux_data} />}
-              {bux_data?.open &&  <LoadingModal data={load_data} />}
+              {load_data?.open &&  <LoadingModal data={load_data} />}
     </React.Fragment>
   );
 }

@@ -3,7 +3,7 @@ import Layout from "../../../components/Account/Layout";
 import TransactionList from "../../../components/Account/Transactions/TRansactionList";
 import { Breadcrumbs, Button, Card, Divider } from "@mui/material";
 import Link from "next/link";
-import LogPay from "../../../components/Account/Transactions/LogPay";
+import LogPay from "../../../components/LogPay";
 
 const Transactions = () => {
 

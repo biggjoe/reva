@@ -53,7 +53,7 @@ const TransactionsTemplate = (props) => {
                 key={item.id}
                 divider={true}
                 component={Link}
-                href={`/account/transactions/${item.tnx_id}`}
+                href={`/account/transactions/details/${item.tnx_id}`}
               >
                 <ListItemIcon>
                   {item.status === "pending" ? (

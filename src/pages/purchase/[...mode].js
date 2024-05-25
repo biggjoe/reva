@@ -185,7 +185,8 @@ export default function Home() {
   return (
     <React.Fragment>
       <Header />
-      <section className="page-main">
+      <div className="main-bg-grad home-cover">
+        <div className="home-overlay"></div>
         <div className="flex flex-col py30 flex-column justify-content-center align-items-center py20 px10">
           
           <BuyPanel
@@ -202,8 +203,8 @@ export default function Home() {
             fetching_referee={fetching_referee}
             referee_fetched={referee_fetched}
           />
+          </div>
         </div>
-      </section>
       <Footer />
     </React.Fragment>
   );

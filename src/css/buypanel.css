@@ -422,6 +422,12 @@
     justify-content: center;
 }
 
+button.buy_token_button[disabled],
+button.buy_token_button:disabled{
+    background-color: #aaa;
+    color:#888
+}
+
 
 
 .prog-desc {
@@ -504,4 +510,8 @@ w3m-connect-button{
 button[data-size='md'] {
     padding: 20px !important;
     min-height: 64px !important;
+}
+
+.css-l0jafl.Mui-expanded {
+    margin: 12px 0px !important;
 }

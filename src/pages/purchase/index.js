@@ -119,6 +119,8 @@ const Purchase = () => {
   return (
     <React.Fragment>
       <Header />
+      <div className="main-bg-grad home-cover">
+        <div className="home-overlay"></div>
         <div className="flex py30 flex-col flex-column justify-content-center align-items-center py20 px10">
           <BuyPanel 
             ref_data={referee}
@@ -134,6 +136,7 @@ const Purchase = () => {
             fetching_referee={fetching_referee}
             referee_fetched={referee_fetched}
             />
+            </div>
         </div>
       <Footer />
     </React.Fragment>

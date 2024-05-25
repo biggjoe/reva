@@ -84,6 +84,7 @@ ul.nav-items {
 ul.nav-items li {
   list-style-type: none;
   display: inline-flex;
+  align-items:center;
   position: relative;
 }
 
@@ -95,7 +96,8 @@ ul.nav-items li a {
   padding: 10px 12px;
   text-transform: capitalize;
   transition: .5s;
-  display: block;
+  display: flex;
+  align-items:center;
 }
 
 ul.nav-items li ul {
@@ -126,7 +128,8 @@ ul.nav-items li ul li a {
   font-size: 1rem;
   font-weight: 400;
   padding: 6px 12px;
-  display: block;
+  display: flex;
+  align-items:center;
   min-width: 150px;
 }
 

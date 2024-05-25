@@ -11,6 +11,7 @@ import { tokenAdd, contractAddr, chainId } from "../config";
 import FontAwesome from "react-fontawesome";
 import ManualPay from "./Currency/ManualPay";
 import numberWithCommas from "../pipes/Number";
+import UsdcCurrency from "./Currency/UsdcCurrency";
 
 export default function BuyPanel(props) {
   const {
@@ -27,14 +28,9 @@ export default function BuyPanel(props) {
     fetching_referee,
     referee_fetched
   } = props;
-  console.log("buypanel temp::",props)
-  const { address } = useAccount(); /* 
-  const AuthServ = useAuthService();
-  const usd = AuthServ.getCurrentUser();
-  const [user_loaded, setUserLoaded] = React.useState(false);
-  const [user_data, setUser] = React.useState(usd); */
+  
   const [loaded, setLoaded] = React.useState(false);
-
+const { address } = useAccount();
   const getEndTime = useContractRead({
     address: contractAddr,
     abi: presaleAbi,
@@ -77,7 +73,7 @@ export default function BuyPanel(props) {
   });
 
   const curprz = new BigNumber(getTokenPrice.data).dividedBy(new BigNumber(10).pow(18)).toFixed(6);
-  const currentPrice  = isNaN(curprz) ? 0.00 : numberWithCommas(curprz); 
+  const currentPrice  = isNaN(curprz) ? 0.00 : curprz; 
   const tokenBalance = new BigNumber(getTokenBalance.data)
     .dividedBy(new BigNumber(10).pow(18))
     .toFixed(3);
@@ -206,7 +202,7 @@ const tgt = new BigNumber(3150000);
                     </button>
                   </div>
 
-                  <div className="btn-col">
+                 {/*  <div className="btn-col">
                     <button
                       type="button"
                       className={`custom-currency-button ${
@@ -218,6 +214,20 @@ const tgt = new BigNumber(3150000);
                         <img src="/images/coins/eth.png" alt="Etherum Icon" />
                       </span>
                       <span>ETH</span>
+                    </button>
+                  </div> */}
+                  <div className="btn-col">
+                    <button
+                      type="button"
+                      className={`custom-currency-button ${
+                        selectedCurrency === "usdc" ? "active" : ""
+                      }`}
+                      onClick={() => setSelectedCurrency("usdc")}
+                    >
+                      <span className="currency-icon">
+                        <img src="/images/coins/usdc.svg" alt="USDC Icon" />
+                      </span>
+                      <span>USDC</span>
                     </button>
                   </div>
 
@@ -291,6 +301,22 @@ const tgt = new BigNumber(3150000);
                     referee_fetched={referee_fetched}
                   />
                 )}
+
+                
+{selectedCurrency === "usdc" && <UsdcCurrency 
+                    ref_data={ref_data}
+                    affiliate_data={affiliate_data}
+                    set_ref={set_ref}
+                    set_aff={set_aff}
+                    handleBonusInput={handleBonusInput}
+                    bonus_code={bonus_code}
+                    applyBonus={applyBonus}
+                    removeBonus={removeBonus}
+                    currency={selectedCurrency}
+                    fetching_bonus={fetching_bonus}
+                    bonus_fetched={bonus_fetched}
+                    fetching_referee={fetching_referee}
+                    referee_fetched={referee_fetched}/>}
                 {selectedCurrency === "manual" && (
                   <ManualPay
                     ref_data={ref_data}

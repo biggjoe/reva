@@ -38,7 +38,7 @@ export default function PaymentForm(props) {
         ||{JSON.stringify(affiliate_data)}||
         <div className="text-start">
           <div className="input iconed">
-            <label>Amount In {currency}</label>
+            <label>Amount In {currency.toUpperCase()}</label>
             <span className="icon-box">
               <img
                 src={`/images/coins/${iconsObjs[currency]}`}

@@ -10,19 +10,19 @@ import "../css/dashboard.css";
 import toast, { Toaster } from "react-hot-toast";
 import { createWeb3Modal, defaultWagmiConfig } from "@web3modal/wagmi/react";
 import { WagmiConfig } from "wagmi";
-import { bscTestnet } from "viem/chains";
-import { UserProvider } from "../services/UserContext";
+import { bsc } from "viem/chains";
 
-const projectId = "7fb83121f24001fe287ad6e719130eab";
+const projectId = "1bcb48d6f04c789a0f51890839107b7b";
+
 
 const metadata = {
-  name: "Web3Modal",
-  description: "Web3Modal Example",
-  url: "https://web3modal.com",
-  icons: ["https://avatars.githubusercontent.com/u/37784886"],
+  name: "Reva Finance",
+  description: "XRV Presale",
+  url: "https://reva.finance",
+  icons: ["https://reva.finance/images/icon.png"],
 };
 
-const chains = [bscTestnet];
+const chains = [bsc];
 const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
 
 createWeb3Modal({

@@ -278,6 +278,7 @@ label {
     line-height: 0.8;
     font-size: 90% !important;
     border-radius: 3px;
+    z-index:4
 }
 
 .input select {
@@ -330,7 +331,8 @@ select.input-form-control {
     max-width: 100%;
 }
 
-.input-form-control[aria-disabled] {
+.input-form-control[aria-disabled], .input-form-control[disabled],
+.input-form-control:disabled {
     background-color: #bbb;
 }
 
@@ -1939,4 +1941,11 @@ ul.flat-nav li button.button-link.active {
 
 .break-word{
     word-wrap: break-word;
+}
+.full-main-height{
+    height:100vh;
+    width:100vw;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }

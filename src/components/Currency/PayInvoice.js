@@ -11,12 +11,12 @@ import ConnectWalletButton from "../../components/ConnectWalletButton";
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
-import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FontAwesome from "react-fontawesome";
 import HttpService from "../../services/HttpService";
 import Link from "next/link";
 import CopyText from "../../services/CopyText";
+import LogPay from "../LogPay";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -35,7 +35,7 @@ const [fill_form,setFill]=React.useState(false);
 const toggleFill = ()=> setFill(!fill_form);
 
 const [sent,setSent]=React.useState({status:0,message:"",ran:0});
-const [pay,setPay]=React.useState({});
+const [pay,setPay]=React.useState({currency:modal.currency});
 const handleInput = 
   (e) => {
     const name = e.target.name;
@@ -65,7 +65,14 @@ setLoading(false);
 setLoaded(true)
   });
 }
-  return (
+
+const closePay = ()=> setLog({...log,onopen:false,onclose:closePay});
+const [log,setLog]=React.useState({onopen:false,onclose:closePay,currency:modal.currency})
+const launchLogPay = ()=>{
+  setLog({...log,onopen:true,onclose:closePay}); 
+}
+
+return (
     <React.Fragment>
       <Dialog
         fullScreen={false}
@@ -137,51 +144,15 @@ setLoaded(true)
          <h4 className="flex ">PAY MANUALLY</h4>
         </AccordionSummary>    <Divider/>
         <AccordionDetails>
-    <Collapse in={fill_form}>
-      {sent.ran===1 &&(
-     <div className={`input-form-control flex flex-col ${sent.status===1 ? "success-input-border":"error-input-border"}`}>
-        <span className={`text-center ${sent.status===1 ? "color-success":"color-error"}`}> {sent.message}</span>
-        
-        
-        <span className="spacer"></span>
-        <div className="text-center">
-        {sent.status===0 && <button className="button-link pt10" onClick={()=>{toggleFill();setSent({...sent,ran:0})}} >Try again</button>}
-        <button className="button-link color-red pt10" onClick={()=>modal.onclose()} >Exit</button>
-        </div></div>
-    )}   
     
-
-    
-       <div className="pt10">{sent.ran ===0 &&(<>
-          <div className="input togger">
-            <label>Payment address</label>
-            <input name="address" disabled={loading ||  (sent.status===1)} onChange={handleInput} placeholder="Enter payment address" className="input-form-control buy-input" />
-          </div>
-          <div className="input togger">
-            <label>Exact Amount Paid</label>
-            <input name="amount" disabled={loading || (sent.status===1)} onChange={handleInput} placeholder="Enter exact amount paid" className="input-form-control buy-input" />
-          </div>
-          <div className="btn-div" style={{opacity:1}}>
-          <button onClick={sendPay} 
-          disabled={loading || (sent.status===1)} 
-          className="buy_token_button">{loading ? "Logging...":"Submit Payment"}</button>
-            </div>
-            <div className="py10  text-center">
-            <button onClick={toggleFill} className="button-link">Show payment instructions</button>
-          </div>
-          </>)}
-          </div>
-          </Collapse>
-          <Collapse in={!fill_form}>
         <div className="pxy10 break-word">
           <p>Please make a deposit of <strong>{modal.amount} {(modal.currency).toUpperCase()}</strong> into  our presale address above and the click on the <strong>&quot;I HAVE PAID&quot;</strong> button below to register your payment.</p>
             <p>You can still register your payment when you login to your
                <Link href="/account/tranactions">user dahsboard</Link> under <strong>&quot;Transactions&quot;</strong></p>
         </div>
         <div className="btn-div" style={{opacity:1}}>
-              <button onClick={toggleFill} className="buy_token_button">I HAVE PAID</button>
+              <button onClick={launchLogPay} className="buy_token_button">I HAVE PAID</button>
             </div>
-            </Collapse>
         </AccordionDetails>
       </Accordion>
                   </div>
@@ -191,6 +162,7 @@ setLoaded(true)
               </div>
         </DialogContent>
       </Dialog>
+     {log.onopen &&<LogPay data={log}/>} 
     </React.Fragment>
   );
 };

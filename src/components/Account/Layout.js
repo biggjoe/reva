@@ -37,7 +37,7 @@ export default function Layout({ children }) {
       (res) => {
         console.log("r::", res);
         return;
-        /*  if (!res.status || res.status === 0) {
+         if (!res.status || res.status === 0) {
           AuthServ.logout();
           setRedirect(true);
           router.push("/login");
@@ -48,7 +48,7 @@ export default function Layout({ children }) {
           } else {
             setUserLogged(true);
           }
-        } */
+        }  /**/
       },
       (error) => {
         console.log(error.message);
