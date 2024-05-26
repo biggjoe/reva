@@ -26,11 +26,11 @@ export default function BuyPanel(props) {
     fetching_bonus,
     bonus_fetched,
     fetching_referee,
-    referee_fetched
+    referee_fetched,
   } = props;
-  
+
   const [loaded, setLoaded] = React.useState(false);
-const { address } = useAccount();
+  const { address } = useAccount();
   const getEndTime = useContractRead({
     address: contractAddr,
     abi: presaleAbi,
@@ -72,8 +72,10 @@ const { address } = useAccount();
     chainId: chainId,
   });
 
-  const curprz = new BigNumber(getTokenPrice.data).dividedBy(new BigNumber(10).pow(18)).toFixed(6);
-  const currentPrice  = isNaN(curprz) ? 0.00 : curprz; 
+  const curprz = new BigNumber(getTokenPrice.data)
+    .dividedBy(new BigNumber(10).pow(18))
+    .toFixed(6);
+  const currentPrice = isNaN(curprz) ? 0.0 : curprz;
   const tokenBalance = new BigNumber(getTokenBalance.data)
     .dividedBy(new BigNumber(10).pow(18))
     .toFixed(3);
@@ -82,11 +84,11 @@ const { address } = useAccount();
 
   const rzd = new BigNumber(getUsdRaised.data)
     .dividedBy(new BigNumber(10).pow(18))
-    .toFixed(3)
-  const raisedUsd = isNaN(rzd) ? 0.00: numberWithCommas(rzd);
+    .toFixed(3);
+  const raisedUsd = isNaN(rzd) ? 0.0 : numberWithCommas(rzd);
 
-const tgt = new BigNumber(3150000);
-    const targetUsd = isNaN(tgt) ? 0.00: numberWithCommas(tgt);
+  const tgt = new BigNumber(3150000);
+  const targetUsd = isNaN(tgt) ? 0.0 : numberWithCommas(tgt);
 
   const progressPercentage = new BigNumber(raisedUsd)
     .dividedBy(targetUsd)
@@ -202,7 +204,7 @@ const tgt = new BigNumber(3150000);
                     </button>
                   </div>
 
-                 {/*  <div className="btn-col">
+                  {/*  <div className="btn-col">
                     <button
                       type="button"
                       className={`custom-currency-button ${
@@ -302,8 +304,8 @@ const tgt = new BigNumber(3150000);
                   />
                 )}
 
-                
-{selectedCurrency === "usdc" && <UsdcCurrency 
+                {selectedCurrency === "usdc" && (
+                  <UsdcCurrency
                     ref_data={ref_data}
                     affiliate_data={affiliate_data}
                     set_ref={set_ref}
@@ -316,7 +318,9 @@ const tgt = new BigNumber(3150000);
                     fetching_bonus={fetching_bonus}
                     bonus_fetched={bonus_fetched}
                     fetching_referee={fetching_referee}
-                    referee_fetched={referee_fetched}/>}
+                    referee_fetched={referee_fetched}
+                  />
+                )}
                 {selectedCurrency === "manual" && (
                   <ManualPay
                     ref_data={ref_data}

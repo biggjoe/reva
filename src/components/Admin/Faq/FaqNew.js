@@ -2,11 +2,6 @@ import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Card from "@mui/material/Card";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import ListItemButton from "@mui/material/ListItemButton";
-import IconButton from "@mui/material/IconButton";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
@@ -15,14 +10,18 @@ import * as processHtml from "../../../services/processHtml";
 import Edit from "@mui/icons-material/Edit";
 import HttpService from "../../../services/HttpService";
 import PlaceHolder from "../../PlaceHolder";
-import { Collapse } from "@mui/material";
+import Collapse from "@mui/material/Collapse";
 import HtmlModal from "../../HtmlModal";
 import useFetchFaqDetails from "../../../hooks/useFetchFaqDetails";
 import CustomModal from "../../CustomModal";
 
-const PagesNew = () => {
+const FaqNew = () => {
   let navigate = useRouter();
-  let [faq, setFaq] = React.useState({});
+  let [faq, setFaq] = React.useState({
+    question: "",
+    answer: "",
+    mode: "add-faq",
+  });
   let [answer, setAnswer] = React.useState("");
   let [loading, setLoading] = React.useState(false);
   let [loaded, setLoaded] = React.useState(false);
@@ -33,6 +32,7 @@ const PagesNew = () => {
     onopen: false,
     onclose: closeModal,
     title: "New Faq",
+    message: "",
   });
 
   React.useEffect(() => {}, []);
@@ -44,10 +44,12 @@ const PagesNew = () => {
 
   const handleSubmit = () => {
     console.log("SUBMITTING");
-    HttpService.postHeader("pages", {
+    setLoading(true);
+    setLoaded(false);
+    HttpService.createFaq({
       question: faq.question,
       answer: answer,
-      mode: "add-page",
+      mode: "add-faq",
     })
       .then((resp) => {
         console.log(resp);
@@ -60,6 +62,7 @@ const PagesNew = () => {
       })
       .finally(() => {
         setLoading(false);
+        setLoaded(true);
       });
   };
   const handleInputChange = React.useCallback(
@@ -73,40 +76,38 @@ const PagesNew = () => {
 
   return (
     <React.Fragment>
+      <div className="pxy20">
+        <div className={loading ? " input iconed " : " input "}>
+          <label>Question</label>
+          <input
+            type="text"
+            className="input-form-control"
+            name="question"
+            onChange={handleInputChange}
+            placeholder={"FAQ Question "}
+          />
+        </div>
 
-            <div className=" pxy20">
-              <div className={loading ? " input iconed " : " input "}>
-                <label>Title</label>
-                <input
-                  type="text"
-                  className="input-form-control"
-                  name="question"
-                  onChange={handleInputChange}
-                  placeholder={"Page Title "}
-                />
-              </div>
-
-              <div className="mb10">
-                <DefaultEditor
-                  className="input-form-control"
-                  placeholder="Page Description"
-                  value={answer}
-                  onChange={onHtmlChange}
-                />
-              </div>
-              <Button
-                type="submit"
-                size="large"
-                variant="contained"
-                disabled={loading}
-                onClick={handleSubmit}
-              >
-                {loading ? "Working..." : " Add Page "}
-              </Button>
-            </div>
+        <div className="mb10">
+          <DefaultEditor
+            className="form-control"
+            value={answer}
+            onChange={onHtmlChange}
+          />
+        </div>
+        <Button
+          type="submit"
+          size="large"
+          variant="contained"
+          disabled={loading}
+          onClick={handleSubmit}
+        >
+          {loading ? "Working..." : " Add FAQ "}
+        </Button>
+      </div>
       <CustomModal data={modal} />
     </React.Fragment>
   );
 };
 
-export default PagesNew;
+export default FaqNew;

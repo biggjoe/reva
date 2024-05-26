@@ -27,13 +27,13 @@ export default function Layout({ children }) {
   const [loading, setLoading] = React.useState(false);
   const [loaded, setLoaded] = React.useState(false);
   const [resending, setResending] = React.useState(false);
-  const [session_checked,setSessionChecked] = React.useState(false);
+  const [session_checked, setSessionChecked] = React.useState(false);
   const [loading_text, setLoadingText] = React.useState(
     "Please enter the verification code sent your phone or email"
   );
   const [verify_data, setVerifyData] = React.useState({});
   const usr = useAuthService().getCurrentUser();
-    let AuthServ = useAuthService();
+  let AuthServ = useAuthService();
   React.useEffect(() => {
     HttpService.checkSession().then(
       (res) => {
@@ -48,23 +48,22 @@ export default function Layout({ children }) {
           }
           setUserLogged(true);
         }
-        
-   setSessionChecked(true); 
+
+        setSessionChecked(true);
       },
       (error) => {
         console.log(error.message);
         AuthServ.logout();
         return router.push("/admin/login");
-        setSessionChecked(true); 
+        setSessionChecked(true);
       }
     );
   }, []);
-/*   React.useEffect(() => {
+  /*   React.useEffect(() => {
     console.log("PAS::", params["*"]);
     setPath(params["*"]);
   }, [params]);
     */
-
 
   const handleInput = (e) => {
     const target = e.target;
@@ -150,11 +149,8 @@ export default function Layout({ children }) {
 
   const doLogout = () => {
     AuthServ.logout().then(() => {
-      setTimeout(() => {
-        console.log("Session Cleared...");
-        window.location.href = "/";
-        return;
-      }, 1);
+      console.log("Session Cleared...");
+      return (window.location.href = "/");
     });
   };
 
@@ -168,7 +164,6 @@ export default function Layout({ children }) {
     { path: "profile", title: "Profile" },
   ];
   return (
-    
     <Box
       sx={{
         display: "flex",
@@ -178,35 +173,46 @@ export default function Layout({ children }) {
         padding: "0 !important",
         backgroundColor: "#f5f5f5",
       }}
-    >{session_checked && user_logged && (<>
-      <CssBaseline />
-      <AdminHeader
-        open={open}
-        toggleDrawer={toggleDrawer}
-        DrawerHeader={DrawerHeader}
-        doLogout={doLogout}
-        usr={usr}
-      />
-      <AdminSidePanel
-        onopen={open}
-        onclose={handleDrawerClose}
-        DrawerHeader={DrawerHeader}
-        doLogout={doLogout}
-      />
-      <main style={{ width: "100%", height: "100%" }}>
-        <DrawerHeader />
-        {children}
-      </main>
-      </>)}  
-      {session_checked && !user_logged && <div className="pxy20">NOT LOGGED IN</div>}
-      {!session_checked && <div className="pxy20">
-        <div className="full-main-height inline-flex flex-col align-items-center">
-           <Box sx={{ width: '30%' }}>
-      <LinearProgress />
+    >
+      {session_checked && user_logged && (
+        <>
+          <CssBaseline />
+          <AdminHeader
+            open={open}
+            toggleDrawer={toggleDrawer}
+            DrawerHeader={DrawerHeader}
+            doLogout={doLogout}
+            usr={usr}
+          />
+          <AdminSidePanel
+            onopen={open}
+            onclose={handleDrawerClose}
+            DrawerHeader={DrawerHeader}
+            doLogout={doLogout}
+          />
+          <main style={{ width: "100%", height: "100%" }}>
+            <DrawerHeader />
+            {children}
+          </main>
+        </>
+      )}
+
+      {session_checked && !user_logged && (
+        <div className="pxy20">NOT LOGGED IN</div>
+      )}
+      {!session_checked && (
+        <div className="pxy20">
+          <div className="full-main-height inline-flex flex-col align-items-center">
+            <Box sx={{ width: "30%" }}>
+              <LinearProgress />
+            </Box>
+            <div className="py20">
+              {" "}
+              <h3>Loading... </h3>
+            </div>
+          </div>
+        </div>
+      )}
     </Box>
-         <div className="py20"> <h3>Loading... </h3></div>
-          </div></div>}
-    </Box>
-  
   );
 }

@@ -7,12 +7,9 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Slide from "@mui/material/Slide";
 import Close from "@mui/icons-material/Close";
-import DatePipe from "../../pipes/DatePipe";
+import DatePipe from "../pipes/DatePipe";
 
-const TransitionUp = React.forwardRef(function Transition(
-  props,
-  ref
-) {
+const TransitionUp = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 

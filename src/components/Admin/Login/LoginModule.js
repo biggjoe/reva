@@ -1,33 +1,39 @@
 import React from "react";
 import LoginForm from "./LoginForm";
 import HttpService from "../../../services/HttpService";
-import CustomModal from "../../templates/CustomModal";
-import ResendVerify from "../../templates/ResendVerify";
+import CustomModal from "../../CustomModal";
+import ResendVerify from "../../ResendVerify";
 
-const LoginModule = (props: any) => {
+const LoginModule = (props) => {
   const { intro_message, return_url } = props;
   console.log(window);
-  const [loading, setLoading] = React.useState<boolean>(false);
-  const [loaded, setLoaded] = React.useState<boolean>(false);
-  const [response_text, setResponseText] = React.useState<string>("");
+  const [loading, setLoading] = React.useState < boolean > false;
+  const [loaded, setLoaded] = React.useState < boolean > false;
+  const [response_text, setResponseText] = React.useState < string > "";
   const modalClose = () => setModal({ ...modal_data, onopen: false });
-  const [modal_data, setModal] = React.useState<any>({
-    onopen: false,
-    onclose: modalClose,
-  });
+  const [modal_data, setModal] =
+    React.useState <
+    any >
+    {
+      onopen: false,
+      onclose: modalClose,
+    };
   const verifyClose = () => {
     setVerify({ ...verify_data, onpen: false });
   };
 
-  const [verify_data, setVerify] = React.useState<any>({
-    onopen: false,
-    onclose: verifyClose,
-  });
+  const [verify_data, setVerify] =
+    React.useState <
+    any >
+    {
+      onopen: false,
+      onclose: verifyClose,
+    };
   React.useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const doLogin = (data: any) => {
+  const doLogin = (data) => {
     data.action = "doLogin";
     console.log(data);
     setLoading(true);
@@ -119,7 +125,7 @@ const LoginModule = (props: any) => {
         setLoaded(true);
       });
   };
-  const items: any = {
+  const items = {
     submit_handler: doLogin,
     intro_message: intro_message,
     loading: loading,

@@ -11,7 +11,6 @@ const Home = () => {
   });
   return (
     <Layout page_data={page}>
-      {" "}
       <div className="pxy20">
         {loading_page && <LinearProgress />}
         {loaded_page && (

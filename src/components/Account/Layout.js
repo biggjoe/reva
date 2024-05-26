@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import AccountHeader from "./AccountHeader";
 import AccountSidePanel from "./AccountSidePanel";
 import Link from "next/link";
+import LinearProgress from "@mui/material/LinearProgress";
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -29,6 +30,7 @@ export default function Layout({ children }) {
   const [loading_text, setLoadingText] = React.useState(
     "Please enter the verification code sent your phone or email"
   );
+  const [session_checked, setSessionChecked] = React.useState(false);
   const [verify_data, setVerifyData] = React.useState({});
   let AuthServ = useAuthService();
   const usr = AuthServ.getCurrentUser();
@@ -36,8 +38,7 @@ export default function Layout({ children }) {
     HttpService.checkSession().then(
       (res) => {
         console.log("r::", res);
-        return;
-         if (!res.status || res.status === 0) {
+        if (!res.status || res.status === 0) {
           AuthServ.logout();
           setRedirect(true);
           router.push("/login");
@@ -48,12 +49,14 @@ export default function Layout({ children }) {
           } else {
             setUserLogged(true);
           }
-        }  /**/
+        } /**/
+        setSessionChecked(true);
       },
       (error) => {
         console.log(error.message);
         AuthServ.logout();
         router.push("/login");
+        setSessionChecked(true);
       }
     );
   }, []);
@@ -141,12 +144,9 @@ export default function Layout({ children }) {
   };
 
   const doLogout = () => {
-    useAuthService.logout().then(() => {
-      setTimeout(() => {
-        console.log("Session Cleared...");
-        window.location.href = "/";
-        return;
-      }, 1);
+    AuthServ.logout().then(() => {
+      console.log("Session Cleared...");
+      return (window.location.href = "/");
     });
   };
 
@@ -170,24 +170,45 @@ export default function Layout({ children }) {
         backgroundColor: "#f5f5f5",
       }}
     >
-      <CssBaseline />
-      <AccountHeader
-        open={open}
-        toggleDrawer={toggleDrawer}
-        DrawerHeader={DrawerHeader}
-        doLogout={doLogout}
-        usr={usr}
-      />
-      <AccountSidePanel
-        onopen={open}
-        onclose={handleDrawerClose}
-        DrawerHeader={DrawerHeader}
-        doLogout={doLogout}
-      />
-      <main style={{ width: "100%", height: "100%" }}>
-        <DrawerHeader />
-        {children}
-      </main>
+      {session_checked && user_logged && (
+        <>
+          <CssBaseline />
+          <AccountHeader
+            open={open}
+            toggleDrawer={toggleDrawer}
+            DrawerHeader={DrawerHeader}
+            doLogout={doLogout}
+            usr={usr}
+          />
+          <AccountSidePanel
+            onopen={open}
+            onclose={handleDrawerClose}
+            DrawerHeader={DrawerHeader}
+            doLogout={doLogout}
+          />
+          <main style={{ width: "100%", height: "100%" }}>
+            <DrawerHeader />
+            {children}
+          </main>
+        </>
+      )}
+
+      {session_checked && !user_logged && (
+        <div className="pxy20">NOT LOGGED IN</div>
+      )}
+      {!session_checked && (
+        <div className="pxy20">
+          <div className="full-main-height inline-flex flex-col align-items-center">
+            <Box sx={{ width: "30%" }}>
+              <LinearProgress />
+            </Box>
+            <div className="py20">
+              {" "}
+              <h3>Loading... </h3>
+            </div>
+          </div>
+        </div>
+      )}
     </Box>
   );
 }

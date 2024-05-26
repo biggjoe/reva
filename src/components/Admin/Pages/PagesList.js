@@ -22,13 +22,6 @@ import Button from "@mui/material/Button";
 import Slide from "@mui/material/Slide";
 import Close from "@mui/icons-material/Close";
 
-const TransitionUp = React.forwardRef(function Transition(
-  props,
-  ref
-) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
-
 export default function PagesList() {
   console.log("PagesList renders");
   const navigate = useRouter();
@@ -91,66 +84,69 @@ export default function PagesList() {
     navigate.push(`/admin/pages/view/${i.id}`);
   };
 
-    const launchNew = (i: any) => {
+  const launchNew = (i) => {
     return navigate.push(`/admin/pages/new`);
   };
 
   return (
     <React.Fragment>
-  
-              <div className="flex flex-row-resp align-items-center pxy20">
-                  <div className="flex flex-row align-items-center spacer">
-                    <h2>All Pages</h2>
-                  </div>
-            
-              <span>
-                <Button variant="outlined" size="small" onClick={launchNew}>
-                  New
-                </Button>
-              </span>
-            </div>
-            <Divider/>
-            
-            {pages.map((item, index) => (
-              <ListItem
-                disablePadding
-                key={index}
-                divider={index < pages.length - 1 ? true : false}
-                component={"div"}
-                secondaryAction={
-                  <>
-                    <Tooltip title="Edit Page">
-                      <IconButton onClick={() => togEdit(item)}>
-                        <Edit />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Preview Page">
-                      <IconButton onClick={() => launchPreview(item)}>
-                        <Search />
-                      </IconButton>
-                    </Tooltip>
-                  </>
-                }
-              >
-                <ListItemButton>
-                  <ListItemText
-                    primary={
-                      <h4 style={{ lineHeight: "1.2" }}>{item.title}</h4>
-                    }
-                  ></ListItemText>
-                </ListItemButton>
-              </ListItem>
-            ))}
+      <div className="flex flex-row-resp align-items-center pxy20">
+        <div className="flex flex-row align-items-center spacer">
+          <h2>All Pages</h2>
+        </div>
 
-         {loading && (
-            <div className="px20"><PlaceHolder type="list" />
-            <Divider/><PlaceHolder type="list" />
-            <Divider/><PlaceHolder type="list" />
-            <Divider/><PlaceHolder type="list" />
-            <Divider/><PlaceHolder type="list" />
-            <Divider/><PlaceHolder type="list" />
-            </div>)}
-          
+        <span>
+          <Button variant="outlined" size="small" onClick={launchNew}>
+            New
+          </Button>
+        </span>
+      </div>
+      <Divider />
+
+      {pages.map((item, index) => (
+        <ListItem
+          disablePadding
+          key={index}
+          divider={index < pages.length - 1 ? true : false}
+          component={"div"}
+          secondaryAction={
+            <>
+              <Tooltip title="Edit Page">
+                <IconButton onClick={() => togEdit(item)}>
+                  <Edit />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Preview Page">
+                <IconButton onClick={() => launchPreview(item)}>
+                  <Search />
+                </IconButton>
+              </Tooltip>
+            </>
+          }
+        >
+          <ListItemButton>
+            <ListItemText
+              primary={<h4 style={{ lineHeight: "1.2" }}>{item.title}</h4>}
+            ></ListItemText>
+          </ListItemButton>
+        </ListItem>
+      ))}
+
+      {loading && (
+        <div className="px20">
+          <PlaceHolder type="list" />
+          <Divider />
+          <PlaceHolder type="list" />
+          <Divider />
+          <PlaceHolder type="list" />
+          <Divider />
+          <PlaceHolder type="list" />
+          <Divider />
+          <PlaceHolder type="list" />
+          <Divider />
+          <PlaceHolder type="list" />
+        </div>
+      )}
     </React.Fragment>
   );
 }

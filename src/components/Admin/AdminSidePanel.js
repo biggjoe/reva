@@ -23,6 +23,7 @@ import {
   GroupWorkSharp,
   ListOutlined,
   LiveTv,
+  LogoutOutlined,
   NotificationsOutlined,
   PaymentOutlined,
   PaymentsOutlined,
@@ -81,7 +82,7 @@ const AdminSidePanel = (props) => {
       icon: <Dashboard />,
       data: { mustAuth: true, isAdmin: false, showSideNav: false },
     },
-    
+
     {
       path: "transactions",
       title: "Transactions",
@@ -92,7 +93,7 @@ const AdminSidePanel = (props) => {
     {
       path: "pages",
       title: "Pages",
-      icon: <FontAwesome name="file" style={{fontSize:"20px"}}/>,
+      icon: <FontAwesome name="file" style={{ fontSize: "20px" }} />,
       navItem: true,
       data: { mustAuth: true, isAdmin: false, showSideNav: false },
     },
@@ -106,7 +107,7 @@ const AdminSidePanel = (props) => {
     {
       path: "faq",
       title: "FAQ",
-      icon: <FontAwesome name="question-circle" style={{fontSize:"22px"}} />,
+      icon: <FontAwesome name="question-circle" style={{ fontSize: "22px" }} />,
       navItem: true,
       data: { mustAuth: true, isAdmin: false, showSideNav: false },
     },
@@ -166,7 +167,7 @@ const AdminSidePanel = (props) => {
           <ListItem
             disablePadding
             button
-            onClick={doLogout}
+            onClick={() => doLogout()}
             sx={{ fontWeight: "900" }}
           >
             <ListItemButton>
@@ -177,10 +178,7 @@ const AdminSidePanel = (props) => {
                 followCursor
               >
                 <ListItemIcon>
-                  <i
-                    className={`fas fa-sign-out-alt`}
-                    style={{ color: "red" }}
-                  ></i>
+                  <LogoutOutlined sx={{ color: "red" }} />
                 </ListItemIcon>
               </Tooltip>
               <ListItemText primary={"Log Out"} />

@@ -3,7 +3,8 @@ import Link from "next/link";
 import LoginModule from "../../../components/Login/LoginModule";
 
 const Login = () => {
-  return (<React.Fragment>
+  return (
+    <React.Fragment>
       <section className="page-main">
         <div className="flex flex-col align-items-center">
           <div className="auth-logo-space">
@@ -15,7 +16,7 @@ const Login = () => {
 
         <div className="flex flex-col flex-column justify-content-center align-items-center py20 px10">
           <div className="login-pane">
-            <LoginModule />
+            <LoginModule do_redirect={true} return_url={"/account/dashboard"} />
           </div>
         </div>
       </section>

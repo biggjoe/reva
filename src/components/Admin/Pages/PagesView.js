@@ -12,9 +12,9 @@ import { Description } from "@mui/icons-material";
 
 const PagesView = (props) => {
   let router = useRouter();
-    console.log("router::", router.query);
+  console.log("router::", router.query);
   const mode = router.query.mode;
-  const id  = mode[1];
+  const id = mode[1];
   const { decodeHtml, truncateWord } = processHtml;
   const togEdit = () => {
     router.push(`/admin/pages/edit/${id}`);
@@ -26,7 +26,7 @@ const PagesView = (props) => {
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
   React.useEffect(() => {
-      getpage(id);
+    getpage(id);
   }, []);
 
   const getpage = (id) => {
@@ -41,11 +41,9 @@ const PagesView = (props) => {
             setTitle(result.data.title);
             setDescription(result.data.description);
             setDetail(result.data.description);
-          } 
+          }
         },
-        (error) => {
-          
-        }
+        (error) => {}
       )
       .finally(() => {
         setLoading(false);
@@ -54,29 +52,29 @@ const PagesView = (props) => {
   }; //doAjax
   return (
     <React.Fragment>
-            <div
-              className="flex flex-row border-bottom
+      <div
+        className="flex flex-row border-bottom
             stickied
             align-items-center pxy10"
-            >
-              <h2 className="spacer">{title || "---"}</h2>
-              <span>
-                <ButtonGroup>
-                  <Button variant="outlined" size="small" onClick={togEdit}>
-                    <Edit />
-                    Edit
-                  </Button>
-                </ButtonGroup>
-              </span>
-            </div>
+      >
+        <h2 className="spacer">{title || "---"}</h2>
+        <span>
+          <ButtonGroup>
+            <Button variant="outlined" size="small" onClick={togEdit}>
+              <Edit />
+              Edit
+            </Button>
+          </ButtonGroup>
+        </span>
+      </div>
 
-            <div className="pxy20">
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: decodeHtml(description),
-                }}
-              ></div>
-            </div>
+      <div className="pxy20">
+        <div
+          dangerouslySetInnerHTML={{
+            __html: decodeHtml(description),
+          }}
+        ></div>
+      </div>
     </React.Fragment>
   );
 };

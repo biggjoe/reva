@@ -1,5 +1,6 @@
 import React from "react";
-import Link from "next/link";import { useRouter } from "next/router";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import Card from "@mui/material/Card";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Button from "@mui/material/Button";
@@ -15,9 +16,9 @@ import useFetchFaqDetails from "../../../hooks/useFetchFaqDetails";
 import CustomModal from "../../CustomModal";
 
 const FaqEdit = (props) => {
-  const {id}=props;
+  const { id } = props;
   const isParam = id ? true : false;
-  let [faq, setFaq] = React.useState({});
+  let [faq, setFaq] = React.useState({ question: "", answer: "", mode: "" });
   let [loading, setLoading] = React.useState(false);
   let [loaded, setLoaded] = React.useState(false);
   const closeModal = () => {
@@ -34,10 +35,10 @@ const FaqEdit = (props) => {
   const [answer, setAnswer] = React.useState("");
 
   React.useEffect(() => {
-      getfaq(id);
+    getfaq(id);
   }, []);
 
-  const getfaq = (id: any) => {
+  const getfaq = (id) => {
     setLoading(true);
     setLoaded(false);
     HttpService.getFaqDetails(id)
@@ -49,13 +50,9 @@ const FaqEdit = (props) => {
             setFaq(result.data);
             setQuestion(result.data.question);
             setAnswer(result.data.answer);
-          } else {
-            setFaq({});
           }
         },
-        (error) => {
-          setFaq({});
-        }
+        (error) => {}
       )
       .finally(() => {
         setLoading(false);
@@ -63,7 +60,7 @@ const FaqEdit = (props) => {
       }); //fetch
   }; //doAjax
 
-  const onHtmlChange = (e: any) => {
+  const onHtmlChange = (e) => {
     setAnswer(e.target.value);
     console.log(answer);
   };
@@ -93,7 +90,7 @@ const FaqEdit = (props) => {
       });
   };
   const handleInputChange = React.useCallback(
-    (e: any) => {
+    (e) => {
       console.log(e.taget);
       setQuestion(e.target.value);
     },
@@ -101,45 +98,46 @@ const FaqEdit = (props) => {
   );
 
   return (
-    <React.Fragment><div className="py20"><h2>{faq.question}</h2></div>
-            {loading && <PlaceHolder type="edit_page" />}
+    <React.Fragment>
+      <div className="py20">
+        <h2>{faq.question}</h2>
+      </div>
+      {loading && <PlaceHolder type="edit_page" />}
 
-            {loaded && (
-              
-              <div className=" pxy20">
-                <div className={loading ? " input iconed " : " input "}>
-                  <label>Question</label>
-                  <input
-                    type="text"
-                    className="input-form-control"
-                    name="question"
-                    disabled={loading}
-                    value={question}
-                    onChange={(e) => setQuestion(e.target.value)}
-                    placeholder={"FAQ Question "}
-                  />
-                </div>
+      {loaded && (
+        <div className=" pxy20">
+          <div className={loading ? " input iconed " : " input "}>
+            <label>Question</label>
+            <input
+              type="text"
+              className="input-form-control"
+              name="question"
+              disabled={loading}
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+              placeholder={"FAQ Question "}
+            />
+          </div>
 
-                <div className="mb10">
-                  <DefaultEditor
-                    className="form-control"
-                    value={answer}
-                    disabled={loading}
-                    placeholder="FAQ Answer"
-                    onChange={onHtmlChange}
-                  />
-                </div>
-                <Button
-                  type="submit"
-                  size="large"
-                  variant="contained"
-                  disabled={loading}
-                  onClick={handleSubmit}
-                >
-                  {loading ? "Working..." : " Edit FAQ "}
-                </Button>
-              </div>
-            )}
+          <div className="mb10">
+            <DefaultEditor
+              className="form-control"
+              value={answer}
+              disabled={loading}
+              onChange={onHtmlChange}
+            />
+          </div>
+          <Button
+            type="submit"
+            size="large"
+            variant="contained"
+            disabled={loading}
+            onClick={handleSubmit}
+          >
+            {loading ? "Working..." : " Edit FAQ "}
+          </Button>
+        </div>
+      )}
       <CustomModal data={modal} />
     </React.Fragment>
   );

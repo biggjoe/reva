@@ -1,5 +1,6 @@
 import React from "react";
-import Link from "next/link";import { useRouter } from "next/router";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import Card from "@mui/material/Card";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Button from "@mui/material/Button";
@@ -11,10 +12,15 @@ import useFetchWhitepaperCategories from "../../../hooks/useFetchWhitepaperCateg
 import CustomModal from "../../CustomModal";
 
 const EditWhitepaper = (props) => {
-  const{id}=props
-  let router =useRouter();
+  const { id } = props;
+  let router = useRouter();
   const isParam = id ? true : false;
-  let [whitepaper, setWhitepaper] = React.useState({});
+  let [whitepaper, setWhitepaper] = React.useState({
+    cat_id: "0",
+    title: "",
+    banner: null,
+    description: "",
+  });
   const { whitepaper_categories } = useFetchWhitepaperCategories();
   let [loading, setLoading] = React.useState(false);
   let [loaded, setLoaded] = React.useState(false);
@@ -25,6 +31,7 @@ const EditWhitepaper = (props) => {
     onopen: false,
     onclose: closeModal,
     title: "Edit Whitepaper",
+    message: "",
   });
 
   const [title, setTitle] = React.useState("");
@@ -33,7 +40,7 @@ const EditWhitepaper = (props) => {
   //let [id, setId] = React.useState(false);
 
   React.useEffect(() => {
-      getWhitepaper(id);
+    getWhitepaper(id);
   }, []);
 
   const getWhitepaper = (id) => {
@@ -53,13 +60,9 @@ const EditWhitepaper = (props) => {
             setPreview(
               process.env.NEXT_PUBLIC_SERVER_DOMAIN + result.data.banner_url
             );
-          } else {
-            setWhitepaper({});
           }
         },
-        (error) => {
-          setWhitepaper({});
-        }
+        (error) => {}
       )
       .finally(() => {
         setLoading(false);
@@ -115,7 +118,7 @@ const EditWhitepaper = (props) => {
   );
 
   const [file, setFile] = React.useState(null);
-  const [new_file, setNewFile] = React.useState(0);
+  const [new_file, setNewFile] = React.useState("");
   const [preview_image, setPreview] = React.useState(null);
   const handleFileChange = (e) => {
     const formData = new FormData();
@@ -132,86 +135,84 @@ const EditWhitepaper = (props) => {
   return (
     <React.Fragment>
       <div className="pb20">
-<h2>{whitepaper.title}</h2>
-</div>
-            {loading && <PlaceHolder type="edit_page" />}
+        <h2>{whitepaper.title}</h2>
+      </div>
+      {loading && <PlaceHolder type="edit_page" />}
 
-            {loaded && (
-              <div className="py30 px20">
-                <div className={loading ? " input iconed " : " input "}>
-                  <label>Title</label>
-                  <input
-                    type="text"
-                    className="input-form-control"
-                    name="title"
-                    disabled={loading}
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder={"Title "}
-                  />
-                </div>
+      {loaded && (
+        <div className="py30 px20">
+          <div className={loading ? " input iconed " : " input "}>
+            <label>Title</label>
+            <input
+              type="text"
+              className="input-form-control"
+              name="title"
+              disabled={loading}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder={"Title "}
+            />
+          </div>
 
-                <div className={loading ? " input iconed " : " input "}>
-                  <label>Category</label>
-                  <select
-                    className="input-form-control"
-                    onChange={(e) => setCatId(e.target.value)}
-                    name="cat_id"
-                    defaultValue={cat_id}
-                  >
-                    <option value="0">Main Category</option>
-                    {whitepaper_categories.map((itm, ind: number) => (
-                      <option value={itm.id} key={itm.id}>{itm.title}</option>
-                    ))}
-                  </select>
-                </div>
+          <div className={loading ? " input iconed " : " input "}>
+            <label>Category</label>
+            <select
+              className="input-form-control"
+              onChange={(e) => setCatId(e.target.value)}
+              name="cat_id"
+              defaultValue={cat_id}
+            >
+              <option value="0">Main Category</option>
+              {whitepaper_categories.map((itm, ind) => (
+                <option value={itm.id} key={itm.id}>
+                  {itm.title}
+                </option>
+              ))}
+            </select>
+          </div>
 
-                <div className="banner-section">
-                  {preview_image && (
-                    <div className="image_preview">
-                      <img
-                        className=""
-                        src={preview_image}
-                        alt="preview Image"
-                      />
-                    </div>
-                  )}
-                  <div
-                    className={
-                      loading ? " input iconed mt20 pt10" : " input mt20 pt10"
-                    }
-                  >
-                    <label>Attach Page Banner</label>
-                    <input
-                      type="file"
-                      className="form-control"
-                      name="file"
-                      onChange={handleFileChange}
-                      placeholder={"details firstname "}
-                    />
-                  </div>
-                </div>
-
-                <div className="mb10">
-                  <DefaultEditor
-                    className="form-control"
-                    value={description}
-                    disabled={loading}
-                    placeholder="Page Details"
-                    onChange={onHtmlChange}
-                  />
-                </div>
-                <Button
-                  type="submit"
-                  size="large"
-                  variant="contained"
-                  disabled={loading}
-                  onClick={handleSubmit}
-                >
-                  {loading ? "Working..." : " Edit Whitepaper "}
-                </Button>
+          <div className="banner-section">
+            {preview_image && (
+              <div className="image_preview">
+                <img className="" src={preview_image} alt="preview Image" />
               </div>
             )}
+            <div
+              className={
+                loading ? " input iconed mt20 pt10" : " input mt20 pt10"
+              }
+            >
+              <label>Attach Page Banner</label>
+              <input
+                type="file"
+                className="form-control"
+                name="file"
+                onChange={handleFileChange}
+                placeholder={"details firstname "}
+              />
+            </div>
+          </div>
+
+          <div className="mb10">
+            <DefaultEditor
+              className="form-control"
+              value={description}
+              disabled={loading}
+              placeholder="Page Details"
+              onChange={onHtmlChange}
+            />
+          </div>
+          <Button
+            type="submit"
+            size="large"
+            variant="contained"
+            disabled={loading}
+            onClick={handleSubmit}
+          >
+            {loading ? "Working..." : " Edit Whitepaper "}
+          </Button>
+        </div>
+      )}
       <CustomModal data={modal} />
     </React.Fragment>
   );

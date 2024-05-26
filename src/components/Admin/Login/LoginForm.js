@@ -1,23 +1,17 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import Button from "@mui/material/Button";
-const LoginForm = ({
-  submit_handler,
-  loading,
-  intro_message,
-}: {
-  submit_handler: any;
-  loading: boolean;
-  intro_message: string;
-}) => {
-  const [form, setForm] = React.useState<any>({ login_mode: "admin" });
-  const handleInput = (e: any) => {
+import FontAwesome from "react-fontawesome";
+
+const LoginForm = ({ submit_handler, loading, intro_message }) => {
+  const [form, setForm] = React.useState({ login_mode: "admin" });
+  const handleInput = (e) => {
     const value = e.target.value;
     const name = e.target.name;
     setForm({ ...form, [name]: value });
   };
-  const [user, setUser] = React.useState<any>(null);
-  const [input_togged, setInputTog] = React.useState<any>(false);
+  const [user, setUser] = React.useState(null);
+  const [input_togged, setInputTog] = React.useState(false);
   return (
     <React.Fragment>
       <div>
@@ -37,7 +31,7 @@ const LoginForm = ({
           />
 
           <span className="input-icon">
-            <i className="fas fa-user"></i>
+            <FontAwesome name="user-circle" />
           </span>
         </div>
         <div className="input iconed togger">
@@ -50,7 +44,7 @@ const LoginForm = ({
             onChange={handleInput}
           />
           <span className="input-icon">
-            <i className="fas fa-lock"></i>
+            <FontAwesome name="lock" />
           </span>
           <span className="input-togger">
             <a onClick={() => setInputTog(!input_togged)}>
@@ -72,12 +66,13 @@ const LoginForm = ({
           </Button>
           <span className="spacer"></span>
           <span className="pl5">
-            <Link to={"/forgot-password"}>Forgot password?</Link>
+            <Link href={"/forgot-password"}>Forgot password?</Link>
           </span>
         </div>
       </div>
       <div className="py20 text-center">
-        Don&apos;t have an account? <Link to="/register">Create an account</Link>
+        Don&apos;t have an account?{" "}
+        <Link href="/register">Create an account</Link>
       </div>
     </React.Fragment>
   );

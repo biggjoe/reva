@@ -23,6 +23,7 @@ import {
   GroupWorkSharp,
   ListOutlined,
   LiveTv,
+  LogoutOutlined,
   NotificationsOutlined,
   PaymentOutlined,
   PaymentsOutlined,
@@ -30,6 +31,7 @@ import {
 } from "@mui/icons-material";
 import Link from "next/link";
 import FontAwesome from "react-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
@@ -91,7 +93,17 @@ const AccountSidePanel = (props) => {
     {
       path: "referral",
       title: "Referral",
-      icon: <FontAwesome name="users" style={{lineHeight:"1",margin:"0",padding:"0", fontSize:"17px"}} />,
+      icon: (
+        <FontAwesome
+          name="users"
+          style={{
+            lineHeight: "1",
+            margin: "0",
+            padding: "0",
+            fontSize: "17px",
+          }}
+        />
+      ),
       navItem: true,
       data: { mustAuth: true, isAdmin: false, showSideNav: false },
     },
@@ -111,7 +123,9 @@ const AccountSidePanel = (props) => {
       data: { mustAuth: true, isAdmin: false, showSideNav: false },
     },
   ];
-
+  const logout_icon = (
+    <LogoutOutlined sx={{ color: "red", fontWeight: "900" }} />
+  );
   const togg = () => {
     onclose();
   };
@@ -120,45 +134,42 @@ const AccountSidePanel = (props) => {
       <Drawer variant="permanent" open={onopen} onClose={onclose}>
         <DrawerHeader />
         <Divider />
-
-        <List>
-          {pages.map(
-            (item, index) =>
-              item.path !== "" &&
-              item.navItem &&
-              item.path !== "*" && (
-                <ListItem
-                  key={item.path}
-                  disablePadding
-                  sx={{
-                    textDecoration: "none",
-                    color: "#222222",
-                    fontWeight: "900 !important",
-                  }}
-                  component={Link}
-                  href={`/account/${item.path}`}
-                >
-                  <ListItemButton onClick={togg}>
-                    <Tooltip
-                      title={item.title}
-                      placement="right-start"
-                      arrow
-                      followCursor
-                    >
-                      <ListItemIcon>{item.icon}</ListItemIcon>
-                    </Tooltip>
-                    <ListItemText primary={item.title} />
-                  </ListItemButton>
-                </ListItem>
-              )
-          )}
-        </List>
+        {pages.map(
+          (item, index) =>
+            item.path !== "" &&
+            item.navItem &&
+            item.path !== "*" && (
+              <ListItem
+                key={item.path}
+                disablePadding
+                sx={{
+                  textDecoration: "none",
+                  color: "#222222",
+                  fontWeight: "900 !important",
+                }}
+                component={Link}
+                href={`/account/${item.path}`}
+              >
+                <ListItemButton onClick={togg}>
+                  <Tooltip
+                    title={item.title}
+                    placement="right-start"
+                    arrow
+                    followCursor
+                  >
+                    <ListItemIcon>{item.icon}</ListItemIcon>
+                  </Tooltip>
+                  <ListItemText primary={item.title} />
+                </ListItemButton>
+              </ListItem>
+            )
+        )}
         <Divider />
         <List sx={{ p: "0", m: "0" }}>
           <ListItem
             disablePadding
             button
-            onClick={doLogout}
+            onClick={() => doLogout()}
             sx={{ fontWeight: "900" }}
           >
             <ListItemButton>
@@ -168,12 +179,7 @@ const AccountSidePanel = (props) => {
                 arrow
                 followCursor
               >
-                <ListItemIcon>
-                  <i
-                    className={`fas fa-sign-out-alt`}
-                    style={{ color: "red" }}
-                  ></i>
-                </ListItemIcon>
+                <ListItemIcon>{logout_icon}</ListItemIcon>
               </Tooltip>
               <ListItemText primary={"Log Out"} />
             </ListItemButton>

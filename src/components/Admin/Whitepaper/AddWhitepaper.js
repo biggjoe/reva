@@ -1,5 +1,6 @@
 import React from "react";
-import Link from "next/link";import { useRouter } from "next/router";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import Card from "@mui/material/Card";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Button from "@mui/material/Button";
@@ -9,7 +10,12 @@ import CustomModal from "../../CustomModal";
 import useFetchWhitepaperCategories from "../../../hooks/useFetchWhitepaperCategories";
 
 const AddWhitepaper = () => {
-  let [whitepaper, setWhitepaper] = React.useState({ cat_id: "0" });
+  let [whitepaper, setWhitepaper] = React.useState({
+    cat_id: "0",
+    title: "",
+    banner: null,
+    description: "",
+  });
   const { whitepaper_categories } = useFetchWhitepaperCategories();
   let [description, setDescription] = React.useState("");
   let [loading, setLoading] = React.useState(false);
@@ -21,6 +27,7 @@ const AddWhitepaper = () => {
     onopen: false,
     onclose: closeModal,
     title: "New Whitepaper",
+    message: "",
   });
 
   React.useEffect(() => {}, []);
@@ -89,75 +96,72 @@ const AddWhitepaper = () => {
 
   return (
     <React.Fragment>
-          
+      <div className="py20">
+        <div className={loading ? " input iconed " : " input "}>
+          <label>Title</label>
+          <input
+            type="text"
+            className="input-form-control"
+            name="title"
+            onChange={handleInputChange}
+            placeholder={"Whitepaper title "}
+          />
+        </div>
 
-            <div className="py20">
-              <div className={loading ? " input iconed " : " input "}>
-                <label>Title</label>
-                <input
-                  type="text"
-                  className="input-form-control"
-                  name="title"
-                  onChange={handleInputChange}
-                  placeholder={"Whitepaper title "}
-                />
-              </div>
+        <div className={loading ? " input iconed " : " input "}>
+          <label>Category</label>
+          <select
+            className="input-form-control"
+            onChange={handleInputChange}
+            name="cat_id"
+            defaultValue={"0"}
+          >
+            <option value="0">Main Category</option>
+            {whitepaper_categories.map((itm, ind) => (
+              <option value={itm.id} key={itm.id}>
+                {itm.title}
+              </option>
+            ))}
+          </select>
+        </div>
 
-              <div className={loading ? " input iconed " : " input "}>
-                <label>Category</label>
-                <select
-                  className="input-form-control"
-                  onChange={handleInputChange}
-                  name="cat_id"
-                  defaultValue={"0"}
-                >
-                  <option value="0">Main Category</option>
-                  {whitepaper_categories.map((itm, ind: number) => (
-                    <option value={itm.id} key={itm.id}>{itm.title}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="banner-section">
-                {preview_image && (
-                  <div className="image_preview">
-                    <img className="" src={preview_image} alt="preview Image" />
-                  </div>
-                )}
-                <div
-                  className={
-                    loading ? " input iconed mt20 pt10" : " input mt20 pt10"
-                  }
-                >
-                  <label>Attach Page Banner</label>
-                  <input
-                    type="file"
-                    className="form-control"
-                    name="file"
-                    onChange={handleFileChange}
-                    placeholder={"details firstname "}
-                  />
-                </div>
-              </div>
-
-              <div className="mb10 mt20">
-                <DefaultEditor
-                  className="form-control"
-                  placeholder="Whitepaper Details"
-                  value={description}
-                  onChange={onHtmlChange}
-                />
-              </div>
-              <Button
-                type="submit"
-                size="large"
-                variant="contained"
-                disabled={loading}
-                onClick={handleSubmit}
-              >
-                {loading ? "Working..." : " Add whitepaper "}
-              </Button>
+        <div className="banner-section">
+          {preview_image && (
+            <div className="image_preview">
+              <img className="" src={preview_image} alt="preview Image" />
             </div>
+          )}
+          <div
+            className={loading ? " input iconed mt20 pt10" : " input mt20 pt10"}
+          >
+            <label>Attach Page Banner</label>
+            <input
+              type="file"
+              className="form-control"
+              name="file"
+              onChange={handleFileChange}
+              placeholder={"details firstname "}
+            />
+          </div>
+        </div>
+
+        <div className="mb10 mt20">
+          <DefaultEditor
+            className="form-control"
+            value={description}
+            onChange={onHtmlChange}
+          />
+        </div>
+        <Button
+          type="submit"
+          size="large"
+          variant="contained"
+          disabled={loading}
+          onClick={handleSubmit}
+        >
+          {loading ? "Working..." : " Add whitepaper "}
+        </Button>
+      </div>
       <CustomModal data={modal} />
     </React.Fragment>
   );

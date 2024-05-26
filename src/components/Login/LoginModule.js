@@ -76,7 +76,7 @@ const LoginModule = (props) => {
             const redir_delay = response.status === 1 ? 2000 : 3000;
             setTimeout(() => {
               if (do_redirect) {
-                router.push(next_url);
+                return router.push(next_url);
               }
               if (return_call) {
                 return_call();

@@ -13,11 +13,11 @@ export default function AmountForm(props) {
     <React.Fragment>
       <div className="text-start">
         <div className="input   togger">
-          <label>Amount In {curr}</label>
+          <label>Amount In {curr.toUpperCase()}</label>
           <input
             type="number"
             className="input-form-control  no-scroll"
-            placeholder={0}
+            placeholder={`Enter ${curr.toUpperCase()} amount...`}
             name="currAmount"
             value={currAmount}
             onChange={handleCurrAmountChange}
@@ -26,9 +26,11 @@ export default function AmountForm(props) {
 
           <span className="input-togger flex flex-col color-black">
             <span className="txt-xxsm text-right"> Amount in $XRV</span>
-            <span className="txt-xsm dixer text-right">  <span className="grayed">$XRV</span>{`${
-              result || `0.00`
-            }`}</span>
+            <span className="txt-xsm dixer text-right">
+              {" "}
+              <span className="grayed">$XRV</span>
+              {`${result || `0.00`}`}
+            </span>
           </span>
         </div>
         {currErrorMessage && (

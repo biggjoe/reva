@@ -18,7 +18,7 @@ import ChevronLeft from "@mui/icons-material/ChevronLeft";
 import MenuOutlined from "@mui/icons-material/MenuOutlined";
 import { styled } from "@mui/material/styles";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
-import { AccountBox, Dashboard,LogoutOutlined } from "@mui/icons-material";
+import { AccountBox, Dashboard, LogoutOutlined } from "@mui/icons-material";
 
 const drawerWidth = 240;
 
@@ -44,22 +44,21 @@ const AccountHeader = (props) => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const handleOpenUserMenu = (event) => {
-    console.log("currentTarget:",event.currentTarget)
+    console.log("currentTarget:", event.currentTarget);
     setAnchorElUser(event.currentTarget);
   };
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
 
-
   const toggleUserMenu = (event) => {
-    if(anchorElUser){
-setAnchorElUser(null);
-    }else{
+    if (anchorElUser) {
+      setAnchorElUser(null);
+    } else {
       setAnchorElUser(event.currentTarget);
     }
-  }
-  const pages  = [
+  };
+  const pages = [
     {
       path: "dashboard",
       component: "Dashboard",
@@ -107,117 +106,115 @@ setAnchorElUser(null);
         <div style={{ flexGrow: 1, display: "flex" }}></div>
 
         <Box
-            sx={{
-              flexGrow: 0,
-              m: "0",
-              display: {
-                xs: "inline-flex",
-                sm: "inline-flex",
-                md: "inline-flex",
+          sx={{
+            flexGrow: 0,
+            m: "0",
+            display: {
+              xs: "inline-flex",
+              sm: "inline-flex",
+              md: "inline-flex",
+            },
+          }}
+        >
+          <Tooltip title="Open settings">
+            <IconButton onClick={toggleUserMenu} sx={{ p: 0 }}>
+              <Avatar
+                alt="Menu"
+                sx={{ border: "2px solid #fff" }}
+                src={
+                  usr && usr.avatar
+                    ? `${process.env.NEXT_PUBLIC_SERVER_DOMAIN + usr.avatar}`
+                    : `/images/avatar.jpg`
+                }
+              />
+            </IconButton>
+          </Tooltip>
+
+          <Menu
+            sx={{ m: "0", p: "0 !important" }}
+            id="menu-appbar"
+            anchorEl={anchorElUser}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+            keepMounted
+            PaperProps={{
+              elevation: 0,
+              sx: {
+                overflow: "visible",
+                filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                mt: 1.5,
+                "& .MuiAvatar-root": {
+                  width: 32,
+                  height: 32,
+                  ml: -0.5,
+                  mr: 1,
+                },
+                "&:before": {
+                  content: '""',
+                  display: "block",
+                  position: "absolute",
+                  top: 0,
+                  right: 14,
+                  width: 10,
+                  height: 10,
+                  bgcolor: "background.paper",
+                  transform: "translateY(-50%) rotate(45deg)",
+                  zIndex: 0,
+                },
               },
             }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            open={Boolean(anchorElUser)}
+            onClose={handleCloseUserMenu}
+            onClick={handleCloseUserMenu}
           >
-            <Tooltip title="Open settings">
-              <IconButton onClick={toggleUserMenu} sx={{ p: 0 }}>
-                <Avatar
-                  alt="Menu"
-                  sx={{ border: "2px solid #fff" }}
-                  src={
-                    usr && usr.avatar
-                      ? `${process.env.NEXT_PUBLIC_SERVER_DOMAIN + usr.avatar}`
-                      : `/images/avatar.jpg`
-                  }
-                />
-              </IconButton>
-            </Tooltip>
-
-            <Menu
-              sx={{ m: "0", p: "0 !important" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-              keepMounted
-              PaperProps={{
-                elevation: 0,
-                sx: {
-                  overflow: "visible",
-                  filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-                  mt: 1.5,
-                  "& .MuiAvatar-root": {
-                    width: 32,
-                    height: 32,
-                    ml: -0.5,
-                    mr: 1,
-                  },
-                  "&:before": {
-                    content: '""',
-                    display: "block",
-                    position: "absolute",
-                    top: 0,
-                    right: 14,
-                    width: 10,
-                    height: 10,
-                    bgcolor: "background.paper",
-                    transform: "translateY(-50%) rotate(45deg)",
-                    zIndex: 0,
-                  },
-                },
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-              onClick={handleCloseUserMenu}
-            >
-              {/*  <Paper sx={{ width: "auto", maxWidth: "100%" }}> */}
-              <List sx={{ paddingTop: "0", paddingBottom: "0", m: "0" }}>
-                <div className="account-drop">
-                  <div className="email-space">{usr.email}</div>
-                  <div className="balance-space">
-                    <span className="tkn-desc">Token Balance</span>
-                    <h2>{usr.tokenBalance}</h2>
-                  </div>
+            {/*  <Paper sx={{ width: "auto", maxWidth: "100%" }}> */}
+            <List sx={{ paddingTop: "0", paddingBottom: "0", m: "0" }}>
+              <div className="account-drop">
+                <div className="email-space">{usr.email}</div>
+                <div className="balance-space">
+                  <span className="tkn-desc">Token Balance</span>
+                  <h2>{usr.tokenBalance}</h2>
                 </div>
-                {pages.map((item, index) => (
-                  <MenuItem key={index} sx={{ p: "0", m: "0" }}>
-                    <ListItem
-                      disablePadding
-                      button
-                      key={item.id}
-                      sx={{ margin: "0px" }}
-                      component={Link}
-                      href={item.path === "/" ? "../" : `${item.path}`}
-                    >
-                      <ListItemButton>
-                        <ListItemIcon>{item.icon}</ListItemIcon>
-                        <ListItemText>{item.component}</ListItemText>
-                      </ListItemButton>
-                    </ListItem>
-                  </MenuItem>
-                ))}
-              </List>
-              <Divider />
-              <MenuItem>
-                <List sx={{ m: "0", p: "0" }}>
-                  <ListItem disablePadding onClick={doLogout}>
-                    <ListItemIcon>
-                      <LogoutOutlined />
-                    </ListItemIcon>
-                    <ListItemText></ListItemText>
-                    <Typography variant="body2" color="text.primary">
-                      Log Out
-                    </Typography>
+              </div>
+              {pages.map((item, index) => (
+                <MenuItem
+                  divider
+                  key={index}
+                  sx={{ py: "0", px: "10px", m: "0" }}
+                >
+                  <ListItem
+                    button
+                    disablePadding
+                    key={item.id}
+                    sx={{ margin: "0px" }}
+                    component={Link}
+                    href={item.path === "/" ? "../" : `${item.path}`}
+                  >
+                    <ListItemIcon>{item.icon}</ListItemIcon>
+                    <ListItemText>{item.component}</ListItemText>
                   </ListItem>
-                </List>
-              </MenuItem>
-              {/* </Paper> */}
-            </Menu>
-          </Box>
+                </MenuItem>
+              ))}
+            </List>
+            <MenuItem sx={{ py: "0", px: "10px", m: "0" }}>
+              <List sx={{ m: "0", p: "0" }}>
+                <ListItem disablePadding onClick={() => doLogout()}>
+                  <ListItemIcon>
+                    <LogoutOutlined sx={{color:"red"}} />
+                  </ListItemIcon>
+                  <ListItemText>LOG OUT</ListItemText>
+                </ListItem>
+              </List>
+            </MenuItem>
+            {/* </Paper> */}
+          </Menu>
+        </Box>
       </Toolbar>
     </AppBar>
   );

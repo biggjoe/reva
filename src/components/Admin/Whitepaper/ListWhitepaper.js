@@ -1,5 +1,6 @@
 import React from "react";
-import Link from "next/link";import { useRouter } from "next/router";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import Card from "@mui/material/Card";
 import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
@@ -22,7 +23,7 @@ import Delete from "@mui/icons-material/Delete";
 import ConfirmModal from "../../ConfirmModal";
 import FontAwesome from "react-fontawesome";
 export default function ListWhitepaper() {
-  const router = useRouter()
+  const router = useRouter();
   const { decodeHtml, truncateWord } = processHtml;
   const [whitepaper, setWhitepaper] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
@@ -34,15 +35,8 @@ export default function ListWhitepaper() {
     onopen: false,
     onclose: closeModal,
     title: "Edit whitepaper",
+    message: "",
   });
-
-  /*  React.useEffect(() => {
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => setData(data));
-  }, [url]);
-
-  return [data]; */
 
   React.useEffect(() => {
     listwhitepaper();
@@ -72,7 +66,7 @@ export default function ListWhitepaper() {
       }); //fetch
   }; //doAjax
 
-  const togView = (index, state: boolean) => {
+  const togView = (index, state) => {
     console.log(index, state);
     const mutd = [...whitepaper];
     const item = (mutd[index]["is_togged"] = !mutd[index]["is_togged"]);
@@ -122,6 +116,8 @@ export default function ListWhitepaper() {
     onopen: false,
     onclose: closeDelModal,
     title: "Delete whitepaper",
+    message: "",
+    onaccept: "",
   });
   const launchDelete = (item) => {
     setDelModal({
@@ -208,9 +204,9 @@ export default function ListWhitepaper() {
                             onClick={() => togView(index, !item.is_togged)}
                           >
                             {item.is_togged ? (
-                              <FontAwesome name="chevron-up"/>
+                              <FontAwesome name="chevron-up" />
                             ) : (
-                              <FontAwesome name="chevron-down"/>
+                              <FontAwesome name="chevron-down" />
                             )}
                           </IconButton>
                         </Tooltip>
@@ -257,15 +253,17 @@ export default function ListWhitepaper() {
                 </ListItemButton>
               </ListItem>
             ))}
-            {loading && <div className="pxy20">
-              <PlaceHolder type="list" />
-              <Divider/>
-              <PlaceHolder type="list" />
-              <Divider/>
-              <PlaceHolder type="list" />
-              <Divider/>
-              <PlaceHolder type="list" />
-              </div>}
+            {loading && (
+              <div className="pxy20">
+                <PlaceHolder type="list" />
+                <Divider />
+                <PlaceHolder type="list" />
+                <Divider />
+                <PlaceHolder type="list" />
+                <Divider />
+                <PlaceHolder type="list" />
+              </div>
+            )}
           </Card>
         </div>
       </section>

@@ -21,7 +21,7 @@ import { Title } from "@mui/icons-material";
 
 const PagesEdit = (props) => {
   let navigate = useRouter();
-  const {id}=props
+  const { id } = props;
   const isParam = id ? true : false;
   let [page, setPage] = React.useState({});
   let [loading, setLoading] = React.useState(false);
@@ -33,6 +33,7 @@ const PagesEdit = (props) => {
     onopen: false,
     onclose: closeModal,
     title: "Edit page",
+    message: "",
   });
 
   const [detail, setDetail] = React.useState("");
@@ -40,7 +41,7 @@ const PagesEdit = (props) => {
   const [description, setDescription] = React.useState("");
 
   React.useEffect(() => {
-      getpage(id);
+    getpage(id);
   }, []);
 
   const getpage = (id) => {
@@ -103,49 +104,47 @@ const PagesEdit = (props) => {
       console.log(e.target);
       setTitle(e.target.value);
     },
-    [Title]
+    [title]
   );
 
   return (
     <React.Fragment>
+      {loading && <PlaceHolder type="edit_page" />}
 
-            {loading && <PlaceHolder type="edit_page" />}
+      {loaded && (
+        <div className="pxy20">
+          <div className={loading ? " input iconed " : " input "}>
+            <label>Page title</label>
+            <input
+              type="text"
+              className="input-form-control"
+              name="name"
+              disabled={loading}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder={"page Title"}
+            />
+          </div>
 
-            {loaded && (
-              <div className="pxy20">
-                <div className={loading ? " input iconed " : " input "}>
-                  <label>Page title</label>
-                  <input
-                    type="text"
-                    className="input-form-control"
-                    name="name"
-                    disabled={loading}
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder={"page Title"}
-                  />
-                </div>
-
-                <div className="mb10">
-                  <DefaultEditor
-                    className="input-form-control"
-                    value={detail}
-                    placeholder="Page Detail"
-                    disabled={loading}
-                    onChange={onHtmlChange}
-                  />
-                </div>
-                <Button
-                  type="submit"
-                  size="large"
-                  variant="contained"
-                  disabled={loading}
-                  onClick={handleSubmit}
-                >
-                  {loading ? "Working..." : " Edit page "}
-                </Button>
-              </div>
-            )}
+          <div className="mb10">
+            <DefaultEditor
+              className="input-form-control"
+              value={detail}
+              disabled={loading}
+              onChange={onHtmlChange}
+            />
+          </div>
+          <Button
+            type="submit"
+            size="large"
+            variant="contained"
+            disabled={loading}
+            onClick={handleSubmit}
+          >
+            {loading ? "Working..." : " Edit page "}
+          </Button>
+        </div>
+      )}
       <CustomModal data={modal} />
     </React.Fragment>
   );

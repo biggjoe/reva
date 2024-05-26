@@ -3,125 +3,106 @@ import Grid from "@mui/material/Grid";
 import useAuthService from "../../services/useAuthService";
 import HttpService from "../../services/HttpService";
 import * as processHtml from "../../services/processHtml";
-import CountdownTimers from "../../components/CountdownTimers";
 import PlaceHolder from "../../components/PlaceHolder";
 import Link from "next/link";
-import BigNumber from "bignumber.js";
-import { useContractRead, useAccount, useBalance } from "wagmi";
-import presaleAbi from "../../abi/presale.json";
-import erc20Abi from "../../abi/erc20.json";
-import CountdownTimer from "../../components/CountdownTimers";
-import BnbCurrency from "../../components/Currency/BnbCurrency";
-import UsdtCurrency from "../../components/Currency/UsdtCurrency";
-import EthCurrency from "../../components/Currency/EthCurrency";
-import { tokenAdd, contractAddr, chainId } from "../../config";
-import FontAwesome from "react-fontawesome";
-import ManualPay from "../../components/Currency/ManualPay";
 import numberWithCommas from "../../pipes/Number";
 import Layout from "../../components/Account/Layout";
+import useFetchContract from "../../hooks/useFetchContract";
+import CountdownTimer from "../../components/CountdownTimers";
 
 const Dashboard = () => {
   const AuthServ = useAuthService();
   const usr = AuthServ.getCurrentUser();
   const { decodeHtml } = processHtml;
   const [dashboard, setDashboard] = React.useState(null);
-  const [loading, setLoading] = React.useState(false);
-  const [loaded, setLoaded] = React.useState(false);
-  const [isParam, setParam] = React.useState(false);
-  const [seconds, setSeconds] = React.useState(null);
-const { address } = useAccount();
-  const getEndTime = useContractRead({
-    address: contractAddr,
-    abi: presaleAbi,
-    functionName: "endTimeSale",
-    watch: true,
-    chainId: chainId,
-  });
 
-  const getStartTime = useContractRead({
-    address: contractAddr,
-    abi: presaleAbi,
-    functionName: "startTimeSale",
-    watch: true,
-    chainId: chainId,
-  });
-
-  const getUsdRaised = useContractRead({
-    address: contractAddr,
-    abi: presaleAbi,
-    functionName: "getUsdRaised",
-    watch: true,
-    chainId: chainId,
-  });
-
-  const getTokenPrice = useContractRead({
-    address: contractAddr,
-    abi: presaleAbi,
-    functionName: "getPriceInUSD",
-    watch: true,
-    chainId: chainId,
-  });
-
-  const getTokenBalance = useContractRead({
-    address: tokenAdd,
-    abi: erc20Abi,
-    functionName: "balanceOf",
-    args: [address],
-    enabled: !!address,
-    chainId: chainId,
-  });
-
-  const curprz = new BigNumber(getTokenPrice.data).dividedBy(new BigNumber(10).pow(18)).toFixed(6);
-  const currentPrice  = isNaN(curprz) ? 0.00 : numberWithCommas(curprz); 
-  const tokenBalance = new BigNumber(getTokenBalance.data)
-    .dividedBy(new BigNumber(10).pow(18))
-    .toFixed(3);
-  const saleEndTime = new BigNumber(getEndTime.data);
-  const saleStartTime = new BigNumber(getStartTime.data);
-
-  const rzd = new BigNumber(getUsdRaised.data)
-    .dividedBy(new BigNumber(10).pow(18))
-    .toFixed(3)
-  const raisedUsd = isNaN(rzd) ? 0.00: numberWithCommas(rzd);
-
-const tgt = new BigNumber(3150000);
-    const targetUsd = isNaN(tgt) ? 0.00: numberWithCommas(tgt);
-
-  const progressPercentage = new BigNumber(raisedUsd)
-    .dividedBy(targetUsd)
-    .multipliedBy(100);
-
-
-  const handleCurrencyChange = (currency) => {
-    setSelectedCurrency(currency);
-  };
-
-  const [percVal, setPerc] = React.useState(0);
-  React.useEffect(() => {
-    if ((progressPercentage && targetUsd && raisedUsd, currentPrice)) {
-      setLoaded(true);
-      const prc = isNaN(progressPercentage) ? 0 : progressPercentage.toFixed(2);
-      setPerc(`${prc}%`);
-    }
-  }, [progressPercentage, targetUsd, raisedUsd, currentPrice]);
-
+  const {
+    address,
+    contract_loaded,
+    saleEndTime,
+    saleStartTime,
+    total_raised_usd,
+    total_target_usd,
+    xrv_to_usd,
+    tokenBalance,
+    percProgres,
+  } = useFetchContract();
+  console.log(
+    "DASHBOARD:::::::::::::::::::::::",
+    address,
+    contract_loaded,
+    saleEndTime,
+    saleStartTime,
+    total_raised_usd,
+    total_target_usd,
+    xrv_to_usd,
+    tokenBalance,
+    percProgres
+  );
   return (
     <React.Fragment>
       <Layout>
         <section className="dashboard-pane">
           <div className="z-high py10">
-            {loading && <PlaceHolder type="dash" />}
-            {loaded && (
+            {!contract_loaded && <PlaceHolder type="dash" />}
+            {contract_loaded && (
               <>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6} md={4}>
                     <Link href="/account/dashboard" className="grid-card g7">
-                      --------
+                      <CountdownTimer endTime={saleEndTime} />
                     </Link>
                   </Grid>
-                  <Grid item xs={12} sm={6} md={4}>
-                    <Link href="/account/dashboard" className="grid-card bga">
-                      -----
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignContent: "stretch",
+                    }}
+                  >
+                    <Link
+                      href="/account/dashboard"
+                      className="prog-container mt0"
+                      style={{
+                        display: "flex",
+                        flexGrow: "1",
+                        marginTop: "0",
+                      }}
+                    >
+                      <div
+                        className="prog-desc"
+                        style={{ display: "flex", flexGrow: "1" }}
+                      >
+                        <div className="done-text px10">
+                          <h4 className="txt-xem">Total Raised</h4>
+                          <span className="txt-pcs">
+                            {contract_loaded ? `$${total_raised_usd}` : "..."}
+                          </span>
+                        </div>
+                        <div className="spacer"></div>
+                        <div className="total-text text-right px10">
+                          <h4 className="txt-xem">Target</h4>
+                          <span className="txt-pcs">
+                            {contract_loaded ? `$${total_target_usd}` : "..."}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="prog-signal" style={{ flex: "0 0" }}>
+                        <div className="status-bar">
+                          <span
+                            className="done-bar"
+                            style={{
+                              width: percProgres,
+                            }}
+                          >
+                            {contract_loaded ? `${percProgres}%` : ""}
+                          </span>
+                        </div>
+                      </div>
                     </Link>
                   </Grid>
                   <Grid item xs={12} sm={6} md={4}>
