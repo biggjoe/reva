@@ -338,6 +338,7 @@
 .custom-currency-button.active,
 .custom-currency-button:hover {
     background: linear-gradient(90deg, #2871FE 35%, #3F26D9 85%);
+
     color: #fff;
 }
 
@@ -423,9 +424,9 @@
 }
 
 button.buy_token_button[disabled],
-button.buy_token_button:disabled{
+button.buy_token_button:disabled {
     background-color: #aaa;
-    color:#888
+    color: #888
 }
 
 
@@ -453,7 +454,7 @@ button.buy_token_button:disabled{
     margin-top: 8px;
 }
 
-.txt-pcs{
+.txt-pcs {
     font-size: 1.2rem;
     font-weight: 700;
 }
@@ -483,18 +484,21 @@ button.buy_token_button:disabled{
     opacity: 0;
     transition: 0.5s ease-in-out;
 }
-.grayed{
+
+.grayed {
     color: #0487a7;
 }
-.nbx{
+
+.nbx {
     padding: 10px;
     background-color: #ddd;
 }
+
 .css-1f773le-MuiButtonBase-root-MuiAccordionSummary-root.Mui-expanded {
     min-height: 24px !important;
 }
 
- .css-eqpfi5-MuiAccordionSummary-content.Mui-expanded {
+.css-eqpfi5-MuiAccordionSummary-content.Mui-expanded {
     margin: 10px 0 !important;
 }
 
@@ -503,7 +507,8 @@ button > wui-text {
     opacity: var(--local-opacity-100);
     color: var(--wui-color-inverse-100);
 }
-w3m-connect-button{
+
+w3m-connect-button {
     border: 3px dashed red;
 }
 

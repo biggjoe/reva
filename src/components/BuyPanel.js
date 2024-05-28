@@ -129,7 +129,7 @@ export default function BuyPanel(props) {
           </div>
 
           <div className="panel-content">
-            <div className="prog-container">
+            <div className="prog-container bg-grax">
               {/*  */}
               <div className="prog-desc">
                 <div className="done-text px10">

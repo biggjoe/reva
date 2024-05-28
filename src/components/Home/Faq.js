@@ -27,7 +27,6 @@ const Faq = () => {
       .then(
         (result) => {
           setLoading(false);
-          console.log(result);
           if (Array.isArray(result.data)) {
             setFaq(result.data);
           } else {
@@ -45,7 +44,6 @@ const Faq = () => {
   }; //doAjax
 
   const togView = (index, state) => {
-    console.log(index, state);
     const mutd = [...faqs];
     const item = (mutd[index]["is_togged"] = !mutd[index]["is_togged"]);
     setFaq(mutd);

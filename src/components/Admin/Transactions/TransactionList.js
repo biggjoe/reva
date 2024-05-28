@@ -75,7 +75,7 @@ const TransactionList = (props) => {
       
 
       
-            <div className="page-head bg-grax">
+            <div className="page-head">
               <div className="flex flex-row-resp align-items-center">
                 <div className="inline-block pxy20 spacer">
                   <Breadcrumbs

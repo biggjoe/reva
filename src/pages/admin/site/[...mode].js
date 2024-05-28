@@ -64,7 +64,7 @@ export default function Mode() {
         <section className="dashboard-pane">
           <div className="container pxy20-resp">
             <Card sx={{ borderRadius: "0" }}>
-              <div className="page-head bga">
+              <div className="page-head">
                 <div className="flex flex-row-resp px20">
                   <div className="inline-block py20">
                     <Breadcrumbs

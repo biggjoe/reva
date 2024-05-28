@@ -6,9 +6,9 @@ import * as processHtml from "../../../services/processHtml";
 import HttpService from "../../../services/HttpService";
 import FontAwesome from "react-fontawesome";
 import LoadingModal from "../../../components/LoadingModal";
-import Layout from "../../../components/Account/Layout";
-import TransactionList from "../../../components/Account/Transactions/TRansactionList";
-import TransactionDetails from "../../../components/Account/Transactions/TransactionDetails";
+import Layout from "../../../components/Admin/Layout";
+import TransactionList from "../../../components/Admin/Transactions/TransactionList";
+import TransactionDetails from "../../../components/Admin/Transactions/TransactionDetails";
 
 export default function Page() {
   const router = useRouter();
@@ -73,11 +73,16 @@ export default function Page() {
                         width: "100%",
                       }}
                     >
-                    <Link href="/account/dashboard">Dashboard</Link>
+                      <Link href="/account/dashboard">Dashboard</Link>
                       <Link href="/account/transactions">Transactions</Link>
                     </Breadcrumbs>
-                    <h2 className="mt20">{page==="details" ? "Transaction Details":
-                    page==="list" ? "All Transaction":""}</h2>
+                    <h2 className="mt20">
+                      {page === "details"
+                        ? "Transaction Details"
+                        : page === "list"
+                        ? "All Transaction"
+                        : ""}
+                    </h2>
                   </div>
                 </div>
               </div>

@@ -2,7 +2,7 @@ import React from "react";
 import { CircularProgress } from "@mui/material";
 
 const LoadingModal = (props) => {
-  const { message, loading, open, onclose,mode } = props.data;
+  const { message, loading, open, onclose, mode, hide_exit } = props.data;
   const createMarkup = (text) => {
     return { __html: text };
   };
@@ -16,15 +16,20 @@ const LoadingModal = (props) => {
                 <CircularProgress size={40} />
               </span>
             )}
-            {mode !=="component" && 
-     <div className="spacer" dangerouslySetInnerHTML={createMarkup(message)} />}
-     {mode ==="component" &&  (<>{message}</>)}
-
-            <span className="pl5">
-              <button className="button-link" onClick={() => onclose()}>
-                EXIT
-              </button>
-            </span>
+            {mode !== "component" && (
+              <div
+                className="spacer"
+                dangerouslySetInnerHTML={createMarkup(message)}
+              />
+            )}
+            {mode === "component" && <>{message}</>}
+            {!hide_exit && (
+              <span className="pl5">
+                <button className="button-link" onClick={() => onclose()}>
+                  EXIT
+                </button>
+              </span>
+            )}
           </div>
         </div>
       )}

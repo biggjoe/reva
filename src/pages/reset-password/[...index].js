@@ -11,7 +11,7 @@ export default function Home() {
   const router = useRouter();
 
   const { decodeHtml } = processHtml;
-  const isParam = router.query["reset-password"] ? true : false;
+  const isParam = router.query["index"] ? true : false;
   const [id, setId] = React.useState(null);
   const [token, setToken] = React.useState(null);
   const [routes, setRoutes] = React.useState(null);
@@ -32,28 +32,28 @@ export default function Home() {
   }, [id, token]);
 
   React.useEffect(() => {
-    console.log("router::", router.query);
+    console.log("router_query::", router.query);
     if (isParam) {
-      const routes = router.query["reset-password"];
+      const rts = router.query["index"];
       let idn = "";
       let tkn = "";
-      if (routes) {
-        if (routes.length == 0) {
+      if (rts) {
+        if (rts.length == 0) {
           idn = null;
           tkn = null;
-        } else if (routes.length == 1) {
-          idn = routes[0];
+        } else if (rts.length == 1) {
+          idn = rts[0];
           tkn = null;
-        } else if (routes.length == 2) {
-          idn = routes[0];
-          tkn = routes[1];
+        } else if (rts.length == 2) {
+          idn = rts[0];
+          tkn = rts[1];
         }
       }
       console.log("ID::", idn, "TOKEN::", tkn);
       setId(idn);
       setToken(tkn);
     }
-  }, [router.query["reset-password"]]);
+  }, [router.query["index"]]);
 
   const [user, setUser] = React.useState(null);
   const confirm_code = (id, token) => {
@@ -122,7 +122,6 @@ export default function Home() {
     setForm({ ...form, [name]: value });
     console.log(form);
   };
-  const [input_togged, setInputTog] = React.useState(false);
 
   const sendReset = () => {
     console.log(form);
@@ -131,7 +130,7 @@ export default function Home() {
     } else if (form.new_password !== form.re_password) {
       return alert("Passwords doesn't match");
     }
-    const data = { ...form, mode: "reset", old_password: "0123456" };
+    const data = { ...form, mode: "index", old_password: "0123456" };
     console.log("Form::", data);
     setLoading(true);
     setLoaded(false);
@@ -167,6 +166,7 @@ export default function Home() {
         setLoaded(true);
       });
   };
+  const [input_togged, setInputTog] = React.useState(false);
   return (
     <React.Fragment>
       <section className="page-main">
@@ -187,10 +187,10 @@ export default function Home() {
               <div className="form-cover">
                 {code_confirmed && (
                   <>
-                    <div className="input iconed mt20">
+                    <div className="input iconed mt20 togger">
                       <label>Password</label>
                       <input
-                        type="password"
+                        type={input_togged ? "text" : "password"}
                         name="new_password"
                         disabled={loading}
                         className="input-form-control"
@@ -198,14 +198,24 @@ export default function Home() {
                         onChange={handleInput}
                       />
                       <span className="input-icon">
-                        <i className="fas fa-lock"></i>
+                        <FontAwesome name="lock" />
+                      </span>
+                      <span className="input-togger">
+                        <button
+                          className="button-link"
+                          onClick={() => setInputTog(!input_togged)}
+                        >
+                          <FontAwesome
+                            name={`${input_togged ? "eye-slash" : "eye"}`}
+                          />
+                        </button>
                       </span>
                     </div>
 
-                    <div className="input iconed">
+                    <div className="input iconed togger">
                       <label>Confirm Password</label>
                       <input
-                        type="password"
+                        type={input_togged ? "text" : "password"}
                         name="re_password"
                         disabled={loading}
                         className="input-form-control"
@@ -213,7 +223,17 @@ export default function Home() {
                         onChange={handleInput}
                       />
                       <span className="input-icon">
-                        <i className="fas fa-lock"></i>
+                        <FontAwesome name="lock" />
+                      </span>
+                      <span className="input-togger">
+                        <button
+                          className="button-link"
+                          onClick={() => setInputTog(!input_togged)}
+                        >
+                          <FontAwesome
+                            name={`${input_togged ? "eye-slash" : "eye"}`}
+                          />
+                        </button>
                       </span>
                     </div>
                     <div className="flex flex-row align-items-center">

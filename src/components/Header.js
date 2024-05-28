@@ -11,7 +11,6 @@ import { Slide } from "@mui/material";
 
 const Header = (props) => {
   const { bottom_border } = props;
-  console.log("header_props::", props);
   const [isTogged, setIsTogged] = React.useState(false);
   const page = "";
   const AuthServ = useAuthService();

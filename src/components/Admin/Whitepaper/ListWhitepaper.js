@@ -135,7 +135,7 @@ export default function ListWhitepaper() {
         <div className="container py30">
           {" "}
           <Card sx={{ borderRadius: "0" }}>
-            <div className="page-head bg-grax">
+            <div className="page-head">
               <div className="flex flex-row-resp">
                 <div className="inline-block pxy20">
                   <Breadcrumbs

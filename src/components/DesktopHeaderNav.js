@@ -6,10 +6,8 @@ const DesktopHeaderNav = (props) => {
     <nav className="header-nav">
       <ul className="nav-items">
         <li>
-                <Link  href="/purchase">
-              Buy $XRV  Tokens
-                </Link>
-              </li>
+          <Link href="/purchase">Buy $XRV Tokens</Link>
+        </li>
         <li>
           <Link href="./#features">Products</Link>
           <ul>

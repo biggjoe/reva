@@ -65,7 +65,7 @@ export default function Mode() {
         <section className="dashboard-pane">
           <div className="container pxy20-resp">
             <Card sx={{ borderRadius: "0" }}>
-              <div className="page-head bga">
+              <div className="page-head">
                 <div className="flex flex-row-resp px20">
                   <div className="inline-block py20">
                     <Breadcrumbs
@@ -74,19 +74,23 @@ export default function Mode() {
                         width: "100%",
                       }}
                     >
-                    <Link href="/admin/dashboard">Dashboard</Link>
+                      <Link href="/admin/dashboard">Dashboard</Link>
                       <Link href="/admin/whitepaper">Whitepaper</Link>
                     </Breadcrumbs>
                     <h2 className="mt20">
-                        {page==="edit" ? "Edit Whitepaper":
-                    page==="list" ? "Whitepaper":""}</h2>
+                      {page === "edit"
+                        ? "Edit Whitepaper"
+                        : page === "list"
+                        ? "Whitepaper"
+                        : ""}
+                    </h2>
                   </div>
                 </div>
               </div>
 
               <ul className="flat-nav border-bottom"></ul>
               <section className="pxy20">
-                {page === "edit" && <EditWhitepaper id={view}/>}
+                {page === "edit" && <EditWhitepaper id={view} />}
                 {page === "list" && <ListWhitepaper />}
                 {page === "new" && <AddWhitepaper />}
               </section>

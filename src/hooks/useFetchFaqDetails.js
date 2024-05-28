@@ -31,7 +31,7 @@ const useFetchFaqDetails = (props) => {
       )
       .finally(() => {
         setLoading(false);
-        setLoaded(false);
+        setLoaded(true);
       }); //fetch
   }; //doAjax
 

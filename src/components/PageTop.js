@@ -4,7 +4,7 @@ import { Breadcrumbs, Card } from "@mui/material";
 export default function PageTop({ page_data, loading_page, loaded_page }) {
   return (
     <>
-      <div className="page-head bg-grax">
+      <div className="page-head">
         <div className="flex flex-row-resp">
           <div className="inline-block pxy20">
             <Breadcrumbs

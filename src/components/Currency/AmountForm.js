@@ -27,7 +27,6 @@ export default function AmountForm(props) {
           <span className="input-togger flex flex-col color-black">
             <span className="txt-xxsm text-right"> Amount in $XRV</span>
             <span className="txt-xsm dixer text-right">
-              {" "}
               <span className="grayed">$XRV</span>
               {`${result || `0.00`}`}
             </span>

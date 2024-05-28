@@ -268,7 +268,7 @@ label {
     max-width: 100% !important;
 }
 
-.input>label {
+.input > label {
     position: absolute;
     top: -10px;
     left: 10px;
@@ -278,7 +278,7 @@ label {
     line-height: 0.8;
     font-size: 90% !important;
     border-radius: 3px;
-    z-index:4
+    z-index: 4
 }
 
 .input select {
@@ -331,7 +331,8 @@ select.input-form-control {
     max-width: 100%;
 }
 
-.input-form-control[aria-disabled], .input-form-control[disabled],
+.input-form-control[aria-disabled],
+.input-form-control[disabled],
 .input-form-control:disabled {
     background-color: #bbb;
 }
@@ -1887,10 +1888,14 @@ ul.whitepaper-list li ul li a.active {
     left: 0;
     background-color: transparent;
 }
+
 .css-126xj0f {
     z-index: 15 !important;
 }
-.MuiDialog-root, .MuiModal-root, .css-zw3mfo-MuiModal-root-MuiDialog-root{
+
+.MuiDialog-root,
+.MuiModal-root,
+.css-zw3mfo-MuiModal-root-MuiDialog-root {
     z-index: 15 !important;
 }
 
@@ -1939,13 +1944,83 @@ ul.flat-nav li button.button-link.active {
     background-color: #ddd;
 }
 
-.break-word{
+.break-word {
     word-wrap: break-word;
 }
-.full-main-height{
-    height:100vh;
-    width:100vw;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+
+.full-main-height {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bg-grax {
+    background-image: radial-gradient(ellipse farthest-corner at 0 140%,
+            rgb(11, 100, 132) 18%,
+            rgb(72, 166, 233) 40%,
+            #0851e2 70%) !important;
+    color: white;
+}
+
+.counter-div-dash {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #000
+}
+
+.item-div-dash .tm-span {
+    margin-right: 6px;
+    color: #444;
+}
+
+.item-div-dash .tmxs {
+    color: rgb(177, 60, 2) !important;
+    font-weight: 500 !important;
+    margin-left: 1px;
+}
+
+.lh-1 {
+    line-height: 1 !important;
+}
+
+.ucap {
+    text-transform: uppercase;
+}
+
+.grid-card h2 {
+    font-weight: 900;
+    font-size: 1.2rem;
+}
+
+.col-bit {
+    flex-wrap: 1;
+    flex: 1;
+    text-align: center;
+    padding: 0 6px;
+}
+
+.item-div-dash {
+    font-size: 1.01rem;
+    font-weight: 700;
+    color: #000
+}
+
+.time-icon {
+    font-size: 2.1rem;
+}
+
+.bit-col-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.col-bit {
+    border-right: 1px solid #ddd;
+}
+
+.col-bit:last-of-type {
+    border-right: none;
 }

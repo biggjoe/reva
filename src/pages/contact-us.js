@@ -12,7 +12,10 @@ const Contact = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const { page, loaded_page, loading_page } = useFetchPage({ id: 4 });
+  const { page, loaded_page, loading_page } = useFetchPage({
+    slug: "contact-us",
+  });
+  console.log(page);
   return (
     <React.Fragment>
       <Header />

@@ -6,7 +6,7 @@ import * as processHtml from "../../services/processHtml";
 import PlaceHolder from "../../components/PlaceHolder";
 import Link from "next/link";
 import numberWithCommas from "../../pipes/Number";
-import Layout from "../../components/Account/Layout";
+import Layout from "../../components/Admin/Layout";
 import useFetchContract from "../../hooks/useFetchContract";
 import CountdownTimer from "../../components/CountdownTimers";
 import FontAwesome from "react-fontawesome";

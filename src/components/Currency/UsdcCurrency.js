@@ -29,7 +29,6 @@ import numberWithCommas from "../../pipes/Number";
 import LoadingModal from "../LoadingModal";
 import PayInvoice from "./PayInvoice";
 
-
 export default function UsdcCurrency(props) {
   const {
     affiliate_data,
@@ -40,17 +39,15 @@ export default function UsdcCurrency(props) {
     applyBonus,
     removeBonus,
     handleBonusInput,
-            fetching_bonus,
-            bonus_fetched,
-            fetching_referee,
-            referee_fetched
+    fetching_bonus,
+    bonus_fetched,
+    fetching_referee,
+    referee_fetched,
   } = props;
 
   const [usdcAmount, setUsdcAmount] = useState("");
   const [usdcErrorMessage, setUsdcErrorMessage] = useState("");
   const [allowance, setAllowance] = useState(new BigNumber(0));
-
-  
 
   const [show_code, setShowCode] = React.useState(false);
   const [show_init, setShowInit] = React.useState(false);
@@ -80,18 +77,29 @@ export default function UsdcCurrency(props) {
     setBux({ ...bux_data, onopen: true, onclose: closeBux });
   };
 
-
   const closeLoader = () => setLoadData({ ...load_data, open: false });
   const [load_data, setLoadData] = React.useState({
     open: false,
     onclose: closeLoader,
+    hide_exit: true,
   });
-  let doLoader = (state,message,mode=false) => {
-    setLoadData({ ...load_data, open:state,
-      onclose: closeLoader,message:message,mode:mode });
+  let doLoader = (state, message, mode = false) => {
+    setLoadData({
+      ...load_data,
+      open: state,
+      onclose: closeLoader,
+      message: message,
+      mode: mode,
+    });
   };
-  const openLoader = () => {
-    setLoadData({ ...load_data, open: true });
+  const openLoader = (message, hide) => {
+    setLoadData({
+      ...load_data,
+      message: message,
+      hide_exit: hide,
+      open: true,
+      onclose: closeLoader,
+    });
   };
 
   const closeInvoice = () => setInvoice({ ...invoice_data, onopen: false });
@@ -179,61 +187,56 @@ export default function UsdcCurrency(props) {
     chainId: chainId,
   });
 
-const getResult = new BigNumber(getAmount.data);
-  
-const resx = isNaN(getResult)
+  const getResult = new BigNumber(getAmount.data);
+
+  const resx = isNaN(getResult)
     ? 0
     : new BigNumber(getResult).dividedBy(new BigNumber(10).pow(18)).toFixed(3);
   const result = numberWithCommas(resx);
 
-  
-let success_message = <div className="text-center py-2">
-Success! XRV Purchase Complete
-<div>
-  <Link
-    style={{ color: "#fff" }}
-    href={`https://testnet.bscscan.com/tx/${purchaseData?.hash}`}
-  >View On Bscscan
-  </Link>
-</div>
-</div>;
+  let success_message = (
+    <div className="text-center py-2">
+      Success! XRV Purchase Complete
+      <div>
+        <Link
+          style={{ color: "#fff" }}
+          href={`https://testnet.bscscan.com/tx/${purchaseData?.hash}`}
+        >
+          View On Bscscan
+        </Link>
+      </div>
+    </div>
+  );
 
-useEffect(() => {
-  if (purchaseIsSuccess) {
-    doLoader(true,success_message_message,"component");
-    toast.success(success_message);
-    const timeout = setTimeout(() => {
-      setLoadData({
-        ...load_data,
-        open: false,
-        onclose: closeLoader,
-      });
-      doLoader(false,"");
-      toast.dismiss();
-    }, 3000);
-    return () => clearTimeout(timeout);
-  }
-}, [purchaseIsSuccess, purchaseData?.hash]);
+  useEffect(() => {
+    if (purchaseIsSuccess) {
+      toast.success(success_message);
+      openLoader(success_message, false);
+      const timeout = setTimeout(() => {
+        toast.dismiss();
+        closeLoader();
+      }, 3000);
+      return () => clearTimeout(timeout);
+    }
+  }, [purchaseIsSuccess, purchaseData?.hash]);
 
+  useEffect(() => {
+    if (purchaseIsError) {
+      toast.error(
+        <div className="text-center py-2">Error! Something Went Wrong</div>
+      );
 
-useEffect(() => {
-  if (purchaseIsError) {
-    doLoader(true,<span className="color-error">Error! Something Went Wrong</span>,"component");
-    toast.error(
-      <div className="text-center py-2">Error! Something Went Wrong</div>
-    );
-    const timeout = setTimeout(() => {
-      toast.dismiss();
-      setLoadData({
-        ...load_data,
-        open: false,
-        onclose: closeLoader,
-      });
-      doLoader(false,"");
-    }, 5000);
-    return () => clearTimeout(timeout);
-  }
-}, [purchaseIsError]);
+      openLoader(
+        `<div className="text-center py-2">Error! Something Went Wrong</div>`,
+        false
+      );
+      const timeout = setTimeout(() => {
+        toast.dismiss();
+        closeLoader();
+      }, 5000);
+      return () => clearTimeout(timeout);
+    }
+  }, [purchaseIsError]);
 
   useEffect(() => {
     if (purchaseData?.hash) {
@@ -256,60 +259,68 @@ useEffect(() => {
   };
 
   useEffect(() => {
-    const handlePostRequest = async () => {
-      try {
-        if (purchaseIsSuccess) {
-          doLoader(true,"Payment received. Processing dashboard balance...");
-          setTokenData({ ...token_data, total_tokens: result });
-          const additionalData = {
-            id: user_data?.id,
-            tx_id: user_data?.txn_id,
-            tx_hash: purchaseData?.hash,
-            date_time: new Date().toUTCString(),
-            tx_status: "success",
-            user_address: address,
-            payment_currency: "USDC",
-            paid_amount: usdcAmount,
-            received_amount_in_token: result,
-            affiliate_data: token_data,
-            referral_data: ref_data,
-          };
-
-          const jsonData = JSON.stringify(additionalData);
-
-          const response = await axios.post(
-            "https://www.token.reva.finance/api/push_payment?secret=ZMpAShQwlOxzHYnJ97UkwLaW",
-            jsonData,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-
-          console.log("Server response:", response.data);
-          doLoader(true,response.data.message);
-          if(response.data.status===1){
-          const jwt = response.data.new_jwt;
-          localStorage.setItem("access_token", jwt);
-        }
-        }
-      } catch (error) {
-        console.error("Error:", error);
-        let Err = ()=>{return <span className="color-red spacer">{error.message}</span>;}
-     
-        doLoader(true,<Err/>,"component");
-      }
-    };
-    handlePostRequest();
+    if (purchaseIsSuccess) {
+      setTokenData({ ...token_data, total_tokens: result });
+      const additionalData = {
+        id: user_data?.id,
+        tx_id: user_data?.txn_id,
+        tx_hash: purchaseData?.hash,
+        date_time: new Date().toUTCString(),
+        tx_status: "success",
+        user_address: address,
+        payment_currency: "USDC",
+        paid_amount: usdcAmount,
+        received_amount_in_token: result,
+        affiliate_data: token_data,
+        referral_data: ref_data,
+      };
+      postPayment(additionalData);
+    }
   }, [purchaseIsSuccess, purchaseData?.hash]);
 
+  const postPayment = (additionalData) => {
+    //toast.loading("Payment received. Processing token balance...");
+    openLoader("Payment received. Processing token balance...", true);
+    const endpoint = "push_payment";
+    extraHeaders = { "Content-Type": "application/json" };
+    HttpService.postExtraHeader(endpoint, additionalData, extraHeaders)
+      .then(
+        (response) => {
+          toast.dismiss();
 
-  
-    const launchInvoice = () => {
-      setInvoice({ ...invoice_data, currency:"usdc", amount:usdcAmount, onopen: true, onclose: closeInvoice });
-      console.log(invoice_data);
-    };
+          console.log("Server response:", response.data);
+          if (response.data.status === 1) {
+            toast.success(response.data.message);
+            const jwt = response.data.new_jwt;
+            localStorage.setItem("access_token", jwt);
+          } else {
+            toast.error(response.data.message);
+          }
+        },
+        (error) => {
+          console.error("Error:", error);
+          toast.error(error.message);
+        }
+      )
+      .finally(() => {
+        closeLoader();
+        const timeout = setTimeout(() => {
+          toast.dismiss();
+        }, 5000);
+        return () => clearTimeout(timeout);
+      });
+  };
+
+  const launchInvoice = () => {
+    setInvoice({
+      ...invoice_data,
+      currency: "usdc",
+      amount: usdcAmount,
+      onopen: true,
+      onclose: closeInvoice,
+    });
+    console.log(invoice_data);
+  };
 
   return (
     <React.Fragment>
@@ -332,65 +343,71 @@ useEffect(() => {
             removeBonus={removeBonus}
             fetching_bonus={fetching_bonus}
           />
-                <ReferralPane ref_data={ref_data}
+          <ReferralPane
+            ref_data={ref_data}
             fetching_referee={fetching_referee}
-            referee_fetched={referee_fetched}/>
+            referee_fetched={referee_fetched}
+          />
 
           <div className="text-center">
             {address ? (
               <>
-                {allowance.toNumber() < usdcAmount ? (<div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    padding: "5px",
-                  }}
-                >
-                  <button
-                    className="buy_token_button"
-                    disabled={!approveWrite || approveIsLoading}
-                    onClick={() => approveWrite()}
+                {allowance.toNumber() < usdcAmount ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      padding: "5px",
+                    }}
                   >
-                    {approveIsLoading ? "Approving..." : "Approve"}
-                  </button>
+                    <button
+                      className="buy_token_button"
+                      disabled={!approveWrite || approveIsLoading}
+                      onClick={() => approveWrite()}
+                    >
+                      {approveIsLoading ? "Approving..." : "Approve"}
+                    </button>
                   </div>
                 ) : (
-                  <><div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    padding: "5px",
-                  }}
-                >
-                    <button
-                      type="button"
-                      className="buy_token_button"
-                      disabled={!purchaseWrite || purchaseIsLoading}
-                      onClick={() => purchaseWrite()}
+                  <>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        padding: "5px",
+                      }}
                     >
-                      {purchaseIsLoading ? "Buying..." : "Buy Now"}
-                    </button>
+                      <button
+                        type="button"
+                        className="buy_token_button"
+                        disabled={!purchaseWrite || purchaseIsLoading}
+                        onClick={() => purchaseWrite()}
+                      >
+                        {purchaseIsLoading ? "Buying..." : "Buy Now"}
+                      </button>
                     </div>
                   </>
                 )}
               </>
-            ) : (<>
-              <div className="text-center">
-<div className="cover-div">
-  <div
-    className="btn-div"
-    style={{ opacity: usdcAmount > 0 ? "1" : "0.3" }}
-  >
-    <button
-      onClick={() => launchInvoice()}
-      disabled={usdcAmount <= 0}
-      className="buy_token_button"
-    >
-      CONTINUE
-    </button>
-  </div>
-</div>
-</div></>
+            ) : (
+              <>
+                <div className="text-center">
+                  <div className="cover-div">
+                    <div
+                      className="btn-div"
+                      style={{ opacity: usdcAmount > 0 ? "1" : "0.3" }}
+                    >
+                      <button
+                        onClick={() => launchInvoice()}
+                        disabled={usdcAmount <= 0}
+                        className="buy_token_button"
+                      >
+                        CONTINUE
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </>
             )}
           </div>
         </>
@@ -413,9 +430,9 @@ useEffect(() => {
           />
         </div>
       )}
-              {invoice_data?.onopen && <PayInvoice data={invoice_data} />}
-              {bux_data?.onopen &&  <BuyModal data={bux_data} />}
-              {load_data?.open &&  <LoadingModal data={load_data} />}
+      {invoice_data?.onopen && <PayInvoice data={invoice_data} />}
+      {bux_data?.onopen && <BuyModal data={bux_data} />}
+      {load_data?.open && <LoadingModal data={load_data} />}
     </React.Fragment>
   );
 }

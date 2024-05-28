@@ -99,7 +99,7 @@ const AdminSidePanel = (props) => {
     },
     {
       path: "whitepaper",
-      title: "Whaitepaper",
+      title: "Whitepaper",
       icon: <Newspaper />,
       navItem: true,
       data: { mustAuth: true, isAdmin: false, showSideNav: false },

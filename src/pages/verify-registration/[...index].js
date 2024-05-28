@@ -12,7 +12,7 @@ export default function Home() {
   const router = useRouter();
   let AuthServ = useAuthService();
   const { decodeHtml } = processHtml;
-  const isParam = router.query["verify-registration"] ? true : false;
+  const isParam = router.query["index"] ? true : false;
   const [id, setId] = React.useState(null);
   const [token, setToken] = React.useState(null);
   const [routes, setRoutes] = React.useState(null);
@@ -35,26 +35,27 @@ export default function Home() {
   React.useEffect(() => {
     console.log("router::", router.query);
     if (isParam) {
-      const routes = router.query["verify-registration"];
+      const rts = router.query["index"];
+      setRoutes(rts);
       let idn = "";
       let tkn = "";
-      if (routes) {
-        if (routes.length == 0) {
+      if (rts) {
+        if (rts.length == 0) {
           idn = null;
           tkn = null;
-        } else if (routes.length == 1) {
-          idn = routes[0];
+        } else if (rts.length == 1) {
+          idn = rts[0];
           tkn = null;
-        } else if (routes.length == 2) {
-          idn = routes[0];
-          tkn = routes[1];
+        } else if (rts.length == 2) {
+          idn = rts[0];
+          tkn = rts[1];
         }
       }
       console.log("ID::", idn, "TOKEN::", tkn);
       setId(idn);
       setToken(tkn);
     }
-  }, [router.query["verify-registration"]]);
+  }, [router.query["index"]]);
 
   const [user, setUser] = React.useState(null);
   const confirm_code = (id, token) => {

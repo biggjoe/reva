@@ -342,9 +342,8 @@ class HttpServiceFunc {
   createPages(data) {
     return authHeader().then((res) => {
       this.AuthToken = res;
-
       const url = SERVER_API_URL + "create_pages?secret=" + API_SECRET;
-      console.log("adding page details::: ", url, data, {
+      console.log("adding page::: ", url, data, {
         headers: this.AuthToken,
       });
       return axios
@@ -811,6 +810,17 @@ class HttpServiceFunc {
       const url = SERVER_API_URL + endpoint + "?secret=" + API_SECRET;
       return axios
         .post(url, data, { headers: this.AuthToken })
+        .then((response) => {
+          return response.data;
+        });
+    });
+  }
+  postExtraHeader(endpoint, data, extraHeaders) {
+    return authHeader().then((res) => {
+      this.AuthToken = res;
+      const url = SERVER_API_URL + endpoint + "?secret=" + API_SECRET;
+      return axios
+        .post(url, data, { headers: { ...this.AuthToken, ...extraHeaders } })
         .then((response) => {
           return response.data;
         });

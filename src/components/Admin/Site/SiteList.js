@@ -79,7 +79,7 @@ export default function SiteList() {
       <section className="dashboard-pane">
         <div className="container py30">
           <Card sx={{ borderRadius: "0" }}>
-            <div className="page-head bg-grax">
+            <div className="page-head">
               <div className="flex flex-row-resp">
                 <div className="inline-block pxy20">
                   <Breadcrumbs
@@ -107,7 +107,7 @@ export default function SiteList() {
                         component={"div"}
                         secondaryAction={
                           <>
-                            <Tooltip title="Edit Page">
+                            <Tooltip title="Edit Setting">
                               <IconButton onClick={() => togEdit(item)}>
                                 <Edit />
                               </IconButton>

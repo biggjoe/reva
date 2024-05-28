@@ -19,7 +19,6 @@ const useFetchPage = (props) => {
     HttpService.getPage(slug)
       .then(
         (result) => {
-          setLoading(false);
           console.log(result);
           if (result.status === 1) {
             setPage(result.data);
@@ -33,7 +32,7 @@ const useFetchPage = (props) => {
       )
       .finally(() => {
         setLoading(false);
-        setLoaded(false);
+        setLoaded(true);
       }); //fetch
   }; //doAjax
 

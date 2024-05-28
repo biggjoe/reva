@@ -28,9 +28,10 @@ import AffiliatePane from "./AffiliatePane";
 import ReferralPane from "./ReferralPane";
 import numberWithCommas from "../../pipes/Number";
 import PayInvoice from "./PayInvoice";
+import { TramOutlined } from "@mui/icons-material";
 
 export default function BnbCurrency(props) {
-  const { 
+  const {
     affiliate_data,
     ref_data,
     set_aff,
@@ -41,7 +42,8 @@ export default function BnbCurrency(props) {
     fetching_bonus,
     bonus_fetched,
     fetching_referee,
-    referee_fetched } = props;
+    referee_fetched,
+  } = props;
   const [bnbAmount, setBnbAmount] = useState("");
   const [bnbErrorMessage, setBnbErrorMessage] = useState("");
   const AuthServ = useAuthService();
@@ -67,24 +69,37 @@ export default function BnbCurrency(props) {
     setBux({ ...bux_data, onopen: true, onclose: closeBux });
   };
 
-  
   const closeLoader = () => setLoadData({ ...load_data, open: false });
   const [load_data, setLoadData] = React.useState({
     open: false,
     onclose: closeLoader,
+    hide_exit: true,
   });
 
-  let doLoader = (state,message,mode=false) => {
-    setLoadData({ ...load_data, open: state,
-      onclose: closeLoader,message:message,mode:mode });
+  let doLoader = (state, message, mode = false) => {
+    setLoadData({
+      ...load_data,
+      open: state,
+      onclose: closeLoader,
+      message: message,
+      mode: mode,
+    });
   };
 
+  const openLoader = (message, hide) => {
+    setLoadData({
+      ...load_data,
+      message: message,
+      hide_exit: hide,
+      open: true,
+      onclose: closeLoader,
+    });
+  };
   const closeInvoice = () => setInvoice({ ...invoice_data, onopen: false });
   const [invoice_data, setInvoice] = React.useState({
     onopen: false,
     onclose: closeInvoice,
   });
-
 
   const { address } = useAccount();
 
@@ -123,46 +138,43 @@ export default function BnbCurrency(props) {
     chainId: chainId,
   });
 
-const getResult = new BigNumber(getAmount.data);
+  const getResult = new BigNumber(getAmount.data);
   const resx = isNaN(getResult)
     ? 0
     : new BigNumber(getResult).dividedBy(new BigNumber(10).pow(18)).toFixed(3);
 
   const result = numberWithCommas(resx);
 
-let success_message =   <div className="text-center py-2">
-Success! XRV Purchase Complete
-<div>
-  <Link
-    style={{ color: "#fff" }}
-    href={`https://testnet.bscscan.com/tx/${data?.hash}`}
-  >
-    View On Bscscan
-  </Link>
-</div>
-</div>;
-
   useEffect(() => {
     if (isSuccess) {
-      doLoader(true,success_message,"component")
-      toast.success(success_message);
+      toast.success(
+        <div className="text-center py-2">
+          Success! XRV Purchase Complete
+          <div>
+            <Link
+              style={{ color: "#fff" }}
+              href={`https://testnet.bscscan.com/tx/${data?.hash}`}
+            >
+              View On Bscscan
+            </Link>
+          </div>
+        </div>
+      );
       const timeout = setTimeout(() => {
-        doLoader(false,"")
         toast.dismiss();
       }, 5000);
       return () => clearTimeout(timeout);
     }
   }, [isSuccess, data?.hash]);
 
-  let error_message = 
-  <div className="text-center py-2">Error! Something Went Wrong</div>
-;
+  let error_message = ``;
+
   useEffect(() => {
     if (isError) {
-      doLoader(true,error_message)
-      toast.error(error_message );
+      toast.error(
+        <div className="text-center py-2">Error! Something Went Wrong</div>
+      );
       const timeout = setTimeout(() => {
-        doLoader(false,"")
         toast.dismiss();
       }, 5000);
       return () => clearTimeout(timeout);
@@ -186,54 +198,56 @@ Success! XRV Purchase Complete
   );
 
   useEffect(() => {
-    const handlePostRequest = async () => {
-      try {
-        if (isSuccess) {
-          doLoader(true,"Payment received. Processing dashboard balance...")
-          setTokenData({ ...token_data, total_tokens: result });
-          const additionalData = {
-            id: user_data?.id,
-            tx_id: user_data?.txn_id,
-            tx_hash: data?.hash,
-            date_time: new Date().toUTCString(),
-            tx_status: "success",
-            user_address: address,
-            payment_currency: "BNB",
-            paid_amount: bnbAmount,
-            received_amount_in_token: result,
-            affiliate_data: token_data,
-            referral_data: ref_data,
-          };
-          const jsonData = JSON.stringify(additionalData);
+    if (isSuccess) {
+      setTokenData({ ...token_data, total_tokens: result });
+      const additionalData = {
+        id: user_data?.id,
+        tx_id: user_data?.txn_id,
+        tx_hash: data?.hash,
+        date_time: new Date().toUTCString(),
+        tx_status: "success",
+        user_address: address,
+        payment_currency: "BNB",
+        paid_amount: bnbAmount,
+        received_amount_in_token: result,
+        affiliate_data: token_data,
+        referral_data: ref_data,
+      };
+      postPayment(additionalData);
+    }
+  }, [isSuccess, data?.hash]);
 
-          const response = await axios.post(
-            "https://www.token.reva.finance/api/push_payment?secret=ZMpAShQwlOxzHYnJ97UkwLaW",
-            jsonData,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-
+  const postPayment = (additionalData) => {
+    //toast.loading("Payment received. Processing token balance...");
+    openLoader("Payment received. Processing token balance...", true);
+    const endpoint = "push_payment";
+    extraHeaders = { "Content-Type": "application/json" };
+    HttpService.postExtraHeader(endpoint, additionalData, extraHeaders)
+      .then(
+        (response) => {
+          toast.dismiss();
           console.log("Server response:", response.data);
-          doLoader(true,response.data.message)
-          if(response.data.status===1){
-          const jwt = response.data.new_jwt;
-          localStorage.setItem("access_token", jwt);
+          if (response.data.status === 1) {
+            toast.success(response.data.message);
+            const jwt = response.data.new_jwt;
+            localStorage.setItem("access_token", jwt);
+          } else {
+            toast.error(response.data.message);
+          }
+        },
+        (error) => {
+          console.error("Error:", error);
+          toast.error(error.message);
         }
-        }
-      } catch (error) {
-        console.error("Error:", error);
-        let Err = ()=>{return <span className="color-red spacer">{error.message}</span>;}
-        doLoader(true,<Err/>,"component")
-      }
-    };
-    handlePostRequest();
-  }, [
-    isSuccess,
-    data?.hash
-  ]);
+      )
+      .finally(() => {
+        closeLoader();
+        const timeout = setTimeout(() => {
+          toast.dismiss();
+        }, 5000);
+        return () => clearTimeout(timeout);
+      });
+  };
 
   const [is_bonused, setBonused] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
@@ -243,14 +257,19 @@ Success! XRV Purchase Complete
   const togAff = () => setShowCode(!show_code);
   const togOnce = () => setShowInit(!show_init);
 
-  
   const launchInvoice = () => {
-    setInvoice({ ...invoice_data, currency:"bnb", amount:bnbAmount, onopen: true, onclose: closeInvoice });
+    setInvoice({
+      ...invoice_data,
+      currency: "bnb",
+      amount: bnbAmount,
+      onopen: true,
+      onclose: closeInvoice,
+    });
     console.log(invoice_data);
   };
   return (
     <React.Fragment>
-       <AmountForm
+      <AmountForm
         handleCurrAmountChange={handlebnbAmountChange}
         curr={"bnb"}
         result={result}
@@ -258,31 +277,33 @@ Success! XRV Purchase Complete
         currErrorMessage={bnbErrorMessage}
       />
 
-{isLogged && (
+      {isLogged && (
         <>
-        <AffiliatePane
-          affiliate_data={affiliate_data}
-          show_init={show_init}
-          show_code={show_code}
-          togAff={togAff}
-          handleBonusInput={handleBonusInput}
-          applyBonus={applyBonus}
-          removeBonus={removeBonus}
-          fetching_bonus={fetching_bonus}
-        />
-            <ReferralPane ref_data={ref_data}
+          <AffiliatePane
+            affiliate_data={affiliate_data}
+            show_init={show_init}
+            show_code={show_code}
+            togAff={togAff}
+            handleBonusInput={handleBonusInput}
+            applyBonus={applyBonus}
+            removeBonus={removeBonus}
+            fetching_bonus={fetching_bonus}
+          />
+          <ReferralPane
+            ref_data={ref_data}
             fetching_referee={fetching_referee}
-            referee_fetched={referee_fetched}/>
+            referee_fetched={referee_fetched}
+          />
 
-        
-        <div className="text-center">
-              {address ? (<div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            padding: "5px",
-          }}
-        >
+          <div className="text-center">
+            {address ? (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  padding: "5px",
+                }}
+              >
                 <button
                   type="button"
                   className="buy_token_button"
@@ -291,50 +312,51 @@ Success! XRV Purchase Complete
                 >
                   {isLoading ? "Buying..." : "Buy Now"}
                 </button>
+              </div>
+            ) : (
+              <>
+                <div className="text-center">
+                  <div className="cover-div">
+                    <div
+                      className="btn-div"
+                      style={{ opacity: bnbAmount > 0 ? "1" : "0.3" }}
+                    >
+                      <button
+                        onClick={() => launchInvoice()}
+                        disabled={bnbAmount <= 0}
+                        className="buy_token_button"
+                      >
+                        CONTINUE
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              ) : (<>
-              
-              <div className="text-center">
-<div className="cover-div">
-  <div
-    className="btn-div"
-    style={{ opacity: bnbAmount > 0 ? "1" : "0.3" }}
-  >
-    <button
-      onClick={() => launchInvoice()}
-      disabled={bnbAmount <= 0}
-      className="buy_token_button"
-    >
-      CONTINUE
-    </button>
-  </div>
-</div>
-</div></>
-              )}
-            </div>
-        </>)}
-     
-
-        {!isLogged && (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <PromptLogin
-              button_text="BUY TOKEN"
-              button_class="buy_token_button"
-              mode="custom"
-              return_call={launchBuy}
-              return_url="/purchase"
-              do_redirect={true}
-            />
+              </>
+            )}
           </div>
-        )}
-        {invoice_data?.onopen && <PayInvoice data={invoice_data} />}
-              {bux_data?.onopen &&  <BuyModal data={bux_data} />}
-              {load_data?.open &&  <LoadingModal data={load_data} />}
+        </>
+      )}
+
+      {!isLogged && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <PromptLogin
+            button_text="BUY TOKEN"
+            button_class="buy_token_button"
+            mode="custom"
+            return_call={launchBuy}
+            return_url="/purchase"
+            do_redirect={true}
+          />
+        </div>
+      )}
+      {invoice_data?.onopen && <PayInvoice data={invoice_data} />}
+      {bux_data?.onopen && <BuyModal data={bux_data} />}
+      {load_data?.open && <LoadingModal data={load_data} />}
     </React.Fragment>
   );
 }

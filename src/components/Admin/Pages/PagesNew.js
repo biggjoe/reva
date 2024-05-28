@@ -1,30 +1,23 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import Card from "@mui/material/Card";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import ListItemButton from "@mui/material/ListItemButton";
-import IconButton from "@mui/material/IconButton";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
 import { DefaultEditor } from "react-simple-wysiwyg";
-import * as processHtml from "../../../services/processHtml";
-import Edit from "@mui/icons-material/Edit";
 import HttpService from "../../../services/HttpService";
-import PlaceHolder from "../../PlaceHolder";
-import { Collapse } from "@mui/material";
-import HtmlModal from "../../HtmlModal";
-import useFetchFaqDetails from "../../../hooks/useFetchFaqDetails";
 import CustomModal from "../../CustomModal";
-import { Description } from "@mui/icons-material";
 
 const PagesNew = () => {
   let navigate = useRouter();
-  let [page, setPage] = React.useState({ title: "", description: "" });
-  let [answer, setAnswer] = React.useState("");
+  let [page, setPage] = React.useState({
+    title: "",
+    description: "",
+    slug: "",
+  });
+  let [title, setTitle] = React.useState("");
+  let [slug, setSlug] = React.useState("");
+  let [description, setDescription] = React.useState("");
+  let [meta_keyword, setKeyword] = React.useState("");
+  let [meta_description, setMetaDescription] = React.useState("");
   let [loading, setLoading] = React.useState(false);
   let [loaded, setLoaded] = React.useState(false);
   const closeModal = () => {
@@ -33,22 +26,26 @@ const PagesNew = () => {
   const [modal, setModal] = React.useState({
     onopen: false,
     onclose: closeModal,
-    title: "New Faq",
+    title: "New Page",
     message: "",
   });
 
   React.useEffect(() => {}, []);
 
   const onHtmlChange = (e) => {
-    setAnswer(e.target.value);
-    console.log(answer);
+    setDescription(e.target.value);
+    console.log(description);
   };
 
   const handleSubmit = () => {
     console.log("SUBMITTING");
-    HttpService.postHeader("pages", {
-      question: page.title,
-      answer: page.description,
+    setLoading(true);
+    HttpService.createPages({
+      title: title,
+      description: description,
+      meta_keyword: meta_keyword,
+      meta_description: meta_description,
+      slug: slug,
       mode: "add-page",
     })
       .then((resp) => {
@@ -64,33 +61,79 @@ const PagesNew = () => {
         setLoading(false);
       });
   };
-  const handleInputChange = React.useCallback(
+  const handleTitleChange = React.useCallback(
     (e) => {
-      console.log(e.target);
-      const name = e.target.name;
-      setPage({ ...page, [name]: e.target.value });
+      setTitle(e.target.value);
+      let newText = ripString(e.target.value);
+      setSlug(newText);
     },
-    [page]
+    [slug, title]
   );
+
+  const ripString = (string) => {
+    let text = string
+      .toString()
+      .toLowerCase()
+      .replace(" ", "-")
+      .replaceAll([" ", "'", "`", "--", " "], ["", "-", "-", "-", ""]);
+    /*.replace("", "-")
+      .replace("", "")
+      .replace('"', "")
+      .replace('"', "")
+      .replace("'", "-")
+      .replace("", "-")*/ return text;
+  };
 
   return (
     <React.Fragment>
       <div className=" pxy20">
         <div className={loading ? " input iconed " : " input "}>
-          <label>Title</label>
+          <label>Page Title</label>
           <input
             type="text"
             className="input-form-control"
-            name="question"
-            onChange={handleInputChange}
+            name="title"
+            onChange={handleTitleChange}
             placeholder={"Page Title "}
           />
         </div>
+        <div className={loading ? " input iconed " : " input "}>
+          <label>Slug</label>
+          <input
+            type="text"
+            className="input-form-control"
+            name="slug"
+            value={slug}
+            onChange={(e) => setSlug(e.target.value)}
+            placeholder={"slug"}
+          />
+        </div>
+        <div className={loading ? " input iconed " : " input "}>
+          <label>Meta Keywords</label>
+          <input
+            type="text"
+            className="input-form-control"
+            name="meta_keyword"
+            onChange={(e) => setKeyword(e.target.value)}
+            placeholder={"Meta keyword"}
+          />
+        </div>
+        <div className={loading ? " input iconed " : " input "}>
+          <label>Meta Description</label>
+          <input
+            type="text"
+            className="input-form-control"
+            name="meta_description"
+            onChange={(e) => setMetaDescription(e.target.value)}
+            placeholder={"Meta description"}
+          />
+        </div>
 
-        <div className="mb10">
+        <div className="mb10 input">
+          <label>Page Contents</label>
           <DefaultEditor
             className="input-form-control"
-            value={answer}
+            value={description}
             onChange={onHtmlChange}
           />
         </div>

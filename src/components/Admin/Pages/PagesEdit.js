@@ -39,6 +39,7 @@ const PagesEdit = (props) => {
   const [detail, setDetail] = React.useState("");
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
+  const [slug, setSlug] = React.useState("");
 
   React.useEffect(() => {
     getpage(id);
@@ -55,6 +56,7 @@ const PagesEdit = (props) => {
           if (result.status === 1) {
             setPage(result.data);
             setTitle(result.data.title);
+            setSlug(result.data.slug);
             setDescription(result.data.description);
             setDetail(result.data.description);
           } else {
@@ -83,6 +85,7 @@ const PagesEdit = (props) => {
     HttpService.editPages({
       title: title,
       description: detail,
+      slug: slug,
       id: id,
     })
       .then((resp) => {
@@ -118,11 +121,23 @@ const PagesEdit = (props) => {
             <input
               type="text"
               className="input-form-control"
-              name="name"
+              name="title"
               disabled={loading}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder={"page Title"}
+              placeholder={"Page Title"}
+            />
+          </div>
+          <div className={loading ? " input iconed " : " input "}>
+            <label>Slug</label>
+            <input
+              type="text"
+              className="input-form-control"
+              name="slug"
+              disabled={loading}
+              value={slug}
+              onChange={(e) => setSlug(e.target.value)}
+              placeholder={"Page Slug"}
             />
           </div>
 

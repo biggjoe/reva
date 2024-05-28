@@ -56,25 +56,25 @@ const AffiliateHome = (props) => {
           setAffiliateFetched(true);
           if (result) {
             if (result?.affiliate_details) {
-              setAffiliate(result.affiliate_details);
+              setAffiliate(result?.affiliate_details);
             }
             if (result?.affiliate_codes) {
-              setCodes(result?.affiliate_codes?.data);
+              setCodes(result?.affiliate_codes);
             }
             if (result?.withdrawal_requests) {
-              setRequests(result.withdrawal_requests.data);
+              setRequests(result?.withdrawal_requests);
             }
             if (result?.transactions) {
-              setTransactions(result.transactions.data);
+              setTransactions(result?.transactions);
             }
             if (result?.total_earnings) {
-              setTotalEarning(result.total_earnings);
+              setTotalEarning(result?.total_earnings);
             }
             if (result?.wallet_balance) {
-              setWalletBalance(result.wallet_balance);
+              setWalletBalance(result?.wallet_balance);
             }
             if (result?.withdraw_threshold) {
-              setWithdrawThreshold(result.withdraw_threshold);
+              setWithdrawThreshold(result?.withdraw_threshold);
             }
           }
         },

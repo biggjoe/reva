@@ -7,11 +7,10 @@ import Layout from "../../../components/Admin/Layout";
 import SiteList from "../../../components/Admin/Site/SiteList";
 
 const Site = () => {
-
   return (
     <React.Fragment>
       <Layout>
-      <SiteList/>
+        <SiteList />
       </Layout>
     </React.Fragment>
   );

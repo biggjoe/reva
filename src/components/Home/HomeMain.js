@@ -99,7 +99,6 @@ const HomeMain = () => {
     HttpService.fetchReferee(id)
       .then(
         (result) => {
-          console.log("::|", result);
           if (result && result.status === 1) {
             setReferee({
               ...referee,

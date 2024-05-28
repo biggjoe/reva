@@ -196,7 +196,7 @@ const AccountHeader = (props) => {
                 </ListItem>
               </MenuItem>
             ))}
-            <MenuItem key={index} sx={{ py: "0", px: "10px", m: "0" }}>
+            <MenuItem sx={{ py: "0", px: "10px", m: "0" }}>
               <ListItem disablePadding onClick={() => doLogout()}>
                 <ListItemIcon>
                   <LogoutOutlined sx={{ color: "red" }} />
