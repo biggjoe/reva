@@ -2,8 +2,6 @@ import React, { useEffect, useState, useCallback, useMemo } from "react";
 import BigNumber from "bignumber.js";
 import toast, { Toaster } from "react-hot-toast";
 import Link from "next/link";
-import ConnectWalletButton from "../../components/ConnectWalletButton";
-import axios from "axios";
 import {
   useAccount,
   useContractWrite,
@@ -16,8 +14,6 @@ import {
 import { parseUnits, parseEther, formatEther, formatUnits } from "viem";
 import presaleAbi from "../../abi/presale.json";
 import { tokenAdd, contractAddr, chainId } from "../../config";
-import FontAwesome from "react-fontawesome";
-import { UserContext } from "../../services/UserContext";
 import PromptLogin from "../PromptLogin";
 import useAuthService from "../../services/useAuthService";
 import BuyModal from "../BuyModal";
@@ -28,7 +24,7 @@ import AffiliatePane from "./AffiliatePane";
 import ReferralPane from "./ReferralPane";
 import numberWithCommas from "../../pipes/Number";
 import PayInvoice from "./PayInvoice";
-import { TramOutlined } from "@mui/icons-material";
+import { useRouter } from "next/router";
 
 export default function BnbCurrency(props) {
   const {
@@ -44,6 +40,7 @@ export default function BnbCurrency(props) {
     fetching_referee,
     referee_fetched,
   } = props;
+  const router = useRouter();
   const [bnbAmount, setBnbAmount] = useState("");
   const [bnbErrorMessage, setBnbErrorMessage] = useState("");
   const AuthServ = useAuthService();
@@ -199,40 +196,45 @@ export default function BnbCurrency(props) {
 
   useEffect(() => {
     if (isSuccess) {
-      setTokenData({ ...token_data, total_tokens: result });
-      const additionalData = {
-        id: user_data?.id,
-        tx_id: user_data?.txn_id,
-        tx_hash: data?.hash,
-        date_time: new Date().toUTCString(),
-        tx_status: "success",
-        user_address: address,
-        payment_currency: "BNB",
-        paid_amount: bnbAmount,
-        received_amount_in_token: result,
-        affiliate_data: token_data,
-        referral_data: ref_data,
-      };
-      postPayment(additionalData);
+      postPayment();
     }
   }, [isSuccess, data?.hash]);
 
-  const postPayment = (additionalData) => {
-    //toast.loading("Payment received. Processing token balance...");
-    openLoader("Payment received. Processing token balance...", true);
+  const postPayment = () => {
+    setTokenData({ ...token_data, total_tokens: result });
+    const additionalData = {
+      id: user_data?.id,
+      tx_id: user_data?.txn_id,
+      tx_hash: data?.hash,
+      date_time: new Date().toUTCString(),
+      tx_status: "success",
+      user_address: address,
+      payment_currency: "BNB",
+      paid_amount: bnbAmount,
+      received_amount_in_token: result,
+      affiliate_data: token_data,
+      referral_data: ref_data,
+    };
+    toast.dismiss();
+    toast.loading("Payment received. Processing token balance...");
+    //openLoader("Payment received. Processing token balance...", true);
     const endpoint = "push_payment";
-    extraHeaders = { "Content-Type": "application/json" };
+    const extraHeaders = { "Content-Type": "application/json" };
+    console.log("additionalData::", additionalData);
     HttpService.postExtraHeader(endpoint, additionalData, extraHeaders)
       .then(
         (response) => {
           toast.dismiss();
-          console.log("Server response:", response.data);
-          if (response.data.status === 1) {
-            toast.success(response.data.message);
-            const jwt = response.data.new_jwt;
+          console.log("Server response:", response);
+          if (response.status === 1) {
+            toast.success(response.message);
+            const jwt = response.new_jwt;
             localStorage.setItem("access_token", jwt);
+            setTimeout(() => {
+              router.push(`/account/transactions/details/${response.id}`);
+            }, 5000);
           } else {
-            toast.error(response.data.message);
+            toast.error(response.message);
           }
         },
         (error) => {
@@ -262,6 +264,7 @@ export default function BnbCurrency(props) {
       ...invoice_data,
       currency: "bnb",
       amount: bnbAmount,
+      address: address,
       onopen: true,
       onclose: closeInvoice,
     });
@@ -284,10 +287,12 @@ export default function BnbCurrency(props) {
             show_init={show_init}
             show_code={show_code}
             togAff={togAff}
+            bonus_code={bonus_code}
             handleBonusInput={handleBonusInput}
             applyBonus={applyBonus}
             removeBonus={removeBonus}
             fetching_bonus={fetching_bonus}
+            bonus_fetched={bonus_fetched}
           />
           <ReferralPane
             ref_data={ref_data}
@@ -299,7 +304,7 @@ export default function BnbCurrency(props) {
             {address ? (
               <div
                 style={{
-                  display: "flex",
+                  display: "flex flex-col",
                   justifyContent: "center",
                   padding: "5px",
                 }}
@@ -312,6 +317,15 @@ export default function BnbCurrency(props) {
                 >
                   {isLoading ? "Buying..." : "Buy Now"}
                 </button>
+                <div className="py20">
+                  <button
+                    onClick={() => launchInvoice()}
+                    disabled={bnbAmount <= 0}
+                    className=" button-link"
+                  >
+                    Use manual payment
+                  </button>
+                </div>
               </div>
             ) : (
               <>

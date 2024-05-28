@@ -28,6 +28,7 @@ import ReferralPane from "./ReferralPane";
 import numberWithCommas from "../../pipes/Number";
 import LoadingModal from "../LoadingModal";
 import PayInvoice from "./PayInvoice";
+import { useRouter } from "next/router";
 
 export default function UsdcCurrency(props) {
   const {
@@ -44,6 +45,7 @@ export default function UsdcCurrency(props) {
     fetching_referee,
     referee_fetched,
   } = props;
+  const router = useRouter();
 
   const [usdcAmount, setUsdcAmount] = useState("");
   const [usdcErrorMessage, setUsdcErrorMessage] = useState("");
@@ -260,41 +262,46 @@ export default function UsdcCurrency(props) {
 
   useEffect(() => {
     if (purchaseIsSuccess) {
-      setTokenData({ ...token_data, total_tokens: result });
-      const additionalData = {
-        id: user_data?.id,
-        tx_id: user_data?.txn_id,
-        tx_hash: purchaseData?.hash,
-        date_time: new Date().toUTCString(),
-        tx_status: "success",
-        user_address: address,
-        payment_currency: "USDC",
-        paid_amount: usdcAmount,
-        received_amount_in_token: result,
-        affiliate_data: token_data,
-        referral_data: ref_data,
-      };
-      postPayment(additionalData);
+      postPayment();
     }
   }, [purchaseIsSuccess, purchaseData?.hash]);
 
-  const postPayment = (additionalData) => {
-    //toast.loading("Payment received. Processing token balance...");
-    openLoader("Payment received. Processing token balance...", true);
+  const postPayment = () => {
+    setTokenData({ ...token_data, total_tokens: result });
+    const additionalData = {
+      id: user_data?.id,
+      tx_id: user_data?.txn_id,
+      tx_hash: purchaseData?.hash,
+      date_time: new Date().toUTCString(),
+      tx_status: "success",
+      user_address: address,
+      payment_currency: "USDC",
+      paid_amount: usdcAmount,
+      received_amount_in_token: result,
+      affiliate_data: token_data,
+      referral_data: ref_data,
+    };
+    toast.dismiss();
+    toast.loading("Payment received. Processing token balance...");
+    //openLoader("Payment received. Processing token balance...", true);
     const endpoint = "push_payment";
-    extraHeaders = { "Content-Type": "application/json" };
+    const extraHeaders = { "Content-Type": "application/json" };
+    console.log("additionalData::", additionalData);
     HttpService.postExtraHeader(endpoint, additionalData, extraHeaders)
       .then(
         (response) => {
           toast.dismiss();
 
-          console.log("Server response:", response.data);
+          console.log("Server response:", response);
           if (response.data.status === 1) {
-            toast.success(response.data.message);
-            const jwt = response.data.new_jwt;
+            toast.success(response.message);
+            const jwt = response.new_jwt;
             localStorage.setItem("access_token", jwt);
+            setTimeout(() => {
+              router.push(`/account/transactions/details/${response.id}`);
+            }, 5000);
           } else {
-            toast.error(response.data.message);
+            toast.error(response.message);
           }
         },
         (error) => {
@@ -316,6 +323,7 @@ export default function UsdcCurrency(props) {
       ...invoice_data,
       currency: "usdc",
       amount: usdcAmount,
+      address: address,
       onopen: true,
       onclose: closeInvoice,
     });
@@ -338,11 +346,14 @@ export default function UsdcCurrency(props) {
             show_init={show_init}
             show_code={show_code}
             togAff={togAff}
-            handleBonusInput={handleUsdcAmountChange}
+            bonus_code={bonus_code}
+            handleBonusInput={handleBonusInput}
             applyBonus={applyBonus}
             removeBonus={removeBonus}
             fetching_bonus={fetching_bonus}
+            bonus_fetched={bonus_fetched}
           />
+
           <ReferralPane
             ref_data={ref_data}
             fetching_referee={fetching_referee}
@@ -355,7 +366,7 @@ export default function UsdcCurrency(props) {
                 {allowance.toNumber() < usdcAmount ? (
                   <div
                     style={{
-                      display: "flex",
+                      display: "flex flex-col",
                       justifyContent: "center",
                       padding: "5px",
                     }}
@@ -367,12 +378,21 @@ export default function UsdcCurrency(props) {
                     >
                       {approveIsLoading ? "Approving..." : "Approve"}
                     </button>
+                    <div className="py20">
+                      <button
+                        onClick={() => launchInvoice()}
+                        disabled={usdcAmount <= 0}
+                        className=" button-link"
+                      >
+                        Use manual payment
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <>
                     <div
                       style={{
-                        display: "flex",
+                        display: "flex flex-col",
                         justifyContent: "center",
                         padding: "5px",
                       }}
@@ -385,6 +405,15 @@ export default function UsdcCurrency(props) {
                       >
                         {purchaseIsLoading ? "Buying..." : "Buy Now"}
                       </button>
+                      <div className="py20">
+                        <button
+                          onClick={() => launchInvoice()}
+                          disabled={usdcAmount <= 0}
+                          className=" button-link"
+                        >
+                          Use manual payment
+                        </button>
+                      </div>
                     </div>
                   </>
                 )}

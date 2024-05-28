@@ -1,5 +1,5 @@
 import React from "react";
-import LoginModule from "./LoginModule";
+import LoginModule from "../../Login/LoginModule";
 import FontAwesome from "react-fontawesome";
 import Link from "next/link";
 const Login = () => {
@@ -14,7 +14,7 @@ const Login = () => {
       </div>
       <div className="flex flex-col flex-column justify-content-center align-items-center py20 px10">
         <div className="login-pane">
-          <LoginModule />
+          <LoginModule return_url="/admin/dashboard" do_redirect={true} />
         </div>
       </div>
     </section>

@@ -71,12 +71,12 @@ const LoginModule = (props) => {
             localStorage.setItem("user", usr);
             localStorage.setItem("access_token", jwt);
             setResponseText(rsp.message);
-            const next_url = return_url ? return_url : "/account/dashboard";
+            const next_url = return_url ? return_url : "/";
 
             const redir_delay = response.status === 1 ? 2000 : 3000;
             setTimeout(() => {
               if (do_redirect) {
-                return router.push(next_url);
+                router.push(next_url);
               }
               if (return_call) {
                 return_call();

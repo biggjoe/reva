@@ -70,6 +70,21 @@ class HttpServiceFunc {
       });
     });
   }
+  fetchAdminTransactions() {
+    return authHeader().then((res) => {
+      this.AuthToken = res;
+
+      const url =
+        SERVER_API_URL + "transactions_admin_home?secret=" + API_SECRET;
+      console.log("fetching transactions::: ", url, {
+        headers: this.AuthToken,
+      });
+      return axios.get(url, { headers: this.AuthToken }).then((response) => {
+        console.log("fetched_transactions::", response);
+        return response.data;
+      });
+    });
+  }
   fetchTransactions() {
     return authHeader().then((res) => {
       this.AuthToken = res;
@@ -818,10 +833,13 @@ class HttpServiceFunc {
   postExtraHeader(endpoint, data, extraHeaders) {
     return authHeader().then((res) => {
       this.AuthToken = res;
+      const all_headers = { ...this.AuthToken, ...extraHeaders };
       const url = SERVER_API_URL + endpoint + "?secret=" + API_SECRET;
+      console.log("posting to::", url, " headers:: ", all_headers);
       return axios
-        .post(url, data, { headers: { ...this.AuthToken, ...extraHeaders } })
+        .post(url, data, { headers: all_headers })
         .then((response) => {
+          console.log("push_response_full::", response);
           return response.data;
         });
     });

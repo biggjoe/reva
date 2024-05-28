@@ -7,8 +7,8 @@ import HttpService from "../../../services/HttpService";
 import FontAwesome from "react-fontawesome";
 import LoadingModal from "../../../components/LoadingModal";
 import Layout from "../../../components/Admin/Layout";
-import TransactionList from "../../../components/Admin/Transactions/TransactionList";
-import TransactionDetails from "../../../components/Admin/Transactions/TransactionDetails";
+import TransactionList from "../../../components/Transactions/TransactionList";
+import TransactionDetails from "../../../components/Transactions/TransactionDetails";
 
 export default function Page() {
   const router = useRouter();
@@ -64,34 +64,10 @@ export default function Page() {
         <section className="dashboard-pane">
           <div className="container pxy20-resp">
             <Card sx={{ borderRadius: "0" }}>
-              <div className="page-head bga">
-                <div className="flex flex-row-resp px20">
-                  <div className="inline-block py20">
-                    <Breadcrumbs
-                      aria-label="breadcrumb"
-                      sx={{
-                        width: "100%",
-                      }}
-                    >
-                      <Link href="/account/dashboard">Dashboard</Link>
-                      <Link href="/account/transactions">Transactions</Link>
-                    </Breadcrumbs>
-                    <h2 className="mt20">
-                      {page === "details"
-                        ? "Transaction Details"
-                        : page === "list"
-                        ? "All Transaction"
-                        : ""}
-                    </h2>
-                  </div>
-                </div>
-              </div>
-
-              <ul className="flat-nav border-bottom"></ul>
-              <section className="pxy20">
-                {page === "details" && <TransactionDetails tid={view} />}
-                {page === "list" && <TransactionList />}
-              </section>
+              {page === "details" && (
+                <TransactionDetails page="admin" tid={view} />
+              )}
+              {page === "list" && <TransactionList page="admin" />}
             </Card>
           </div>
         </section>
