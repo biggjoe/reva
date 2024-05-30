@@ -1,4 +1,5 @@
 import React from "react";
+import FontAwesome from "react-fontawesome";
 
 export default function AmountForm(props) {
   const { curr, result, currAmount, handleCurrAmountChange, currErrorMessage } =
@@ -33,7 +34,11 @@ export default function AmountForm(props) {
           </span>
         </div>
         {currErrorMessage && (
-          <div className="text-center color-red">{currErrorMessage}</div>
+          <div className="text-center flex flex-col badge py10 badge-warning">
+            <span>
+              <FontAwesome name="exclamation-triangle" /> {currErrorMessage}
+            </span>
+          </div>
         )}
       </div>
     </React.Fragment>

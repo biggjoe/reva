@@ -520,3 +520,9 @@ button[data-size='md'] {
 .css-l0jafl.Mui-expanded {
     margin: 12px 0px !important;
 }
+
+.spread {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}

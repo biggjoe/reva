@@ -253,7 +253,7 @@ export default function UsdcCurrency(props) {
     if (isNaN(parsedAmount) || parsedAmount <= 0) {
       setUsdcErrorMessage("Amount must be greater than zero");
     } else if (balanceUsdc.data?.formatted < parsedAmount) {
-      setUsdcErrorMessage("Insufficient balance.");
+      setUsdcErrorMessage("Insufficient wallet balance.");
     } else {
       setUsdcErrorMessage("");
     }
@@ -371,14 +371,16 @@ export default function UsdcCurrency(props) {
                       padding: "5px",
                     }}
                   >
-                    <button
-                      className="buy_token_button"
-                      disabled={!approveWrite || approveIsLoading}
-                      onClick={() => approveWrite()}
-                    >
-                      {approveIsLoading ? "Approving..." : "Approve"}
-                    </button>
-                    <div className="py20">
+                    <div className="spread">
+                      <button
+                        className="buy_token_button"
+                        disabled={!approveWrite || approveIsLoading}
+                        onClick={() => approveWrite()}
+                      >
+                        {approveIsLoading ? "Approving..." : "Approve"}
+                      </button>
+                    </div>
+                    <div className="spread pt20">
                       <button
                         onClick={() => launchInvoice()}
                         disabled={usdcAmount <= 0}
@@ -397,15 +399,17 @@ export default function UsdcCurrency(props) {
                         padding: "5px",
                       }}
                     >
-                      <button
-                        type="button"
-                        className="buy_token_button"
-                        disabled={!purchaseWrite || purchaseIsLoading}
-                        onClick={() => purchaseWrite()}
-                      >
-                        {purchaseIsLoading ? "Buying..." : "Buy Now"}
-                      </button>
-                      <div className="py20">
+                      <div className="spread">
+                        <button
+                          type="button"
+                          className="buy_token_button"
+                          disabled={!purchaseWrite || purchaseIsLoading}
+                          onClick={() => purchaseWrite()}
+                        >
+                          {purchaseIsLoading ? "Buying..." : "Buy Now"}
+                        </button>
+                      </div>
+                      <div className="spread pt20">
                         <button
                           onClick={() => launchInvoice()}
                           disabled={usdcAmount <= 0}

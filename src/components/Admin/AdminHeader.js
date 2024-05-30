@@ -122,8 +122,8 @@ const AccountHeader = (props) => {
                 alt="Menu"
                 sx={{ border: "2px solid #fff" }}
                 src={
-                  usr && usr.avatar
-                    ? `${process.env.NEXT_PUBLIC_SERVER_DOMAIN + usr.avatar}`
+                  usr && usr?.avatar
+                    ? `${process.env.NEXT_PUBLIC_SERVER_DOMAIN + usr?.avatar}`
                     : `/images/avatar.jpg`
                 }
               />
@@ -175,10 +175,10 @@ const AccountHeader = (props) => {
           >
             {/*  <Paper sx={{ width: "auto", maxWidth: "100%" }}> */}
             <div className="account-drop">
-              <div className="email-space">{usr.email}</div>
+              <div className="email-space">{usr?.email}</div>
               <div className="balance-space">
                 <span className="tkn-desc">Token Balance</span>
-                <h2>{usr.tokenBalance}</h2>
+                <h2>{usr?.tokenBalance}</h2>
               </div>
             </div>
             {pages.map((item, index) => (

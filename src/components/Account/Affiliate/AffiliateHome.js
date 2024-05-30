@@ -61,20 +61,11 @@ const AffiliateHome = (props) => {
             if (result?.affiliate_codes) {
               setCodes(result?.affiliate_codes);
             }
-            if (result?.withdrawal_requests) {
-              setRequests(result?.withdrawal_requests);
-            }
             if (result?.transactions) {
               setTransactions(result?.transactions);
             }
             if (result?.total_earnings) {
               setTotalEarning(result?.total_earnings);
-            }
-            if (result?.wallet_balance) {
-              setWalletBalance(result?.wallet_balance);
-            }
-            if (result?.withdraw_threshold) {
-              setWithdrawThreshold(result?.withdraw_threshold);
             }
           }
         },
@@ -89,7 +80,6 @@ const AffiliateHome = (props) => {
   const navas = [
     { path: "codes", title: "Bonus Codes" },
     { path: "transactions", title: "Code Transactions" },
-    { path: "requests", title: "Withdrawal Requests" },
   ];
 
   const closeApply = () => {
@@ -136,29 +126,13 @@ const AffiliateHome = (props) => {
                   <h2 className="mt20">Affiliate</h2>
                 </div>
                 {affiliate_fetched && affiliate && (
-                  <div className="py10 flex flex-row">
+                  <div className="py20 px20 flex flex-row">
                     <div className="stat-col">
                       <span className="count-span">
                         <sup className="txt-xsm">$</sup>
                         {total_earnings}
                       </span>
-                      <span className="desc-span">total earnings</span>
-                    </div>
-                    <div className="stat-col">
-                      <span className="count-span">
-                        <sup className="txt-xsm">$</sup>
-                        {wallet_balance}
-                      </span>
-                      <span className="desc-span">wallet balance</span>
-                      {wallet_balance >= withdraw_threshold && (
-                        <a
-                          href="#"
-                          onClick={launch_withdraw}
-                          className="badge badge-regular-btn"
-                        >
-                          <i className="fas fa-wallet"></i> Withdraw
-                        </a>
-                      )}
+                      <span className="desc-span">Earnings</span>
                     </div>
                   </div>
                 )}
@@ -319,7 +293,6 @@ const AffiliateHome = (props) => {
       </section>
       <ApplyAffiliateTemplate data={apply} />
       <CreateAffiliateCodeTemplate data={bonus_data} />
-      <WithdrawTemplate data={withdraw_data} />
     </React.Fragment>
   );
 };

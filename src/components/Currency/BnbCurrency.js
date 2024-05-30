@@ -32,6 +32,7 @@ export default function BnbCurrency(props) {
     ref_data,
     set_aff,
     set_ref,
+    bonus_code,
     applyBonus,
     removeBonus,
     handleBonusInput,
@@ -185,7 +186,7 @@ export default function BnbCurrency(props) {
       if (isNaN(parsedAmount) || parsedAmount <= 0) {
         setBnbErrorMessage("Amount must be greater than zero");
       } else if (balanceBnb.data?.formatted < parsedAmount) {
-        setBnbErrorMessage("Insufficient balance.");
+        setBnbErrorMessage("Insufficient wallet balance.");
       } else {
         setBnbErrorMessage("");
       }
@@ -309,15 +310,17 @@ export default function BnbCurrency(props) {
                   padding: "5px",
                 }}
               >
-                <button
-                  type="button"
-                  className="buy_token_button"
-                  disabled={!write || isLoading}
-                  onClick={() => write()}
-                >
-                  {isLoading ? "Buying..." : "Buy Now"}
-                </button>
-                <div className="py20">
+                <div className="spread">
+                  <button
+                    type="button"
+                    className="buy_token_button"
+                    disabled={!write || isLoading}
+                    onClick={() => write()}
+                  >
+                    {isLoading ? "Buying..." : "Buy Now"}
+                  </button>
+                </div>
+                <div className="spread pt20">
                   <button
                     onClick={() => launchInvoice()}
                     disabled={bnbAmount <= 0}

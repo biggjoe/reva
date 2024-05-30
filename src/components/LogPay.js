@@ -17,7 +17,7 @@ const LogPay = (props) => {
   const toggleFill = () => setFill(!fill_form);
 
   const [sent, setSent] = React.useState({ status: 0, message: "", ran: 0 });
-  const [pay, setPay] = React.useState({ currency: modal.currency });
+  const [pay, setPay] = React.useState({ currency: modal.currency, stage: 1 });
   const handleInput = (e) => {
     const name = e.target.name;
     const val = e.target.value;
@@ -179,6 +179,9 @@ const LogPay = (props) => {
                           <option value="usdc">USDC</option>
                         </select>
                       </div>
+                    </div>
+                    <div className="badge badge-info">
+                      Presale Stage: {pay.stage}
                     </div>
                     <div className="btn-div" style={{ opacity: 1 }}>
                       <button

@@ -70,6 +70,22 @@ class HttpServiceFunc {
       });
     });
   }
+  createReferralCode(code) {
+    return authHeader().then((res) => {
+      this.AuthToken = res;
+
+      const url = SERVER_API_URL + "create_referral_code?secret=" + API_SECRET;
+      console.log("fetching create_referral_code::: ", url, {
+        headers: this.AuthToken,
+      });
+      return axios
+        .post(url, { referral_code: code }, { headers: this.AuthToken })
+        .then((response) => {
+          console.log(response);
+          return response.data;
+        });
+    });
+  }
   fetchAdminTransactions() {
     return authHeader().then((res) => {
       this.AuthToken = res;
@@ -609,8 +625,6 @@ class HttpServiceFunc {
   }
   queryTransaction(load) {
     return authHeader().then((res) => {
-      this.AuthToken = res;
-
       const url = SERVER_API_URL + "query_transaction?secret=" + API_SECRET;
       console.log("query_transaction::: ", url, {
         headers: this.AuthToken,
@@ -624,6 +638,20 @@ class HttpServiceFunc {
     });
   }
 
+  processPayment(load) {
+    return authHeader().then((res) => {
+      const url = SERVER_API_URL + "process_transaction?secret=" + API_SECRET;
+      console.log("process_transaction::: ", url, {
+        headers: this.AuthToken,
+      });
+      return axios
+        .post(url, load, { headers: this.AuthToken })
+        .then((response) => {
+          console.log(response);
+          return response.data;
+        });
+    });
+  }
   changePassword(usr) {
     return authHeader().then((res) => {
       this.AuthToken = res;
@@ -716,7 +744,7 @@ class HttpServiceFunc {
     return authHeader().then((res) => {
       this.AuthToken = res;
 
-      const url = SERVER_API_URL + "fetchreferee?secret=" + API_SECRET;
+      const url = SERVER_API_URL + "fetch_referee?secret=" + API_SECRET;
       console.log("fetching referee::: ", `${url}&id=${id}`, {
         headers: this.AuthToken,
       });

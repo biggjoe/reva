@@ -1,9 +1,9 @@
 import React from "react";
-import Layout from "../../../components/Admin/Layout";
-import TransactionList from "../../../components/Transactions/TransactionList";
 import { Breadcrumbs, Button, Card, Divider } from "@mui/material";
 import Link from "next/link";
 import LogPay from "../../../components/LogPay";
+import Layout from "../../../components/Admin/Layout";
+import TransactionList from "../../../components/Admin/Transactions/List";
 
 const Transactions = () => {
   return (

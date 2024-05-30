@@ -1412,6 +1412,14 @@ ins {
     font-size: 85% !important;
 }
 
+.txt-normal {
+    font-size: 100% !important;
+}
+
+.txt-md {
+    font-size: 105% !important;
+}
+
 .txt-lg {
     font-size: 115% !important;
 }
@@ -1767,18 +1775,18 @@ ul.whitepaper-list li ul li a.active {
 .coler h3 {
     text-transform: uppercase;
     font-weight: 900;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     margin-bottom: 10px;
 }
 
 .coler h4 {
     font-weight: 400;
-    font-size: 0.85rem;
+    font-size: 0.89rem;
 }
 
 .coler h5 {
     font-weight: 400;
-    font-size: 0.75rem;
+    font-size: 0.85rem;
 }
 
 .coler p {
@@ -1798,7 +1806,7 @@ ul.whitepaper-list li ul li a.active {
 .count-span {
     font-weight: 900;
     text-align: center;
-    font-size: 2rem;
+    font-size: 1.2rem;
 }
 
 @media screen and (max-width: 600px) {
@@ -1904,6 +1912,11 @@ ul.whitepaper-list li ul li a.active {
     border: 1px solid transparent;
     outline: 0;
     color: #2871FE;
+}
+
+.button-link:disabled,
+.button-link[disable] {
+    color: #888;
 }
 
 .css-nljkhp {

@@ -7,9 +7,8 @@ import HttpService from "../../../services/HttpService";
 import FontAwesome from "react-fontawesome";
 import LoadingModal from "../../../components/LoadingModal";
 import Layout from "../../../components/Account/Layout";
-import TransactionList from "../../../components/Transactions/TransactionList";
-import TransactionDetails from "../../../components/Transactions/TransactionDetails";
-
+import TransactionList from "../../../components/Account/Transactions/List";
+import TransactionDetails from "../../../components/Account/Transactions/Details";
 export default function Page() {
   const router = useRouter();
   const { decodeHtml } = processHtml;

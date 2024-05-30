@@ -80,31 +80,6 @@ const Dashboard = () => {
             {contract_loaded && (
               <>
                 <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6} md={4}>
-                    <div className="grid-card g7 flex flex-col">
-                      <div className="flex flex-row align-items-center">
-                        <div className="time-icon">
-                          <FontAwesome name="hourglass-half" />
-                        </div>
-                        <span className="spacer"></span>
-                        <div className=" flex flex-col spacer">
-                          <h2 className="spacer text-right ucap">Stage 1</h2>
-                          <span className="txt-xsm lh-1 ucap boldest text-right">
-                            Duration
-                          </span>
-                          <span className="txt-sm bold text-right">
-                            <DatePipe value={saleStartTime * 1000} /> -
-                            <DatePipe value={saleEndTime * 1000} />
-                          </span>
-                        </div>
-                      </div>
-                      <span className="spacer"></span>
-                      <div className="txt-sm">Presale ends:</div>
-                      <div className="item-div-dash">
-                        <CountdownTimer endTime={saleEndTime} />
-                      </div>
-                    </div>
-                  </Grid>
                   <Grid
                     item
                     xs={12}
@@ -157,43 +132,30 @@ const Dashboard = () => {
                     </div>
                   </Grid>
                   <Grid item xs={12} sm={6} md={4}>
-                    <div className="grid-card bga flex flex-col">
+                    <div className="grid-card g7 flex flex-col">
                       <div className="flex flex-row align-items-center">
-                        <span className="time-icon">
-                          <FontAwesome name="bitcoin" />
-                        </span>
-                        <div className="spacer">
-                          <h2 className="spacer text-right ucap lh-1">
-                            SUMMARY
-                          </h2>
-                          <div className="spacer txt-sm text-right ucap">
-                            Acct. details
-                          </div>
+                        <div className="time-icon">
+                          <FontAwesome name="hourglass-half" />
+                        </div>
+                        <span className="spacer"></span>
+                        <div className=" flex flex-col spacer">
+                          <h2 className="spacer text-right ucap">Stage 1</h2>
+                          <span className="txt-xsm lh-1 ucap boldest text-right">
+                            Duration
+                          </span>
+                          <span className="txt-sm bold text-right">
+                            <DatePipe value={saleStartTime * 1000} /> -
+                            <DatePipe value={saleEndTime * 1000} />
+                          </span>
                         </div>
                       </div>
-                      <span className="py10">
-                        <Divider />
-                      </span>
                       <span className="spacer"></span>
-                      <div className="flex flex-row bit-col-container">
-                        <div className="col-bit">
-                          <div className="txt-sm ucap">$XRV BAL.</div>
-                          <div className="item-div-dash">
-                            {loading_balance ? "..." : token_balance}
-                          </div>
-                        </div>
-                        <div className="col-bit">
-                          <div className="txt-sm ucap">TNX</div>
-                          <div className="item-div-dash">14</div>
-                        </div>
-                        <div className="col-bit">
-                          <div className="txt-sm ucap">Messages</div>
-                          <div className="item-div-dash">18</div>
-                        </div>
+                      <div className="txt-sm">Presale ends:</div>
+                      <div className="item-div-dash">
+                        <CountdownTimer endTime={saleEndTime} />
                       </div>
                     </div>
                   </Grid>
-
                   <Grid item xs={12} sm={6} md={4}>
                     <div className="grid-card bga flex flex-col">
                       <div className="flex flex-row align-items-center">
@@ -223,6 +185,49 @@ const Dashboard = () => {
                         <div className="col-bit">
                           <div className="txt-sm ucap">USDC/$XRV</div>
                           <div className="item-div-dash">{usdc_rate}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4}>
+                    <div className="grid-card bga flex flex-col">
+                      <div className="flex flex-row align-items-center">
+                        <span className="time-icon">
+                          <FontAwesome name="bitcoin" />
+                        </span>
+                        <div className="spacer">
+                          <h2 className="spacer text-right ucap lh-1">
+                            SUMMARY
+                          </h2>
+                          <div className="spacer txt-sm text-right ucap">
+                            Acct. details
+                          </div>
+                        </div>
+                      </div>
+                      <span className="py10">
+                        <Divider />
+                      </span>
+                      <span className="spacer"></span>
+                      <div className="flex flex-row bit-col-container">
+                        <div className="col-bit">
+                          <div className="txt-sm ucap">Total $xrv</div>
+                          <div className="item-div-dash">
+                            {loading_balance ? "..." : token_balance}
+                          </div>
+                        </div>
+                        <div className="col-bit">
+                          <div className="txt-sm ucap">BONUS</div>
+                          <div className="item-div-dash">18</div>
+                        </div>
+                        <div className="col-bit">
+                          <div className="txt-sm ucap">Transactions</div>
+                          <div className="item-div-dash">37</div>
+                        </div>
+                        <div className="col-bit">
+                          <div className="txt-sm ucap">
+                            <FontAwesome name="envelope" />
+                          </div>
+                          <div className="item-div-dash">14</div>
                         </div>
                       </div>
                     </div>
