@@ -128,7 +128,7 @@ const TransactionListTemplate = (props) => {
           <PlaceHolder type="list" />
         </div>
       )}
-      {loaded && transactions.length === 0 && (
+      {loaded && transactions?.length === 0 && (
         <div className="pxy20">No Transactions found</div>
       )}
     </React.Fragment>

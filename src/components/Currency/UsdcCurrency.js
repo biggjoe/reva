@@ -33,17 +33,13 @@ import { useRouter } from "next/router";
 export default function UsdcCurrency(props) {
   const {
     affiliate_data,
-    ref_data,
     set_aff,
-    set_ref,
     bonus_code,
     applyBonus,
     removeBonus,
     handleBonusInput,
     fetching_bonus,
     bonus_fetched,
-    fetching_referee,
-    referee_fetched,
   } = props;
   const router = useRouter();
 
@@ -279,7 +275,6 @@ export default function UsdcCurrency(props) {
       paid_amount: usdcAmount,
       received_amount_in_token: result,
       affiliate_data: token_data,
-      referral_data: ref_data,
     };
     toast.dismiss();
     toast.loading("Payment received. Processing token balance...");
@@ -352,12 +347,6 @@ export default function UsdcCurrency(props) {
             removeBonus={removeBonus}
             fetching_bonus={fetching_bonus}
             bonus_fetched={bonus_fetched}
-          />
-
-          <ReferralPane
-            ref_data={ref_data}
-            fetching_referee={fetching_referee}
-            referee_fetched={referee_fetched}
           />
 
           <div className="text-center">

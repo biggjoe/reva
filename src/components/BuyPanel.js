@@ -16,17 +16,13 @@ import UsdcCurrency from "./Currency/UsdcCurrency";
 export default function BuyPanel(props) {
   const {
     affiliate_data,
-    ref_data,
     set_aff,
-    set_ref,
     bonus_code,
     applyBonus,
     removeBonus,
     handleBonusInput,
     fetching_bonus,
     bonus_fetched,
-    fetching_referee,
-    referee_fetched,
   } = props;
 
   const [loaded, setLoaded] = React.useState(false);
@@ -253,9 +249,7 @@ export default function BuyPanel(props) {
               <div className="pt5 pb10">
                 {selectedCurrency === "bnb" && (
                   <BnbCurrency
-                    ref_data={ref_data}
                     affiliate_data={affiliate_data}
-                    set_ref={set_ref}
                     set_aff={set_aff}
                     handleBonusInput={handleBonusInput}
                     bonus_code={bonus_code}
@@ -264,16 +258,12 @@ export default function BuyPanel(props) {
                     currency={selectedCurrency}
                     fetching_bonus={fetching_bonus}
                     bonus_fetched={bonus_fetched}
-                    fetching_referee={fetching_referee}
-                    referee_fetched={referee_fetched}
                   />
                 )}
                 {/* */}
                 {selectedCurrency === "usdt" && (
                   <UsdtCurrency
-                    ref_data={ref_data}
                     affiliate_data={affiliate_data}
-                    set_ref={set_ref}
                     set_aff={set_aff}
                     handleBonusInput={handleBonusInput}
                     bonus_code={bonus_code}
@@ -282,15 +272,11 @@ export default function BuyPanel(props) {
                     currency={selectedCurrency}
                     fetching_bonus={fetching_bonus}
                     bonus_fetched={bonus_fetched}
-                    fetching_referee={fetching_referee}
-                    referee_fetched={referee_fetched}
                   />
                 )}
                 {selectedCurrency === "eth" && (
                   <EthCurrency
-                    ref_data={ref_data}
                     affiliate_data={affiliate_data}
-                    set_ref={set_ref}
                     set_aff={set_aff}
                     handleBonusInput={handleBonusInput}
                     bonus_code={bonus_code}
@@ -299,16 +285,12 @@ export default function BuyPanel(props) {
                     currency={selectedCurrency}
                     fetching_bonus={fetching_bonus}
                     bonus_fetched={bonus_fetched}
-                    fetching_referee={fetching_referee}
-                    referee_fetched={referee_fetched}
                   />
                 )}
 
                 {selectedCurrency === "usdc" && (
                   <UsdcCurrency
-                    ref_data={ref_data}
                     affiliate_data={affiliate_data}
-                    set_ref={set_ref}
                     set_aff={set_aff}
                     handleBonusInput={handleBonusInput}
                     bonus_code={bonus_code}
@@ -317,22 +299,16 @@ export default function BuyPanel(props) {
                     currency={selectedCurrency}
                     fetching_bonus={fetching_bonus}
                     bonus_fetched={bonus_fetched}
-                    fetching_referee={fetching_referee}
-                    referee_fetched={referee_fetched}
                   />
                 )}
                 {selectedCurrency === "manual" && (
                   <ManualPay
-                    ref_data={ref_data}
                     affiliate_data={affiliate_data}
-                    set_ref={set_ref}
                     set_aff={set_aff}
                     applyBonus={applyBonus}
                     currency={selectedCurrency}
                     fetching_bonus={fetching_bonus}
                     bonus_fetched={bonus_fetched}
-                    fetching_referee={fetching_referee}
-                    referee_fetched={referee_fetched}
                   />
                 )}
               </div>

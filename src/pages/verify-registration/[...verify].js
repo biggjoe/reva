@@ -12,7 +12,7 @@ export default function Home() {
   const router = useRouter();
   let AuthServ = useAuthService();
   const { decodeHtml } = processHtml;
-  const isParam = router.query["index"] ? true : false;
+  const isParam = router.query["verify"] ? true : false;
   const [id, setId] = React.useState(null);
   const [token, setToken] = React.useState(null);
   const [routes, setRoutes] = React.useState(null);
@@ -35,7 +35,7 @@ export default function Home() {
   React.useEffect(() => {
     console.log("router::", router.query);
     if (isParam) {
-      const rts = router.query["index"];
+      const rts = router.query["verify"];
       setRoutes(rts);
       let idn = "";
       let tkn = "";
@@ -55,7 +55,7 @@ export default function Home() {
       setId(idn);
       setToken(tkn);
     }
-  }, [router.query["index"]]);
+  }, [router.query["verify"]]);
 
   const [user, setUser] = React.useState(null);
   const confirm_code = (id, token) => {

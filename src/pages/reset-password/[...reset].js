@@ -11,7 +11,7 @@ export default function Home() {
   const router = useRouter();
 
   const { decodeHtml } = processHtml;
-  const isParam = router.query["index"] ? true : false;
+  const isParam = router.query["reset"] ? true : false;
   const [id, setId] = React.useState(null);
   const [token, setToken] = React.useState(null);
   const [routes, setRoutes] = React.useState(null);
@@ -34,7 +34,7 @@ export default function Home() {
   React.useEffect(() => {
     console.log("router_query::", router.query);
     if (isParam) {
-      const rts = router.query["index"];
+      const rts = router.query["reset"];
       let idn = "";
       let tkn = "";
       if (rts) {
@@ -53,7 +53,7 @@ export default function Home() {
       setId(idn);
       setToken(tkn);
     }
-  }, [router.query["index"]]);
+  }, [router.query["reset"]]);
 
   const [user, setUser] = React.useState(null);
   const confirm_code = (id, token) => {
@@ -130,7 +130,7 @@ export default function Home() {
     } else if (form.new_password !== form.re_password) {
       return alert("Passwords doesn't match");
     }
-    const data = { ...form, mode: "index", old_password: "0123456" };
+    const data = { ...form, mode: "reset", old_password: "0123456" };
     console.log("Form::", data);
     setLoading(true);
     setLoaded(false);

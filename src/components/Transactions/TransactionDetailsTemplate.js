@@ -94,7 +94,7 @@ const TransactionDetailsTemplate = ({
             </div>
           </ListItemText>
         </ListItem>
-        <ListItem divider>
+        <ListItem>
           <ListItemText>
             <div className="flex flex-row-resp">
               <div className="spacer coler">

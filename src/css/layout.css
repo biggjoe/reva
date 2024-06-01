@@ -243,6 +243,7 @@ label {
     overflow: hidden;
 }
 
+
 @media screen and (max-width: 400px) {
     .login-pane {
         min-width: 100%;
@@ -307,15 +308,14 @@ label {
     font-size: 17px;
     color: rgb(0, 43, 79);
     height: auto !important;
+    max-width: 100%;
 }
 
 .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
     height: auto !important;
 }
 
-input.input-form-control {
-    outline: 0;
-}
+
 
 .input-form-control.grp-with-btn {
     border-radius: 5px 0 0 5px;
@@ -325,10 +325,12 @@ input.input-form-control {
 input.input-form-control {
     min-width: 20px !important;
     max-width: 100%;
+    outline: 0;
 }
 
 select.input-form-control {
     max-width: 100%;
+    outline: 0;
 }
 
 .input-form-control[aria-disabled],
@@ -709,8 +711,26 @@ textarea {
     padding-right: 10px;
 }
 
+.pr10-resp {
+    padding-right: 10px;
+}
+
 .pr20 {
     padding-right: 20px;
+}
+
+.pr20-resp {
+    padding-right: 20px;
+}
+
+@media screen and (max-width: 600px) {
+    .pr20-resp {
+        padding-right: 0;
+    }
+
+    .pr10-resp {
+        padding-right: 0;
+    }
 }
 
 .mr5 {
@@ -1807,6 +1827,56 @@ ul.whitepaper-list li ul li a.active {
     font-weight: 900;
     text-align: center;
     font-size: 1.2rem;
+}
+
+.min-170 {
+    min-height: 170px;
+}
+
+
+
+.large-loader {
+    font-size: 2.5rem;
+}
+
+.max-20 {
+    max-width: 20%;
+}
+
+.max-30 {
+    max-width: 30%;
+}
+
+.max-40 {
+    max-width: 40%;
+}
+
+.max-50 {
+    max-width: 50%;
+}
+
+.max-60 {
+    max-width: 60%;
+}
+
+.max-70 {
+    max-width: 70%;
+}
+
+.max-70 {
+    max-width: 70%;
+}
+
+.max-80 {
+    max-width: 80%;
+}
+
+.max-90 {
+    max-width: 90%;
+}
+
+.max-100 {
+    max-width: 100%;
 }
 
 @media screen and (max-width: 600px) {

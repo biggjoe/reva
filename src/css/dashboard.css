@@ -90,7 +90,7 @@
     color: rgb(51, 11, 11);
 }
 
-.section-packer a:hover>.section-packer .feature-icon img {
+.section-packer a:hover > .section-packer .feature-icon img {
     filter: drop-shadow(4px 15px 9px rgb(0 0 0 / 0.9));
 }
 
@@ -116,10 +116,17 @@
     color: #999;
 }
 
-.grid-card {
+.grid-card,
+a.grid-card {
     padding: 20px !important;
     border-radius: 10px;
     display: flex;
     background-color: #fff;
     min-height: 170px;
+    color: #444;
+}
+
+.grid-card:hover {
+    box-shadow: 0 19px 38px rgba(90, 90, 90, 0.3),
+        0 15px 12px rgba(100, 100, 100, 0.22);
 }

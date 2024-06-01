@@ -1,8 +1,8 @@
 import React from "react";
-import RegisterModule from "../components/Register/RegisterModule";
+import RegisterModule from "../../components/Register/RegisterModule";
 import { Link } from "@mui/material";
 
-const Register = () => {
+const Home = () => {
   return (
     <React.Fragment>
       <section className="page-main">
@@ -24,4 +24,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Home;

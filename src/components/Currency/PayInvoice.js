@@ -177,7 +177,7 @@ const PayInvoice = (props) => {
                     </p>
                     <p>
                       You can still register your payment when you login to your
-                      <Link href="/account/tranactions">
+                      <Link href="/account/transactions">
                         user dahsboard
                       </Link>{" "}
                       under <strong>&quot;Transactions&quot;</strong>

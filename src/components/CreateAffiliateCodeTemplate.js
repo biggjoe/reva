@@ -40,7 +40,8 @@ const CreateAffiliateCodeTemplate = (props) => {
     }
     setLoading(true);
     setLoaded(false);
-    HttpService.createBonusCode(data)
+    console.log(data);
+    HttpService.createAffCode(data)
       .then(
         (result) => {
           console.log("::|", result);
@@ -62,7 +63,9 @@ const CreateAffiliateCodeTemplate = (props) => {
             modal.onclose();
           }
         },
-        (error) => {}
+        (error) => {
+          console.log(error);
+        }
       )
       .finally(() => {
         setLoading(false);
@@ -97,19 +100,32 @@ const CreateAffiliateCodeTemplate = (props) => {
             <h2>New Affiliate Bonus Code</h2>
             <div className="py10"></div>
             {!loading && (
-              <div className="input iconed spacer pb0 pt10">
-                <label>Bonus Code</label>
-                <input
-                  type="text"
-                  name="bonus_code"
-                  className="input-form-control"
-                  placeholder="Bonus Code"
-                  onChange={handleInput}
-                />
-                <span className="input-icon">
-                  <i className="fas fa-code"></i>
-                </span>
-              </div>
+              <>
+                <div className="input iconed spacer pb0 pt10">
+                  <label>Bonus Code</label>
+                  <input
+                    type="text"
+                    name="bonus_code"
+                    className="input-form-control"
+                    placeholder="Bonus Code"
+                    onChange={handleInput}
+                  />
+                  <span className="input-icon">
+                    <i className="fas fa-code"></i>
+                  </span>
+                </div>
+
+                <div className="input iconed">
+                  <label>Percentage Bonus</label>
+                  <input
+                    type="number"
+                    name="percentage"
+                    className="input-form-control"
+                    placeholder="Percentage (%)"
+                    onChange={handleInput}
+                  />
+                </div>
+              </>
             )}
             <div className="input-item pb10">
               {!loading && (

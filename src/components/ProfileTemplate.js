@@ -174,7 +174,10 @@ const ProfileTemplate = (props) => {
                       })
                     }
                     renderInput={(params) => (
-                      <TextField className="input-form-control" {...params} />
+                      <TextField
+                        className="input-form-control buy-input"
+                        {...params}
+                      />
                     )}
                   />
                 </Stack>

@@ -6,7 +6,8 @@ import LoginForm from "./LoginForm";
 import HttpService from "../../services/HttpService";
 
 const LoginModule = (props) => {
-  const { intro_message, return_url, return_call, do_redirect } = props;
+  const {  intro_message, return_url, return_call, do_redirect } =
+    props;
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
   const [loaded, setLoaded] = React.useState(false);

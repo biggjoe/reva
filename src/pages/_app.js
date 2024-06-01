@@ -14,11 +14,10 @@ import { bsc } from "viem/chains";
 
 const projectId = "1bcb48d6f04c789a0f51890839107b7b";
 
-
 const metadata = {
   name: "Reva Finance",
   description: "XRV Presale",
-  url: "https://reva.finance",
+  url: "https://www.reva.finance",
   icons: ["https://reva.finance/images/icon.png"],
 };
 
@@ -35,12 +34,11 @@ createWeb3Modal({
 export default function App({ Component, pageProps }) {
   return (
     <WagmiConfig config={wagmiConfig}>
-      {/*  <UserProvider> */}
       <Head>
         <meta charSet="UTF-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" href="assets/images/favicon.ico" />
+        <link rel="icon" href="images/favicon.ico" />
         <link
           href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
           rel="stylesheet"

@@ -1,7 +1,7 @@
 import axios from "axios";
 import authHeader from "./authHeaders";
 
-const SERVER_API_URL = process.env.NEXT_PUBLIC_SERVER_DOMAIN_API;
+const SERVER_API_URL = process.env.NEXT_PUBLIC_API_DOMAIN;
 const API_SECRET = process.env.NEXT_PUBLIC_API_SECRET;
 /* const Token =()=>{
  const { this.AuthToken } = authHeader();
@@ -56,6 +56,55 @@ class HttpServiceFunc {
       });
     });
   }
+  fetchAffiliateAdmin() {
+    return authHeader().then((res) => {
+      this.AuthToken = res;
+
+      const url = SERVER_API_URL + "affiliate_admin?secret=" + API_SECRET;
+      console.log("fetching affiliate_admin::: ", url, {
+        headers: this.AuthToken,
+      });
+      return axios.get(url, { headers: this.AuthToken }).then((response) => {
+        console.log(response);
+        return response.data;
+      });
+    });
+  }
+
+  fetchAffiliateMember(id) {
+    return authHeader().then((res) => {
+      this.AuthToken = res;
+
+      const url =
+        SERVER_API_URL + "fetch_affiliate_member?secret=" + API_SECRET;
+      console.log("fetching affiliate_member::: ", url, {
+        headers: this.AuthToken,
+      });
+      return axios
+        .post(url, { id: id }, { headers: this.AuthToken })
+        .then((response) => {
+          console.log(response);
+          return response.data;
+        });
+    });
+  }
+
+  fetchAffiliateCode(id) {
+    return authHeader().then((res) => {
+      this.AuthToken = res;
+
+      const url = SERVER_API_URL + "fetch_affiliate_code?secret=" + API_SECRET;
+      console.log("fetching affiliate_code::: ", url, {
+        headers: this.AuthToken,
+      });
+      return axios
+        .post(url, { id: id }, { headers: this.AuthToken })
+        .then((response) => {
+          console.log(response);
+          return response.data;
+        });
+    });
+  }
   fetchReferral() {
     return authHeader().then((res) => {
       this.AuthToken = res;
@@ -68,6 +117,40 @@ class HttpServiceFunc {
         console.log(response);
         return response.data;
       });
+    });
+  }
+
+  processAffiliate(data) {
+    return authHeader().then((res) => {
+      this.AuthToken = res;
+
+      const url = SERVER_API_URL + "process_affiliate?secret=" + API_SECRET;
+      console.log("fetching process_affiliate::: ", url, {
+        headers: this.AuthToken,
+      });
+      return axios
+        .post(url, data, { headers: this.AuthToken })
+        .then((response) => {
+          console.log(response);
+          return response.data;
+        });
+    });
+  }
+  processAffiliateCode(data) {
+    return authHeader().then((res) => {
+      this.AuthToken = res;
+
+      const url =
+        SERVER_API_URL + "process_affiliate_code?secret=" + API_SECRET;
+      console.log("fetching process_affiliate_code::: ", url, {
+        headers: this.AuthToken,
+      });
+      return axios
+        .post(url, data, { headers: this.AuthToken })
+        .then((response) => {
+          console.log(response);
+          return response.data;
+        });
     });
   }
   createReferralCode(code) {
@@ -86,6 +169,23 @@ class HttpServiceFunc {
         });
     });
   }
+
+  createAffCode(data) {
+    return authHeader().then((res) => {
+      this.AuthToken = res;
+      const url = SERVER_API_URL + "create_bonus_code?secret=" + API_SECRET;
+      console.log("fetching create_bonus_code::: ", url, {
+        headers: this.AuthToken,
+      });
+      return axios
+        .post(url, data, { headers: this.AuthToken })
+        .then((response) => {
+          console.log(response);
+          return response.data;
+        });
+    });
+  }
+
   fetchAdminTransactions() {
     return authHeader().then((res) => {
       this.AuthToken = res;
@@ -150,7 +250,7 @@ class HttpServiceFunc {
     return authHeader().then((res) => {
       this.AuthToken = res;
 
-      const url = SERVER_API_URL + "create_code?secret=" + API_SECRET;
+      const url = SERVER_API_URL + "create_bonus_code?secret=" + API_SECRET;
       console.log("creating ::: ", url, { headers: this.AuthToken });
       return axios
         .post(url, load, { headers: this.AuthToken })
@@ -221,12 +321,28 @@ class HttpServiceFunc {
     });
   }
 
-  fetchDashboard() {
+  fetchDashboardHome() {
     return authHeader().then((res) => {
       this.AuthToken = res;
 
-      const url = SERVER_API_URL + "dashboard?secret=" + API_SECRET;
-      console.log("fetching dashboard::: ", url, { headers: this.AuthToken });
+      const url = SERVER_API_URL + "dashboard_home?secret=" + API_SECRET;
+      console.log("fetching dashboard_home::: ", url, {
+        headers: this.AuthToken,
+      });
+      return axios.get(url, { headers: this.AuthToken }).then((response) => {
+        console.log(response);
+        return response.data;
+      });
+    });
+  }
+  fetchDashboardAdmin() {
+    return authHeader().then((res) => {
+      this.AuthToken = res;
+
+      const url = SERVER_API_URL + "dashboard_admin?secret=" + API_SECRET;
+      console.log("fetching dashboard_admin::: ", url, {
+        headers: this.AuthToken,
+      });
       return axios.get(url, { headers: this.AuthToken }).then((response) => {
         console.log(response);
         return response.data;

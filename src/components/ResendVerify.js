@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import HttpService from "../services/HttpService";
 import CustomModal from "./CustomModal";
+import FontAwesome from "react-fontawesome";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -127,12 +128,13 @@ const ResendVerify = (props) => {
                   color: "tomato",
                 }}
               >
-                <i className="fas fa-exclamation-triangle"></i>
+                <FontAwesome name="exclamation-triangle" className="fas fa" />
               </span>
 
               <div className="input spacer px20">
-                Before proceeding, please check your email for a verification
-                link. <br /> Please remember to check your spam box as well.
+                Before proceeding, please check your email address for account
+                verification link. <br />
+                <br /> Please remember to check your spam box as well.
                 <br /> If you did not receive the email, click the button below
                 to resend.
               </div>

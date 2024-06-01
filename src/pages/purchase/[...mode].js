@@ -27,7 +27,6 @@ export default function Home() {
     bonus_ran: false,
   });
   const [bonus, setBonus] = React.useState({});
-  const [referee, setReferee] = React.useState({ ref_ran: false });
   const modalClose = () => setModal({ ...modal_data, open: false });
   const [modal_data, setModal] = React.useState({
     open: false,
@@ -35,9 +34,6 @@ export default function Home() {
   });
   React.useEffect(() => {
     if (page && token) {
-      if (page === "ref") {
-        fetchReferee(token);
-      }
       if (page === "aff") {
         setBonusCode(token);
         if (bonus_code) {
@@ -139,42 +135,8 @@ export default function Home() {
     localStorage.setItem("affiliate_data", JSON.stringify(null));
   };
 
-
-  const [fetching_referee,setFetchingReferee]=React.useState(false);
-  const [referee_fetched,setRefereeFetched]=React.useState(false);
-  const fetchReferee = (id) => {
-    if (!id || id == "") {
-      return alert("Referee code not found");
-    }
-    setFetchingReferee(true);
-    setRefereeFetched(false);
-    HttpService.fetchReferee(id)
-      .then(
-        (result) => {
-          console.log("::|", result);
-          if (result && result.status === 1) {
-            setReferee({
-              ...referee,
-              ...result.user,
-              ref_ran: true,
-              ref_found: true,
-            });
-          } else {
-            setReferee({ ref_ran: true, ref_found: false });
-          }
-        },
-        (error) => {}
-      )
-      .finally(() => {
-        setFetchingReferee(false);
-        setRefereeFetched(true);
-      }); //fetch
-  }; //doAjax
   const set_aff = (data) => {
     setAffiliateData({ ...affiliate_data, ...data });
-  };
-  const set_ref = (data) => {
-    setReferee({ ...referee, ...Linkdata });
   };
 
   const regen_token = () => {
@@ -188,23 +150,18 @@ export default function Home() {
       <div className="main-bg-grad home-cover">
         <div className="home-overlay"></div>
         <div className="flex flex-col py30 flex-column justify-content-center align-items-center py20 px10">
-          
           <BuyPanel
-            ref_data={referee}
             affiliate_data={affiliate_data}
             removeBonus={removeBonus}
-            set_ref={set_ref}
             set_aff={set_aff}
             fetching_bonus={fetching_bonus}
             bonus_fetched={bonus_fetched}
             bonus_code={bonus_code}
             applyBonus={applyBonus}
             handleBonusInput={handleBonusInput}
-            fetching_referee={fetching_referee}
-            referee_fetched={referee_fetched}
           />
-          </div>
         </div>
+      </div>
       <Footer />
     </React.Fragment>
   );

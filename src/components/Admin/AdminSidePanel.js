@@ -16,13 +16,6 @@ import ListAltOutlined from "@mui/icons-material/ListAltOutlined";
 import PhotoAlbumOutlined from "@mui/icons-material/PhotoAlbumOutlined";
 import MailOutline from "@mui/icons-material/MailOutline";
 import {
-  AdUnitsOutlined,
-  CalendarMonthOutlined,
-  CategoryOutlined,
-  CommentOutlined,
-  GroupWorkSharp,
-  ListOutlined,
-  LiveTv,
   LogoutOutlined,
   NotificationsOutlined,
   PaymentOutlined,
@@ -80,6 +73,14 @@ const AdminSidePanel = (props) => {
       title: "Dashboard ",
       navItem: true,
       icon: <Dashboard />,
+      data: { mustAuth: true, isAdmin: false, showSideNav: false },
+    },
+
+    {
+      path: "affiliate",
+      title: "Affiliate",
+      icon: <FontAwesome name="users" style={{ fontSize: "20px" }} />,
+      navItem: true,
       data: { mustAuth: true, isAdmin: false, showSideNav: false },
     },
 

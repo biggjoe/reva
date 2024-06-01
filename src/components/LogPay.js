@@ -1,5 +1,14 @@
 import React from "react";
-import { Slide, DialogContent, Dialog, Divider } from "@mui/material";
+import {
+  Slide,
+  DialogContent,
+  Dialog,
+  Divider,
+  Collapse,
+  ListItem,
+  ListItemText,
+  Paper,
+} from "@mui/material";
 import FontAwesome from "react-fontawesome";
 import HttpService from "../services/HttpService";
 import Link from "next/link";
@@ -53,6 +62,8 @@ const LogPay = (props) => {
         setLoaded(true);
       });
   };
+
+  const [is_togged, setTog] = React.useState(false);
   return (
     <React.Fragment>
       <Dialog
@@ -64,7 +75,7 @@ const LogPay = (props) => {
         aria-labelledby={"Me"}
       >
         <DialogContent sx={{ p: "0", m: "0" }}>
-          <div className="login-pane px0 py0">
+          <div className="login-pane px0 py0 max-100">
             <div
               className="flex align-items-center px10 py10"
               style={{ backgroundColor: "#ededed" }}
@@ -83,23 +94,45 @@ const LogPay = (props) => {
               </button>
             </div>
             <Divider />
-            <div className="pxy20">
-              <div className="pt10 break-word">
-                <p>
-                  Please ensure to make a deposit of the right currency and
-                  amount you selected on the purchase panel into our presale
-                  address shown below before filling the form below
-                </p>
-              </div>
-              <div className="flex flex-col spacer">
-                <span className="grayed txt-sm mb5">PAYMENT ADDRESS</span>
-                <CopyText text={contract_address} />
-              </div>
 
-              <div className="mb10">
-                {" "}
-                <Divider />
-              </div>
+            <div className="pxy20">
+              <Paper sx={{ mb: "10px" }}>
+                <ListItem divider onClick={() => setTog(!is_togged)}>
+                  <ListItemText>
+                    <div className="flex flex-row align-items-center">
+                      <h3 className="mb0 spacer">
+                        <FontAwesome
+                          name={`info-circle`}
+                          style={{ fontSize: "21px" }}
+                          className="pr10"
+                        />
+                        Please Read Instruction
+                      </h3>
+                      <span className="pl10">
+                        <FontAwesome
+                          name={is_togged ? "chevron-up" : "chevron-down"}
+                        />
+                      </span>
+                    </div>
+                    <Collapse in={is_togged}>
+                      <div className="pt10 break-word">
+                        <p>
+                          Please ensure to make a deposit of the right currency
+                          and amount you selected on the purchase panel into our
+                          presale address shown below before filling the form
+                          below
+                        </p>
+                      </div>
+                      <div className="flex flex-col spacer">
+                        <span className="grayed txt-sm mb0">
+                          PAYMENT ADDRESS
+                        </span>
+                        <CopyText text={contract_address} />
+                      </div>
+                    </Collapse>
+                  </ListItemText>
+                </ListItem>
+              </Paper>
               {sent.ran === 1 && (
                 <div
                   className={`input-form-control flex flex-col ${
@@ -132,56 +165,82 @@ const LogPay = (props) => {
                     )}
                     <button
                       className="button-link color-red pt10"
-                      onClick={() => modal.onclose()}
+                      onClick={() => {
+                        toggleFill();
+                        setSent({ ...sent, ran: 0 });
+                        modal.onclose();
+                      }}
                     >
                       Exit
                     </button>
                   </div>
                 </div>
               )}
-
               <div className="pt10">
                 {sent.ran === 0 && (
                   <>
-                    <div className="input">
-                      <label>Wallet address used</label>
-                      <input
-                        name="address"
-                        disabled={loading || sent.status === 1}
-                        onChange={handleInput}
-                        placeholder="Enter wallet address used"
-                        className="input-form-control buy-input"
-                      />
-                    </div>
-                    <div className="flex flex-row align-items-center">
-                      <div className="input togger spacer pr10">
-                        <label>Exact Amount Paid</label>
-                        <input
-                          name="amount"
-                          disabled={loading || sent.status === 1}
-                          onChange={handleInput}
-                          placeholder="Enter exact amount paid"
-                          className="input-form-control buy-input"
-                        />
+                    {" "}
+                    <div className="flex flex-row align-items-center max-100 greo">
+                      <div className="spacer  max-60">
+                        <div className="input">
+                          <label>Wallet address used</label>
+                          <input
+                            name="address"
+                            disabled={loading || sent.status === 1}
+                            onChange={handleInput}
+                            placeholder="Enter wallet address used"
+                            className="input-form-control buy-input"
+                          />
+                        </div>
                       </div>
-
-                      <div className="input spacer">
-                        <label>Currency</label>
-                        <select
-                          name="currency"
-                          disabled={modal.currency}
-                          defaultValue={modal.currency}
-                          onChange={handleInput}
-                          className="input-form-control buy-input"
-                        >
-                          <option value="bnb">BNB</option>
-                          <option value="usdt">USDT</option>
-                          <option value="usdc">USDC</option>
-                        </select>
+                      <div className="spacer max-40">
+                        <div className="input spacer pl10">
+                          <label>$XRV Tokens </label>
+                          <input
+                            name="total_tokens"
+                            disabled={loading || sent.status === 1}
+                            onChange={handleInput}
+                            placeholder="Enter tokens purchases"
+                            className="input-form-control buy-input"
+                          />
+                        </div>
                       </div>
                     </div>
-                    <div className="badge badge-info">
-                      Presale Stage: {pay.stage}
+                    <div className="flex flex-row align-items-center max-100 greo">
+                      <div className="spacer  max-60">
+                        <div className="input">
+                          <label>Amount Paid</label>
+                          <input
+                            name="amount"
+                            type="number"
+                            disabled={loading || sent.status === 1}
+                            onChange={handleInput}
+                            placeholder="Enter exact amount paid"
+                            className="input-form-control buy-input"
+                          />
+                        </div>
+                      </div>
+                      <div className="spacer max-40">
+                        <div className="input spacer pl10">
+                          <label>Currency</label>
+                          <select
+                            name="currency"
+                            disabled={modal.currency}
+                            defaultValue={modal.currency}
+                            onChange={handleInput}
+                            className="input-form-control buy-input"
+                          >
+                            <option value="bnb">BNB</option>
+                            <option value="usdt">USDT</option>
+                            <option value="usdc">USDC</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="py10 text-center">
+                      <div className="badge inline-block badge-info">
+                        Presale Stage: {pay.stage}
+                      </div>
                     </div>
                     <div className="btn-div" style={{ opacity: 1 }}>
                       <button

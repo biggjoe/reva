@@ -7,17 +7,16 @@ import * as processHtml from "../../../services/processHtml";
 import HttpService from "../../../services/HttpService";
 import TransactionsTemplate from "../../TransactionsTemplate";
 import BonusCodesTemplate from "../../BonusCodesTemplate";
-import WithdrawalRequestTemplate from "../../WithdrawalRequestTemplate";
 import ApplyAffiliateTemplate from "../../ApplyAffiliateTemplate";
 import CreateAffiliateCodeTemplate from "../../CreateAffiliateCodeTemplate";
-import WithdrawTemplate from "../../WithdrawTemplate";
 import Link from "next/link";
 import { Divider } from "@mui/material";
 import FontAwesome from "react-fontawesome";
+import AffiliateMembersTemplate from "../../AffiliateMembersTemplate";
 
 const AffiliateHome = (props) => {
   const { decodeHtml } = processHtml;
-  const [affiliate, setAffiliate] = React.useState(null);
+  const [members, setMembers] = React.useState(null);
   const [is_an_affiliate, setAnAffiliate] = React.useState(-2);
   const [affiliate_codes, setCodes] = React.useState([]);
   const [affiliate_withdrawal_requests, setRequests] = React.useState([]);
@@ -27,7 +26,7 @@ const AffiliateHome = (props) => {
   const [affiliate_transactions, setTransactions] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [loaded, setLoaded] = React.useState(false);
-  const [path, setPath] = React.useState("codes");
+  const [path, setPath] = React.useState("members");
   const [isParam, setParam] = React.useState(false);
   const [affiliate_fetched, setAffiliateFetched] = React.useState(false);
   const closeBonus = () => {
@@ -52,16 +51,16 @@ const AffiliateHome = (props) => {
   const fetchAffiliate = () => {
     setLoading(true);
     setLoaded(false);
-    HttpService.fetchAffiliate()
+    HttpService.fetchAffiliateAdmin()
       .then(
         (result) => {
           console.log("::|", result);
           setAffiliateFetched(true);
           if (result) {
-            if (result?.affiliate_details) {
-              setAffiliate(result?.affiliate_details);
+            if (result?.members) {
+              setMembers(result?.members);
             }
-            setAnAffiliate(result?.is_an_affiliate);
+
             if (result?.affiliate_codes) {
               setCodes(result?.affiliate_codes);
             }
@@ -82,6 +81,7 @@ const AffiliateHome = (props) => {
   }; //doAjax
 
   const navas = [
+    { path: "members", title: "Members" },
     { path: "codes", title: "Bonus Codes" },
     { path: "transactions", title: "Code Transactions" },
   ];
@@ -124,12 +124,12 @@ const AffiliateHome = (props) => {
                       width: "100%",
                     }}
                   >
-                    <Link href="/account/dashboard">Dashboard</Link>
+                    <Link href="/admin/dashboard">Dashboard</Link>
                     <span>Affiliate</span>
                   </Breadcrumbs>
                   <h2 className="mt20">Affiliate</h2>
                 </div>
-                {affiliate_fetched && is_an_affiliate === 1 && (
+                {affiliate_fetched && (
                   <div className="py20 px20 flex flex-row">
                     <div className="stat-col">
                       <span className="count-span ">$XRV{total_earnings}</span>
@@ -140,7 +140,7 @@ const AffiliateHome = (props) => {
               </div>
             </div>
             <Divider />
-            {affiliate_fetched && is_an_affiliate === 1 && (
+            {affiliate_fetched && (
               <>
                 <ul className="flat-nav border-bottom">
                   {navas.map((item, index) => (
@@ -151,17 +151,19 @@ const AffiliateHome = (props) => {
                         onClick={() => setPath(item.path)}
                       >
                         {item.title}
+                        {item.path === "members" && (
+                          <span className="txt-xsm">({members?.length})</span>
+                        )}
                         {item.path === "codes" && (
                           <span className="txt-xsm">
-                            {" "}
-                            ({affiliate_codes.length})
+                            ({affiliate_codes?.length})
                           </span>
                         )}
 
                         {item.path === "transactions" && (
                           <span className="txt-xsm">
                             {" "}
-                            ({affiliate_transactions.length})
+                            ({affiliate_transactions?.length})
                           </span>
                         )}
                       </a>
@@ -169,6 +171,13 @@ const AffiliateHome = (props) => {
                   ))}
                 </ul>
                 <section className="pxy0">
+                  {affiliate_fetched && path === "members" && (
+                    <AffiliateMembersTemplate
+                      fetching={loading}
+                      fetched={loaded}
+                      members={members}
+                    />
+                  )}
                   {affiliate_fetched && path === "codes" && (
                     <>
                       {affiliate_codes.length > 0 && (
@@ -189,7 +198,7 @@ const AffiliateHome = (props) => {
                         codes={affiliate_codes}
                         fetched={affiliate_fetched}
                         fnc={create_code}
-                        page="account"
+                        page="admin"
                       />
                     </>
                   )}
@@ -208,61 +217,6 @@ const AffiliateHome = (props) => {
                 <em className="fas large-loader fa-spin fa-circle-notch"></em>
                 <h3 className="pxy20">Loading affiliate page...</h3>
               </div>
-            )}
-            {loaded && affiliate_fetched && is_an_affiliate === -1 && (
-              <>
-                <div className="flex flex-col pxy30 align-items-center">
-                  <FontAwesome
-                    name="face-frown regular"
-                    className="large-loader"
-                  />
-                  <h3 className="pxy20">
-                    You are yet to join our affiliate program
-                  </h3>
-                  <div className="pxy10">
-                    <Button
-                      onClick={() => apply_affiliate("new")}
-                      size="large"
-                      variant="contained"
-                    >
-                      <Add /> JOIN NOW
-                    </Button>
-                  </div>
-                </div>
-              </>
-            )}
-            {loaded && affiliate_fetched && is_an_affiliate === 0 && (
-              <>
-                <div className="flex flex-col pxy30 align-items-center">
-                  <FontAwesome name="hourglass-half" className="large-loader" />
-                  <h3 className="pxy20 text-center">
-                    <p>
-                      Your affiliate program application is being processed.
-                    </p>
-                    <p> Please wait for approval.</p>
-                  </h3>
-                  <div className="pxy10"></div>
-                </div>
-              </>
-            )}
-            {loaded && affiliate_fetched && is_an_affiliate === -2 && (
-              <>
-                <div className="flex flex-col pxy30 align-items-center">
-                  <FontAwesome name="ban" className="large-loader color-red" />
-                  <h3 className="pxy20 text-center">
-                    <p>Your affiliate program application was cancelled.</p>
-                  </h3>
-                  <div className="pxy10">
-                    <Button
-                      onClick={() => apply_affiliate("resubmit")}
-                      size="large"
-                      variant="contained"
-                    >
-                      <Add /> SUBMIT AGAIN
-                    </Button>
-                  </div>
-                </div>
-              </>
             )}
           </Card>
         </div>

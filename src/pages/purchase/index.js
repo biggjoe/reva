@@ -1,4 +1,4 @@
-import React,{useCallback} from "react";
+import React, { useCallback } from "react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import BuyPanel from "../../components/BuyPanel";
@@ -11,16 +11,13 @@ const Purchase = () => {
   const [bonus, setBonus] = React.useState({});
   const [bonus_code, setBonusCode] = React.useState(null);
   const [bonused, setBonused] = React.useState(false);
-  const [referee, setReferee] = React.useState({ ref_ran: false });
-  const handleBonusInput = useCallback(
-    (e) => {
-      const name = e.target.name;
-      const val = e.target.value;
-      console.log("code:", val);
-      setBonusCode(val);
-    },
-    []
-  ); const [fetching_bonus, setFetchingBonus] = React.useState(false);
+  const handleBonusInput = useCallback((e) => {
+    const name = e.target.name;
+    const val = e.target.value;
+    console.log("code:", val);
+    setBonusCode(val);
+  }, []);
+  const [fetching_bonus, setFetchingBonus] = React.useState(false);
   const [bonus_fetched, setBonusFetched] = React.useState(false);
   const applyBonus = () => {
     if (!bonus_code || bonus_code == "") {
@@ -78,42 +75,8 @@ const Purchase = () => {
     localStorage.setItem("affiliate_data", JSON.stringify(null));
   };
 
-
-  const [fetching_referee,setFetchingReferee]=React.useState(false);
-  const [referee_fetched,setRefereeFetched]=React.useState(false);
-  const fetchReferee = (id) => {
-    if (!id || id == "") {
-      return alert("Referee code not found");
-    }
-    setFetchingReferee(true);
-    setRefereeFetched(false);
-    HttpService.fetchReferee(id)
-      .then(
-        (result) => {
-          console.log("::|", result);
-          if (result && result.status === 1) {
-            setReferee({
-              ...referee,
-              ...result.user,
-              ref_ran: true,
-              ref_found: true,
-            });
-          } else {
-            setReferee({ ref_ran: true, ref_found: false });
-          }
-        },
-        (error) => {}
-      )
-      .finally(() => {
-        setFetchingReferee(false);
-        setRefereeFetched(true);
-      }); //fetch
-  }; //doAjax
   const set_aff = (data) => {
     setAffiliateData({ ...affiliate_data, ...data });
-  };
-  const set_ref = (data) => {
-    setReferee({ ...referee, ...Linkdata });
   };
 
   return (
@@ -122,22 +85,18 @@ const Purchase = () => {
       <div className="main-bg-grad home-cover">
         <div className="home-overlay"></div>
         <div className="flex py30 flex-col flex-column justify-content-center align-items-center py20 px10">
-          <BuyPanel 
-            ref_data={referee}
+          <BuyPanel
             affiliate_data={affiliate_data}
             removeBonus={removeBonus}
-            set_ref={set_ref}
             set_aff={set_aff}
             fetching_bonus={fetching_bonus}
             bonus_fetched={bonus_fetched}
             bonus_code={bonus_code}
             applyBonus={applyBonus}
             handleBonusInput={handleBonusInput}
-            fetching_referee={fetching_referee}
-            referee_fetched={referee_fetched}
-            />
-            </div>
+          />
         </div>
+      </div>
       <Footer />
     </React.Fragment>
   );

@@ -92,7 +92,7 @@ export default function Layout({ children }) {
           localStorage.setItem("expire_at", expire_at);
           setTimeout(() => {
             console.log("Redirecting...");
-            const next_url = "/account/dashboard";
+            const next_url = "/admin/dashboard";
             router.push(next_url);
             return;
           }, 3000);

@@ -14,11 +14,12 @@ import {
 } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import Link from "next/link";
+import FontAwesome from "react-fontawesome";
 
-const BonusCodesTemplate = (props) => {
+const AffiliateMembersTemplate = (props) => {
   console.log(props);
   const qr_data = props;
-  const { fetched, fetching, page, codes, fnc } = props;
+  const { fetched, fetching, members, fnc, affiliate } = props;
   const [loading, setLoading] = React.useState(false);
   const [loaded, setLoaded] = React.useState(false);
 
@@ -35,10 +36,10 @@ const BonusCodesTemplate = (props) => {
                 <ListItemText>
                   <div className="flex flex-row-resp">
                     <div className="spacer coler boldest">
-                      <h4>Code</h4>
+                      <h4>Name</h4>
                     </div>
                     <div className="spacer coler boldest flex flex-col align-items-center">
-                      <h4>Bonus%</h4>
+                      <h4>Codes</h4>
                     </div>
                     <div className="spacer coler boldest  flex flex-col align-items-center">
                       <h4>Created</h4>
@@ -51,14 +52,14 @@ const BonusCodesTemplate = (props) => {
               </ListItemButton>
             </ListItem>
 
-            {codes.map((item, index) => (
+            {members.map((item, index) => (
               <ListItem
                 disablePadding
                 button
                 key={item.id}
                 divider={true}
                 component={Link}
-                href={`/${page}/affiliate/codes/id/${item.code}`}
+                href={`/admin/affiliate/members/id/${item.uid}`}
               >
                 <ListItemButton>
                   <ListItemIcon>
@@ -73,8 +74,9 @@ const BonusCodesTemplate = (props) => {
                         className={`color-success`}
                       />
                     ) : item.is_approved == "-1" ? (
-                      <WarningOutlined
-                        sx={{ fontSize: "35px" }}
+                      <FontAwesome
+                        name="ban"
+                        style={{ fontSize: "35px" }}
                         className={`color-red`}
                       />
                     ) : (
@@ -84,10 +86,10 @@ const BonusCodesTemplate = (props) => {
                   <ListItemText>
                     <div className="flex flex-row-resp">
                       <div className="spacer coler">
-                        <h4 className=" boldest">{item.code}</h4>
+                        <h4 className=" boldest">{item.name}</h4>
                       </div>
                       <div className="spacer coler flex flex-col align-items-center">
-                        <h4>{item.percentage}</h4>
+                        <h4>{item.codes}</h4>
                       </div>
                       <div className="spacer coler  flex flex-col align-items-center">
                         <h4>
@@ -133,24 +135,16 @@ const BonusCodesTemplate = (props) => {
       {!fetched && (
         <div className="flex flex-col pxy30 align-items-center">
           <em className="fas large-loader fa-spin fa-circle-notch"></em>
-          <h3 className="pxy20">Loading bonus codes </h3>
+          <h3 className="pxy20">Loading affiliate bers </h3>
         </div>
       )}
-      {fetched && codes.length === 0 && (
+      {fetched && affiliate && members.length === 0 && (
         <div className="flex flex-col pxy30 align-items-center">
-          <Button
-            onClick={fnc}
-            size="large"
-            variant="contained"
-            color="primary"
-          >
-            <Add />
-            Create First Bonus Code
-          </Button>
+          <h2>No registered members yet</h2>
         </div>
       )}
     </React.Fragment>
   );
 };
 
-export default React.memo(BonusCodesTemplate);
+export default React.memo(AffiliateMembersTemplate);

@@ -18,12 +18,10 @@ const Dashboard = () => {
   const AuthServ = useAuthService();
   const usr = AuthServ.getCurrentUser();
   const { decodeHtml } = processHtml;
-  const [dashboard, setDashboard] = React.useState(null);
 
   const { bnb_rate, usdc_rate, usdt_rate } = useFetchRates();
   React.useEffect(() => {
-    getBalance();
-    getAffiliate();
+    getDashboard();
   }, []);
   const {
     address,
@@ -37,40 +35,23 @@ const Dashboard = () => {
     percProgres,
   } = useFetchContract();
 
-  const [token_balance, setBalance] = React.useState(0.0);
-
-  const [loading_balance, setLoadingBalance] = React.useState(false);
-  const [loaded_balance, setLoadedBalance] = React.useState(false);
-  const getBalance = () => {
-    setLoadingBalance(true);
-    setLoadedBalance(false);
-    HttpService.postHeader("token_balance", {})
+  const [dashboard, setDashboard] = React.useState({});
+  const [loading_dashboard, setLoadingDashboard] = React.useState(false);
+  const [loaded_dashboard, setLoadedDashboard] = React.useState(false);
+  const getDashboard = () => {
+    setLoadingDashboard(true);
+    setLoadedDashboard(false);
+    HttpService.fetchDashboardAdmin()
       .then((response) => {
-        console.log("TOKEN BAL:::", response);
-        setBalance(response.token_balance);
+        console.log("DASHBOARD DATA:::", response);
+        setDashboard(response);
       })
       .finally(() => {
-        setLoadingBalance(false);
-        setLoadedBalance(true);
+        setLoadingDashboard(false);
+        setLoadedDashboard(true);
       });
   };
-  const [affiliate, setAffiliate] = React.useState(null);
-  const [loading_affiliate, setLoadingAffiliate] = React.useState(false);
-  const [loaded_affiliate, setLoadedAffiliate] = React.useState(false);
-  const getAffiliate = () => {
-    setLoadingAffiliate(true);
-    setLoadedAffiliate(false);
-    HttpService.fetchAffiliate()
-      .then((res) => {
-        console.log("affiliate_data :: ");
-        console.log(res);
-        setAffiliate(res);
-      })
-      .finally(() => {
-        setLoadingAffiliate(false);
-        setLoadedAffiliate(true);
-      });
-  };
+
   return (
     <React.Fragment>
       <Layout>
@@ -80,31 +61,6 @@ const Dashboard = () => {
             {contract_loaded && (
               <>
                 <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6} md={4}>
-                    <div className="grid-card g7 flex flex-col">
-                      <div className="flex flex-row align-items-center">
-                        <div className="time-icon">
-                          <FontAwesome name="hourglass-half" />
-                        </div>
-                        <span className="spacer"></span>
-                        <div className=" flex flex-col spacer">
-                          <h2 className="spacer text-right ucap">Stage 1</h2>
-                          <span className="txt-xsm lh-1 ucap boldest text-right">
-                            Duration
-                          </span>
-                          <span className="txt-sm bold text-right">
-                            <DatePipe value={saleStartTime * 1000} /> -
-                            <DatePipe value={saleEndTime * 1000} />
-                          </span>
-                        </div>
-                      </div>
-                      <span className="spacer"></span>
-                      <div className="txt-sm">Presale ends:</div>
-                      <div className="item-div-dash">
-                        <CountdownTimer endTime={saleEndTime} />
-                      </div>
-                    </div>
-                  </Grid>
                   <Grid
                     item
                     xs={12}
@@ -117,7 +73,7 @@ const Dashboard = () => {
                     }}
                   >
                     <div
-                      className="prog-container mt0 bg-grax"
+                      className="prog-container mt0 bg-grax min-170"
                       style={{
                         display: "flex",
                         flexGrow: "1",
@@ -157,43 +113,30 @@ const Dashboard = () => {
                     </div>
                   </Grid>
                   <Grid item xs={12} sm={6} md={4}>
-                    <div className="grid-card bga flex flex-col">
+                    <div className="grid-card g7 flex flex-col">
                       <div className="flex flex-row align-items-center">
-                        <span className="time-icon">
-                          <FontAwesome name="bitcoin" />
-                        </span>
-                        <div className="spacer">
-                          <h2 className="spacer text-right ucap lh-1">
-                            SUMMARY
-                          </h2>
-                          <div className="spacer txt-sm text-right ucap">
-                            Acct. details
-                          </div>
+                        <div className="time-icon">
+                          <FontAwesome name="hourglass-half" />
+                        </div>
+                        <span className="spacer"></span>
+                        <div className=" flex flex-col spacer">
+                          <h2 className="spacer text-right ucap">Stage 1</h2>
+                          <span className="txt-xsm lh-1 ucap boldest text-right">
+                            Duration
+                          </span>
+                          <span className="txt-sm bold text-right">
+                            <DatePipe value={saleStartTime * 1000} /> -
+                            <DatePipe value={saleEndTime * 1000} />
+                          </span>
                         </div>
                       </div>
-                      <span className="py10">
-                        <Divider />
-                      </span>
                       <span className="spacer"></span>
-                      <div className="flex flex-row bit-col-container">
-                        <div className="col-bit">
-                          <div className="txt-sm ucap">$XRV BAL.</div>
-                          <div className="item-div-dash">
-                            {loading_balance ? "..." : token_balance}
-                          </div>
-                        </div>
-                        <div className="col-bit">
-                          <div className="txt-sm ucap">TNX</div>
-                          <div className="item-div-dash">14</div>
-                        </div>
-                        <div className="col-bit">
-                          <div className="txt-sm ucap">Messages</div>
-                          <div className="item-div-dash">18</div>
-                        </div>
+                      <div className="txt-sm">Presale ends:</div>
+                      <div className="item-div-dash">
+                        <CountdownTimer endTime={saleEndTime} />
                       </div>
                     </div>
                   </Grid>
-
                   <Grid item xs={12} sm={6} md={4}>
                     <div className="grid-card bga flex flex-col">
                       <div className="flex flex-row align-items-center">
@@ -214,15 +157,62 @@ const Dashboard = () => {
                       <div className="flex flex-row bit-col-container">
                         <div className="col-bit">
                           <div className="txt-sm ucap">BNB/$XRV</div>
-                          <div className="item-div-dash">{bnb_rate}</div>
+                          <div className="item-div-dash">
+                            {bnb_rate || "..."}
+                          </div>
                         </div>
                         <div className="col-bit">
                           <div className="txt-sm ucap">USDT/$XRV</div>
-                          <div className="item-div-dash">{usdt_rate}</div>
+                          <div className="item-div-dash">
+                            {usdt_rate || "..."}
+                          </div>
                         </div>
                         <div className="col-bit">
                           <div className="txt-sm ucap">USDC/$XRV</div>
-                          <div className="item-div-dash">{usdc_rate}</div>
+                          <div className="item-div-dash">
+                            {usdc_rate || "..."}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4}>
+                    <div className="grid-card bga flex flex-col">
+                      <div className="flex flex-row align-items-center">
+                        <span className="time-icon">
+                          <FontAwesome name="bitcoin" />
+                        </span>
+                        <div className="spacer">
+                          <h2 className="spacer text-right ucap lh-1">
+                            SUMMARY
+                          </h2>
+                          <div className="spacer txt-sm text-right ucap">
+                            Acct. details
+                          </div>
+                        </div>
+                      </div>
+                      <span className="py10">
+                        <Divider />
+                      </span>
+                      <span className="spacer"></span>
+                      <div className="flex flex-row bit-col-container">
+                        <div className="col-bit">
+                          <div className="txt-sm ucap">Total $xrv</div>
+                          <div className="item-div-dash">
+                            {dashboard?.token_balance || "..."}
+                          </div>
+                        </div>
+                        <div className="col-bit">
+                          <div className="txt-sm ucap">BONUS $XRV</div>
+                          <div className="item-div-dash">
+                            {dashboard?.total_bonus_earnings || "..."}
+                          </div>
+                        </div>
+                        <div className="col-bit">
+                          <div className="txt-sm ucap">Transactions</div>
+                          <div className="item-div-dash">
+                            {dashboard?.all_transactions || "..."}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -244,25 +234,19 @@ const Dashboard = () => {
                         <div className="col-bit">
                           <div className="txt-sm ucap">Earnings</div>
                           <div className="item-div-dash">
-                            ${affiliate?.total_earnings}
+                            $XRV{dashboard?.affiliate_earning || "..."} {/**/}
                           </div>
                         </div>
                         <div className="col-bit">
-                          <div className="txt-sm ucap">Tnx</div>
+                          <div className="txt-sm ucap">Transactions</div>
                           <div className="item-div-dash">
-                            {affiliate?.transactions?.length}
+                            {dashboard?.affiliate_transactions || "..."} {/* */}
                           </div>
                         </div>
                         <div className="col-bit">
                           <div className="txt-sm ucap">Codes</div>
                           <div className="item-div-dash">
-                            {affiliate?.affiliate_codes?.length}
-                          </div>
-                        </div>
-                        <div className="col-bit">
-                          <div className="txt-sm ucap">Bal.</div>
-                          <div className="item-div-dash">
-                            {affiliate?.wallet_balance}
+                            {dashboard?.total_codes || "..."} {/**/}
                           </div>
                         </div>
                       </div>
@@ -284,15 +268,15 @@ const Dashboard = () => {
                       <div className="flex flex-row bit-col-container">
                         <div className="col-bit">
                           <div className="txt-sm ucap">Earnings</div>
-                          <div className="item-div-dash">$0.00</div>
+                          <div className="item-div-dash">
+                            $XRV{dashboard?.referral_earning || "..."}
+                          </div>
                         </div>
                         <div className="col-bit">
-                          <div className="txt-sm ucap">Tnx</div>
-                          <div className="item-div-dash">1</div>
-                        </div>
-                        <div className="col-bit">
-                          <div className="txt-sm ucap">Referred:</div>
-                          <div className="item-div-dash">1</div>
+                          <div className="txt-sm ucap">Transactions</div>
+                          <div className="item-div-dash">
+                            {dashboard?.referral_transactions || "..."}
+                          </div>
                         </div>
                       </div>
                     </div>

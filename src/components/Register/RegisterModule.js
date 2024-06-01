@@ -5,7 +5,7 @@ import HttpService from "../../services/HttpService";
 import CustomModal from "../CustomModal";
 
 const RegisterModule = (props) => {
-  const { intro_message, return_url } = props;
+  const { referee, intro_message, return_url } = props;
   const router = useRouter();
   const [disabled, setDisabled] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
@@ -36,6 +36,12 @@ const RegisterModule = (props) => {
       message: "creating account....",
     });
     data.mode = "register";
+    if (referee && referee?.ref_ran) {
+      data.ref_data = referee;
+    }
+
+    console.log(referee);
+    console.log(data);
     HttpService.registerUser(data)
       .then(
         (response) => {

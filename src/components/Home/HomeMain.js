@@ -1,4 +1,4 @@
-import React,{useCallback} from "react";
+import React, { useCallback } from "react";
 import BuyPanel from "../BuyPanel";
 import Link from "next/link";
 import HttpService from "../../services/HttpService";
@@ -10,24 +10,18 @@ const HomeMain = () => {
     bonus_ran: false,
   });
   const [bonus, setBonus] = React.useState({});
-  const [referee, setReferee] = React.useState({ ref_ran: false });
   const modalClose = () => setModal({ ...modal_data, open: false });
   const [modal_data, setModal] = React.useState({
     open: false,
     onclose: modalClose,
   });
 
-  
-
-  const handleBonusInput = useCallback(
-    (e) => {
-      const name = e.target.name;
-      const val = e.target.value;
-      console.log("code:", val);
-      setBonusCode(val);
-    },
-    []
-  );
+  const handleBonusInput = useCallback((e) => {
+    const name = e.target.name;
+    const val = e.target.value;
+    console.log("code:", val);
+    setBonusCode(val);
+  }, []);
 
   const [fetching_bonus, setFetchingBonus] = React.useState(false);
   const [bonus_fetched, setBonusFetched] = React.useState(false);
@@ -87,41 +81,8 @@ const HomeMain = () => {
     localStorage.setItem("affiliate_data", JSON.stringify(null));
   };
 
-
-  const [fetching_referee,setFetchingReferee]=React.useState(false);
-  const [referee_fetched,setRefereeFetched]=React.useState(false);
-  const fetchReferee = (id) => {
-    if (!id || id == "") {
-      return alert("Referee code not found");
-    }
-    setFetchingReferee(true);
-    setRefereeFetched(false);
-    HttpService.fetchReferee(id)
-      .then(
-        (result) => {
-          if (result && result.status === 1) {
-            setReferee({
-              ...referee,
-              ...result.user,
-              ref_ran: true,
-              ref_found: true,
-            });
-          } else {
-            setReferee({ ref_ran: true, ref_found: false });
-          }
-        },
-        (error) => {}
-      )
-      .finally(() => {
-        setFetchingReferee(false);
-        setRefereeFetched(true);
-      }); //fetch
-  }; //doAjax
   const set_aff = (data) => {
     setAffiliateData({ ...affiliate_data, ...data });
-  };
-  const set_ref = (data) => {
-    setReferee({ ...referee, ...Linkdata });
   };
 
   return (
@@ -156,20 +117,16 @@ const HomeMain = () => {
             </div>
 
             <div className="buy-area world-map">
-              <BuyPanel  
-            ref_data={referee}
-            affiliate_data={affiliate_data}
-            removeBonus={removeBonus}
-            set_ref={set_ref}
-            set_aff={set_aff}
-            fetching_bonus={fetching_bonus}
-            bonus_fetched={bonus_fetched}
-            bonus_code={bonus_code}
-            applyBonus={applyBonus}
-            handleBonusInput={handleBonusInput}
-            fetching_referee={fetching_referee}
-            referee_fetched={referee_fetched}
-            />
+              <BuyPanel
+                affiliate_data={affiliate_data}
+                removeBonus={removeBonus}
+                set_aff={set_aff}
+                fetching_bonus={fetching_bonus}
+                bonus_fetched={bonus_fetched}
+                bonus_code={bonus_code}
+                applyBonus={applyBonus}
+                handleBonusInput={handleBonusInput}
+              />
             </div>
           </div>
         </div>

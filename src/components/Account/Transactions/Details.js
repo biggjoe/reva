@@ -9,6 +9,12 @@ import useAuthService from "../../../services/useAuthService";
 import CustomModal from "../../CustomModal";
 import FontAwesome from "react-fontawesome";
 import TransactionDetailsTemplate from "../../Transactions/TransactionDetailsTemplate";
+import {
+  CheckCircleOutlined,
+  CreditCard,
+  PendingOutlined,
+  WarningOutlined,
+} from "@mui/icons-material";
 
 const TransactionDetails = ({ page, tid }) => {
   const { decodeHtml, truncateWord } = processHtml;
@@ -101,7 +107,26 @@ const TransactionDetails = ({ page, tid }) => {
             <h2>
               <span className="txt-lg">{transaction_details?.tnx_id}</span>
               <sup className="desc-span ucap">
-                {transaction_details?.status}
+                <sup>
+                  {transaction_details?.status === "0" ? (
+                    <PendingOutlined
+                      sx={{ fontSize: "25px" }}
+                      className={`color-pending`}
+                    />
+                  ) : transaction_details?.status === "1" ? (
+                    <CheckCircleOutlined
+                      sx={{ fontSize: "25px" }}
+                      className={`color-success`}
+                    />
+                  ) : transaction_details?.status === "-1" ? (
+                    <WarningOutlined
+                      sx={{ fontSize: "25px" }}
+                      className={`color-red`}
+                    />
+                  ) : (
+                    <CreditCard sx={{ fontSize: "25px" }} />
+                  )}
+                </sup>
               </sup>
             </h2>
           </div>
