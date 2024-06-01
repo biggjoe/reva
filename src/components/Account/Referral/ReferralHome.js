@@ -71,7 +71,7 @@ const ReferralHome = (props) => {
     onclose: closeApply,
   });
 
-  const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_DOMAIN;
+  const SERVER_URL = process.env.NEXT_PUBLIC_DOMAIN;
 
   const [ref_link, setRefLink] = React.useState("");
 
@@ -137,7 +137,7 @@ const ReferralHome = (props) => {
                       <span className="grayed txt-sm mb0">Referral Lnk</span>
                       <CopyText
                         class_name={`py5 px10 mr0 pr0 txt-md`}
-                        text={`${SERVER_URL}purchase/ref/${usr.referral_code}`}
+                        text={`${SERVER_URL}register/r/${usr.referral_code}`}
                       />
                     </div>
                   </div>
